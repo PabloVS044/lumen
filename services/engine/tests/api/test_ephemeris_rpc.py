@@ -42,7 +42,40 @@ def test_range_too_long_is_invalid_argument(rpc: ConnectJSON) -> None:
     assert r.json()["code"] == "invalid_argument"
 
 
-def test_list_events_still_unimplemented(rpc: ConnectJSON) -> None:
+def test_list_events_unimplemented_until_horizon_exists(rpc: ConnectJSON) -> None:
     body = {"site": SITE, "from": "2027-01-01T00:00:00Z"}
     r = rpc.call("EphemerisService", "ListEvents", body)
     assert r.json()["code"] == "unimplemented"
+
+
+@pytest.fixture
+def flat_horizon(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Sustituye la máscara de R2 por un horizonte plano (solo en tests)."""
+    from lumen.v1 import horizon_pb2
+
+    from lumen_engine.horizon import mask
+
+    def fake(site: object, *, az_step_deg: float, max_range_km: float) -> horizon_pb2.HorizonMask:
+        return horizon_pb2.HorizonMask(
+            az_step_deg=1.0, elevation_deg=[0.0] * 360, observer=horizon_pb2.Observer()
+        )
+
+    monkeypatch.setattr(mask, "compute", fake)
+
+
+@pytest.mark.usefixtures("flat_horizon")
+def test_list_events_with_horizon(rpc: ConnectJSON) -> None:
+    body = {
+        "site": {"lat": 0.674, "lon": 23.473},
+        "from": "2027-01-01T00:00:00Z",
+        "horizonDays": 40,
+        "types": ["EVENT_TYPE_SUNRISE", "EVENT_TYPE_SUNSET"],
+    }
+    r = rpc.call("EphemerisService", "ListEvents", body)
+    assert r.status_code == 200, r.text
+    events = r.json()["events"]
+    assert {e["type"] for e in events} == {"EVENT_TYPE_SUNRISE", "EVENT_TYPE_SUNSET"}
+    times = [e["time"] for e in events]
+    assert times == sorted(times)
+    # Ecuador, 40 días: un amanecer y un atardecer por día lunar (~29.5 d)
+    assert 2 <= len(events) <= 3
