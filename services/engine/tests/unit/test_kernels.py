@@ -66,3 +66,13 @@ def test_load_kernels_without_files_raises_unavailable(
     with pytest.raises(kernels.KernelsMissingError) as exc:
         kernels.load_kernels()
     assert exc.value.connect_code == Code.UNAVAILABLE
+
+
+def test_run_spice_executes_on_dedicated_thread() -> None:
+    import asyncio
+    import threading
+
+    from lumen_engine.ephem.kernels import run_spice
+
+    name = asyncio.run(run_spice(lambda: threading.current_thread().name))
+    assert name.startswith("spice")

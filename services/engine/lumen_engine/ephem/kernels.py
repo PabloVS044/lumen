@@ -4,10 +4,14 @@ Versiones fijadas y verificadas con SHA-256 en `data/scripts/download_kernels.sh
 SPICE mantiene estado global en el proceso: la carga se hace una sola vez y bajo lock.
 """
 
+import asyncio
 import threading
+from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
-from functools import lru_cache
+from functools import lru_cache, partial
 from pathlib import Path
+from typing import Any
 
 import spiceypy as sp
 from connectrpc.code import Code
@@ -46,6 +50,16 @@ class KernelsMissingError(EngineError):
 
 _lock = threading.Lock()
 _loaded: list[str] = []
+
+# CSPICE no es thread-safe (estado global): todo cálculo SPICE del servidor pasa por este hilo,
+# y así no bloquea el event loop de ASGI.
+_spice_executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="spice")
+
+
+async def run_spice[T](fn: Callable[..., T], *args: Any, **kwargs: Any) -> T:
+    """Ejecuta `fn` (que usa SPICE) en el hilo dedicado de SPICE."""
+    loop = asyncio.get_running_loop()
+    return await loop.run_in_executor(_spice_executor, partial(fn, *args, **kwargs))
 
 
 def kernel_paths(kernels_dir: Path | None = None) -> list[Path]:
