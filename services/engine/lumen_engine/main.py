@@ -32,16 +32,16 @@ from lumen_engine.services.analysis import AnalysisServiceImpl
 from lumen_engine.services.ephemeris import EphemerisServiceImpl
 from lumen_engine.services.health import HealthServiceImpl
 from lumen_engine.services.horizon import HorizonServiceImpl
+from lumen_engine.services.power import PowerServiceImpl
 from lumen_engine.services.sites import SiteServiceImpl
 from lumen_engine.services.stubs import (
     ExportServiceImpl,
     JobServiceImpl,
-    PowerServiceImpl,
     SearchServiceImpl,
-    ValidationServiceImpl,
-    WhatIfServiceImpl,
 )
 from lumen_engine.services.terrain import TerrainServiceImpl
+from lumen_engine.services.validation import ValidationServiceImpl
+from lumen_engine.services.whatif import WhatIfServiceImpl
 
 CONNECT_HEADERS = ["Connect-Protocol-Version", "Connect-Timeout-Ms", "Content-Type"]
 

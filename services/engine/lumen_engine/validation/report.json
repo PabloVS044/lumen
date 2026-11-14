@@ -1,0 +1,28 @@
+{
+  "checks": [
+    {
+      "id": "ephemeris_sun_vs_horizons",
+      "description": "Azimut y elevación aparentes del Sol vs JPL Horizons (5 sitios × 20 instantes, 2026–2028)",
+      "tolerance": 0.01,
+      "max_error": 9.256e-09,
+      "passed": true,
+      "notes": "Grados; el error de azimut se mide como arco (Δaz·cos el)."
+    },
+    {
+      "id": "ephemeris_earth_vs_horizons",
+      "description": "Azimut y elevación aparentes de la Tierra vs JPL Horizons (5 sitios × 20 instantes, 2026–2028)",
+      "tolerance": 0.01,
+      "max_error": 5.428e-07,
+      "passed": true,
+      "notes": "Grados; el error de azimut se mide como arco (Δaz·cos el)."
+    },
+    {
+      "id": "eclipse_vs_spice_occult",
+      "description": "Ventanas parcial y total del eclipse lunar del 2026-03-03 vs CSPICE occult()",
+      "tolerance": 3.0,
+      "max_error": 1.0,
+      "passed": true,
+      "notes": "Minutos, resolución de 1 min. SPICE usa el elipsoide terrestre; el motor, una esfera de 6371 km."
+    }
+  ]
+}
