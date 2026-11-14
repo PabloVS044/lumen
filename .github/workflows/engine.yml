@@ -2,7 +2,14 @@ name: engine
 
 on:
   pull_request:
-    paths: ["services/engine/**", "proto/**", "data/catalog/**", ".github/workflows/engine.yml"]
+    paths:
+      [
+        "services/engine/**",
+        "proto/**",
+        "data/catalog/**",
+        "data/scripts/download_kernels.sh",
+        ".github/workflows/engine.yml",
+      ]
   push:
     branches: [main]
 
@@ -18,8 +25,18 @@ jobs:
       - uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
-      - run: uv sync --locked
+      # Extras science/geo/infra (spiceypy, numba, rasterio...): los tests de ciencia los necesitan
+      - run: uv sync --locked --all-extras
+      # Kernels SPICE (~33 MB), cacheados por el hash del script que fija versiones y SHA-256
+      - uses: actions/cache@v4
+        with:
+          path: services/engine/kernels
+          key: spice-kernels-${{ hashFiles('data/scripts/download_kernels.sh') }}
+      - run: bash ../../data/scripts/download_kernels.sh
       - run: uv run ruff check .
       - run: uv run ruff format --check .
       - run: uv run mypy lumen_engine tests
+      # En CI los tests que requieren kernels nunca se saltan
       - run: uv run pytest -m "not network"
+        env:
+          LUMEN_REQUIRE_KERNELS: "1"
