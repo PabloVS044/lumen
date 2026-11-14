@@ -448,6 +448,7 @@ dependencies = [
     { name = "protovalidate" },
     { name = "pydantic-settings" },
     { name = "pyyaml" },
+    { name = "spiceypy" },
     { name = "starlette" },
     { name = "uvicorn", extra = ["standard"] },
 ]
@@ -467,7 +468,6 @@ infra = [
 science = [
     { name = "numba" },
     { name = "scipy" },
-    { name = "spiceypy" },
 ]
 
 [package.dev-dependencies]
@@ -498,7 +498,7 @@ requires-dist = [
     { name = "rasterio", marker = "extra == 'geo'", specifier = ">=1.4" },
     { name = "redis", marker = "extra == 'infra'", specifier = ">=5.2" },
     { name = "scipy", marker = "extra == 'science'", specifier = ">=1.14" },
-    { name = "spiceypy", marker = "extra == 'science'", specifier = ">=6.0" },
+    { name = "spiceypy", specifier = ">=6.0" },
     { name = "sqlalchemy", marker = "extra == 'infra'", specifier = ">=2.0" },
     { name = "starlette", specifier = ">=0.46" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.32" },
