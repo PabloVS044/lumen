@@ -14,12 +14,13 @@ dependencies = [
     "pydantic-settings>=2.6",
     "pyyaml>=6.0",
     "numpy>=2.1",
+    # Efemérides SPICE: el motor no funciona sin ellas (sección 9.4)
+    "spiceypy>=6.0",
 ]
 
 [project.optional-dependencies]
 # Ciencia: SPICE + interpolación. Owner: Efemérides/Ciencia
 science = [
-    "spiceypy>=6.0",
     "scipy>=1.14",
     "numba>=0.60",
 ]
