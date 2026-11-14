@@ -1,0 +1,56 @@
+name: Tarea / feature
+description: Una unidad de trabajo de un módulo (1 issue = 1 rama = 1 PR)
+labels: ["feature"]
+body:
+  - type: dropdown
+    id: module
+    attributes:
+      label: Módulo
+      options:
+        [
+          M1 Selector,
+          M2 Horizonte,
+          M3 Timeline,
+          M4 Globo,
+          M5 Comparador sitios,
+          M6 Comparador fechas,
+          M7 Métricas,
+          M8 Batería,
+          M9 What-if,
+          M10 Terreno 3D,
+          M11 Explorar,
+          M12 Mejor punto,
+          M13 Compartir,
+          M14 Exportación,
+          M15 Validación,
+          M16 Mapa regional,
+          M17 i18n,
+          M18 Cielo,
+          M19 API pública,
+          Motor/infra,
+          Datos,
+          Docs/Pitch,
+        ]
+    validations: { required: true }
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioridad
+      options: ["mvp", "ambitious", "experimental"]
+    validations: { required: true }
+  - type: input
+    id: section
+    attributes:
+      label: Sección del documento técnico
+      placeholder: "9.3"
+  - type: textarea
+    id: what
+    attributes:
+      label: Qué hay que hacer
+    validations: { required: true }
+  - type: textarea
+    id: ac
+    attributes:
+      label: Criterios de aceptación
+      placeholder: "- AC1: ..."
+    validations: { required: true }

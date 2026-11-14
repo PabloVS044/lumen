@@ -1,0 +1,32 @@
+// Exportación CSV/JSON/PDF (HU-12). Owner: R1 (backend), R6 (UI).
+syntax = "proto3";
+
+package lumen.v1;
+
+import "buf/validate/validate.proto";
+import "lumen/v1/analysis.proto";
+
+service ExportService {
+  rpc CreateExport(CreateExportRequest) returns (CreateExportResponse);
+}
+
+enum ExportFormat {
+  EXPORT_FORMAT_UNSPECIFIED = 0;
+  EXPORT_FORMAT_CSV = 1;
+  EXPORT_FORMAT_JSON = 2;
+  EXPORT_FORMAT_PDF = 3;
+}
+
+message CreateExportRequest {
+  AnalyzeRequest analysis = 1 [(buf.validate.field).required = true];
+  ExportFormat format = 2 [(buf.validate.field).enum = {
+    defined_only: true
+    not_in: [0]
+  }];
+}
+
+message CreateExportResponse {
+  string job_id = 1;
+  // URL firmada cuando el archivo está listo.
+  optional string download_url = 2;
+}

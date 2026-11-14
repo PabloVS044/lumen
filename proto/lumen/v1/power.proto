@@ -1,0 +1,67 @@
+// Simulador de energía/batería (sección 9.8, HU-07). Owner: R3 (modelo), R6 (UI).
+syntax = "proto3";
+
+package lumen.v1;
+
+import "buf/validate/validate.proto";
+import "google/protobuf/timestamp.proto";
+import "lumen/v1/analysis.proto";
+
+service PowerService {
+  rpc Simulate(SimulateRequest) returns (SimulateResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+}
+
+enum PanelOrientation {
+  PANEL_ORIENTATION_UNSPECIFIED = 0;
+  PANEL_ORIENTATION_VERTICAL_TRACKING = 1;
+  PANEL_ORIENTATION_HORIZONTAL = 2;
+  PANEL_ORIENTATION_VERTICAL_FIXED = 3;
+}
+
+// Defaults (preset "lander pequeño") cuando el campo no viene: ver sección 9.8.
+message PowerConfig {
+  optional double panel_area_m2 = 1 [(buf.validate.field).double.gt = 0];
+  optional double efficiency = 2 [(buf.validate.field).double = {
+    gt: 0
+    lte: 1
+  }];
+  PanelOrientation orientation = 3;
+  // Solo para VERTICAL_FIXED.
+  optional double panel_azimuth_deg = 4 [(buf.validate.field).double = {
+    gte: 0
+    lt: 360
+  }];
+  optional double battery_wh = 5 [(buf.validate.field).double.gt = 0];
+  optional double soc0_pct = 6 [(buf.validate.field).double = {
+    gte: 0
+    lte: 100
+  }];
+  optional double max_dod_pct = 7 [(buf.validate.field).double = {
+    gt: 0
+    lte: 100
+  }];
+  optional double load_day_w = 8 [(buf.validate.field).double.gte = 0];
+  optional double load_night_w = 9 [(buf.validate.field).double.gte = 0];
+  optional double battery_efficiency = 10 [(buf.validate.field).double = {
+    gt: 0
+    lte: 1
+  }];
+}
+
+message SimulateRequest {
+  Scenario scenario = 1 [(buf.validate.field).required = true];
+  PowerConfig config = 2;
+}
+
+message SimulateResponse {
+  repeated google.protobuf.Timestamp time = 1;
+  repeated double p_gen_w = 2;
+  repeated double p_load_w = 3;
+  repeated double soc_pct = 4;
+  bool survives = 5;
+  google.protobuf.Timestamp first_brownout_time = 6;
+  double min_soc_pct = 7;
+  double energy_margin_wh = 8;
+}

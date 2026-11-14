@@ -1,0 +1,24 @@
+// Owner: R1.
+syntax = "proto3";
+
+package lumen.v1;
+
+service HealthService {
+  rpc Check(CheckRequest) returns (CheckResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+}
+
+message CheckRequest {}
+
+message CheckResponse {
+  enum Status {
+    STATUS_UNSPECIFIED = 0;
+    STATUS_OK = 1;
+    STATUS_DEGRADED = 2;
+  }
+  Status status = 1;
+  string version = 2;
+  repeated string kernels_loaded = 3;
+  repeated string dem_layers = 4;
+}

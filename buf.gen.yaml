@@ -1,0 +1,17 @@
+# Generación de código desde proto/ (ADR-0012). Correr: `pnpm proto:gen`. NUNCA editar lo generado.
+version: v2
+plugins:
+  # TypeScript (protobuf-es v2: mensajes + descriptores de servicio para connect-es)
+  - local: protoc-gen-es
+    out: packages/sdk/src/gen
+    include_imports: true
+    opt: target=ts
+  # Python (mensajes + stubs de tipos + servidor/cliente Connect)
+  - remote: buf.build/protocolbuffers/python:v33.1
+    out: services/engine/gen
+    include_imports: true
+  - remote: buf.build/protocolbuffers/pyi:v33.1
+    out: services/engine/gen
+    include_imports: true
+  - remote: buf.build/connectrpc/python:v0.9.0
+    out: services/engine/gen

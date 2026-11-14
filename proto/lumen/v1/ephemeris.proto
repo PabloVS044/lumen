@@ -1,0 +1,78 @@
+// Efemérides Sol/Tierra con SPICE DE440 (sección 9.4, 9.11). Owner: R3 Efemérides/Ciencia.
+syntax = "proto3";
+
+package lumen.v1;
+
+import "buf/validate/validate.proto";
+import "google/protobuf/timestamp.proto";
+import "lumen/v1/common.proto";
+
+service EphemerisService {
+  rpc GetSeries(GetSeriesRequest) returns (GetSeriesResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+  // Direcciones Sol/Tierra en MOON_ME para iluminar el globo 3D.
+  rpc GetState(GetStateRequest) returns (GetStateResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+  // Próximos sunrise/sunset/earthrise/earthset desde un instante (HU-06).
+  rpc ListEvents(ListEventsRequest) returns (ListEventsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+}
+
+enum EventType {
+  EVENT_TYPE_UNSPECIFIED = 0;
+  EVENT_TYPE_SUNRISE = 1;
+  EVENT_TYPE_SUNSET = 2;
+  EVENT_TYPE_EARTHRISE = 3;
+  EVENT_TYPE_EARTHSET = 4;
+  EVENT_TYPE_ECLIPSE_START = 5;
+  EVENT_TYPE_ECLIPSE_END = 6;
+}
+
+message Event {
+  EventType type = 1;
+  google.protobuf.Timestamp time = 2;
+}
+
+message Vector3 {
+  double x = 1;
+  double y = 2;
+  double z = 3;
+}
+
+message GetSeriesRequest {
+  Site site = 1 [(buf.validate.field).required = true];
+  TimeRange range = 2 [(buf.validate.field).required = true];
+}
+
+message GetSeriesResponse {
+  repeated google.protobuf.Timestamp time = 1;
+  BodySeries sun = 2;
+  BodySeries earth = 3;
+}
+
+message GetStateRequest {
+  google.protobuf.Timestamp time = 1 [(buf.validate.field).required = true];
+}
+
+message GetStateResponse {
+  google.protobuf.Timestamp time = 1;
+  // Vectores unitarios en MOON_ME.
+  Vector3 sun_dir = 2;
+  Vector3 earth_dir = 3;
+}
+
+message ListEventsRequest {
+  Site site = 1 [(buf.validate.field).required = true];
+  google.protobuf.Timestamp from = 2 [(buf.validate.field).required = true];
+  // Vacío = todos los tipos.
+  repeated EventType types = 3;
+  // Cuántos días buscar hacia adelante. 0 = default 60.
+  uint32 horizon_days = 4 [(buf.validate.field).uint32 = {lte: 730}];
+}
+
+message ListEventsResponse {
+  repeated Event events = 1;
+}

@@ -1,0 +1,202 @@
+# Catálogo curado de sitios (sección 13 del documento técnico).
+# Owner: Producto/Diseño (investigación) + revisión de Efemérides/Ciencia.
+#
+# REGLAS
+# - Ningún sitio pasa a `verified: true` sin confirmar coordenadas en QuickMap o fuente primaria
+#   y poner esa fuente en `source_url`.
+# - Longitud este positiva en [-180, 180). Latitud sur negativa.
+# - Valores actuales: aproximados / de memoria (⚠️ VERIFICAR en sección 13).
+#
+# PENDIENTES SIN COORDENADAS (agregar cuando se verifiquen):
+#   Artemis: a3-peak-near-cabeus-b, a3-haworth, a3-mons-mouton-plateau, a3-mons-mouton,
+#            a3-nobile-rim-1, a3-nobile-rim-2, a3-de-gerlache-rim-2, a3-slater-plain
+#   PGDA:    pgda-site04, pgda-site06, pgda-site07, pgda-site11, pgda-site20, pgda-site23
+#   CLPS:    im2-athena, firefly-bg1
+
+- id: a3-malapert-massif
+  name: Malapert Massif
+  lat: -86.0
+  lon: 0.0
+  program: Artemis
+  agency: NASA
+  country: USA
+  status: candidate
+  region: south_pole
+  coord_precision: approx_region_center
+  verified: false
+  source_url: https://www.nasa.gov/news-release/nasa-provides-update-on-artemis-iii-moon-landing-regions/
+
+- id: pgda-site01
+  name: Connecting ridge (Shackleton–de Gerlache)
+  lat: -89.45
+  lon: -137.31
+  program: Reference
+  status: candidate
+  region: south_pole
+  coord_precision: approx
+  verified: false
+  source_url: https://pgda.gsfc.nasa.gov/data/LOLA_5mpp/
+
+- id: crater-shackleton-center
+  name: Shackleton crater center (PSR)
+  lat: -89.67
+  lon: 129.8
+  program: Reference
+  status: historic
+  region: south_pole
+  coord_precision: approx
+  verified: false
+  description_es: Ejemplo de región en sombra permanente.
+  description_en: Example of a permanently shadowed region.
+
+- id: cnsa-change7
+  name: Chang'e-7
+  lat: -88.8
+  lon: 123.4
+  program: Chang'e
+  agency: CNSA
+  country: China
+  status: planned
+  region: south_pole
+  coord_precision: approx
+  verified: false
+  source_url: https://www.planetary.org/space-missions/change-7
+
+- id: isro-ch3
+  name: Chandrayaan-3 Vikram (Statio Shiv Shakti)
+  lat: -69.37
+  lon: 32.32
+  program: Chandrayaan
+  agency: ISRO
+  country: India
+  status: landed
+  region: nearside
+  coord_precision: approx
+  verified: false
+
+- id: im1-odysseus
+  name: IM-1 Odysseus (Malapert A)
+  lat: -80.1
+  lon: 1.4
+  program: CLPS
+  agency: Intuitive Machines
+  country: USA
+  status: landed
+  region: south_pole
+  coord_precision: approx
+  verified: false
+
+- id: cnsa-change4
+  name: Chang'e-4 (Von Kármán)
+  lat: -45.44
+  lon: 177.60
+  program: Chang'e
+  agency: CNSA
+  country: China
+  status: landed
+  region: farside
+  coord_precision: approx
+  verified: false
+
+- id: cnsa-change6
+  name: Chang'e-6 (Apollo basin)
+  lat: -41.6
+  lon: -154.0
+  program: Chang'e
+  agency: CNSA
+  country: China
+  status: landed
+  region: farside
+  coord_precision: approx
+  verified: false
+
+- id: jaxa-slim
+  name: SLIM (near Shioli)
+  lat: -13.3
+  lon: 25.2
+  program: SLIM
+  agency: JAXA
+  country: Japan
+  status: landed
+  region: nearside
+  coord_precision: approx
+  verified: false
+
+- {
+    id: apollo11,
+    name: Apollo 11 (Tranquility Base),
+    lat: 0.674,
+    lon: 23.473,
+    program: Apollo,
+    agency: NASA,
+    country: USA,
+    status: historic,
+    region: nearside,
+    coord_precision: approx,
+    verified: false,
+  }
+- {
+    id: apollo12,
+    name: Apollo 12,
+    lat: -3.012,
+    lon: -23.422,
+    program: Apollo,
+    agency: NASA,
+    country: USA,
+    status: historic,
+    region: nearside,
+    coord_precision: approx,
+    verified: false,
+  }
+- {
+    id: apollo14,
+    name: Apollo 14,
+    lat: -3.645,
+    lon: -17.471,
+    program: Apollo,
+    agency: NASA,
+    country: USA,
+    status: historic,
+    region: nearside,
+    coord_precision: approx,
+    verified: false,
+  }
+- {
+    id: apollo15,
+    name: Apollo 15,
+    lat: 26.132,
+    lon: 3.634,
+    program: Apollo,
+    agency: NASA,
+    country: USA,
+    status: historic,
+    region: nearside,
+    coord_precision: approx,
+    verified: false,
+  }
+- {
+    id: apollo16,
+    name: Apollo 16,
+    lat: -8.973,
+    lon: 15.498,
+    program: Apollo,
+    agency: NASA,
+    country: USA,
+    status: historic,
+    region: nearside,
+    coord_precision: approx,
+    verified: false,
+  }
+- {
+    id: apollo17,
+    name: Apollo 17,
+    lat: 20.191,
+    lon: 30.772,
+    program: Apollo,
+    agency: NASA,
+    country: USA,
+    status: historic,
+    region: nearside,
+    coord_precision: approx,
+    verified: false,
+  }

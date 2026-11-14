@@ -1,0 +1,43 @@
+// Análisis what-if de retraso (sección 9.9, HU-08). Owner: R3 (cálculo), R6 (UI).
+syntax = "proto3";
+
+package lumen.v1;
+
+import "buf/validate/validate.proto";
+import "google/protobuf/timestamp.proto";
+import "lumen/v1/common.proto";
+import "lumen/v1/power.proto";
+
+service WhatIfService {
+  rpc Evaluate(EvaluateRequest) returns (EvaluateResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+}
+
+message EvaluateRequest {
+  Site site = 1 [(buf.validate.field).required = true];
+  google.protobuf.Timestamp nominal_landing = 2 [(buf.validate.field).required = true];
+  uint32 max_delay_days = 3 [(buf.validate.field).uint32 = {lte: 365}];
+  // 0 = default 24 h.
+  uint32 delay_step_hours = 4 [(buf.validate.field).uint32 = {lte: 168}];
+  double mission_duration_days = 5 [(buf.validate.field).double = {
+    gt: 0
+    lte: 365
+  }];
+  // Nombres de campos de Metrics. Vacío = illumination_pct, longest_dark_h, operable_pct.
+  repeated string metrics = 6;
+  // Si viene, también simula batería por cada retraso.
+  PowerConfig power = 7;
+}
+
+message WhatIfPoint {
+  double delay_hours = 1;
+  google.protobuf.Timestamp landing = 2;
+  map<string, double> metrics = 3;
+  optional bool survives = 4;
+}
+
+message EvaluateResponse {
+  repeated WhatIfPoint points = 1;
+  repeated double recommended_delays_hours = 2;
+}

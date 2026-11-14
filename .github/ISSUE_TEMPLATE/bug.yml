@@ -1,0 +1,15 @@
+name: Bug
+description: Algo no funciona o un número está mal
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: Qué pasa y qué esperabas
+    validations: { required: true }
+  - type: textarea
+    id: repro
+    attributes:
+      label: Cómo reproducirlo
+      description: URL compartible, coordenadas, rango de fechas, request al motor
+    validations: { required: true }

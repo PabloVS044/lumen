@@ -1,0 +1,8 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+allowBuilds:
+  "@bufbuild/buf": true
+  sharp: false
+  unrs-resolver: false

@@ -1,0 +1,9 @@
+.claude/skills
+docs/LUMEN_documento_tecnico.md
+packages/sdk/src/gen
+pnpm-lock.yaml
+**/.next
+**/node_modules
+apps/web/public/cesium
+services/engine
+data/notebooks
