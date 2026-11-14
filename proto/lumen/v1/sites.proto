@@ -1,0 +1,70 @@
+// Catálogo curado (sección 13). Owner: R1 (servicio) + R7 (contenido del catálogo).
+syntax = "proto3";
+
+package lumen.v1;
+
+import "buf/validate/validate.proto";
+
+service SiteService {
+  rpc ListSites(ListSitesRequest) returns (ListSitesResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+  rpc GetSite(GetSiteRequest) returns (GetSiteResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+}
+
+enum SiteStatus {
+  SITE_STATUS_UNSPECIFIED = 0;
+  SITE_STATUS_CANDIDATE = 1;
+  SITE_STATUS_LANDED = 2;
+  SITE_STATUS_PLANNED = 3;
+  SITE_STATUS_HISTORIC = 4;
+}
+
+enum Region {
+  REGION_UNSPECIFIED = 0;
+  REGION_SOUTH_POLE = 1;
+  REGION_NORTH_POLE = 2;
+  REGION_NEARSIDE = 3;
+  REGION_FARSIDE = 4;
+}
+
+message CatalogSite {
+  string id = 1;
+  string name = 2;
+  double lat = 3;
+  double lon = 4;
+  string program = 5;
+  string agency = 6;
+  string country = 7;
+  SiteStatus status = 8;
+  Region region = 9;
+  // exact | approx | approx_region_center
+  string coord_precision = 10;
+  // Coordenadas confirmadas con fuente primaria.
+  bool verified = 11;
+  string source_url = 12;
+  string description_es = 13;
+  string description_en = 14;
+}
+
+message ListSitesRequest {
+  optional string program = 1;
+  optional string country = 2;
+  Region region = 3;
+  // Búsqueda por nombre o id.
+  optional string query = 4;
+}
+
+message ListSitesResponse {
+  repeated CatalogSite sites = 1;
+}
+
+message GetSiteRequest {
+  string id = 1 [(buf.validate.field).string.min_len = 1];
+}
+
+message GetSiteResponse {
+  CatalogSite site = 1;
+}

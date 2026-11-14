@@ -1,0 +1,36 @@
+// Trabajos asíncronos (ADR-06, sección 10.2). Owner: R1.
+syntax = "proto3";
+
+package lumen.v1;
+
+import "buf/validate/validate.proto";
+
+service JobService {
+  // La UI hace polling cada 1 s mientras el estado sea QUEUED o RUNNING.
+  rpc GetJob(GetJobRequest) returns (GetJobResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+}
+
+enum JobState {
+  JOB_STATE_UNSPECIFIED = 0;
+  JOB_STATE_QUEUED = 1;
+  JOB_STATE_RUNNING = 2;
+  JOB_STATE_DONE = 3;
+  JOB_STATE_FAILED = 4;
+}
+
+message GetJobRequest {
+  string job_id = 1 [(buf.validate.field).string.min_len = 1];
+}
+
+message GetJobResponse {
+  string job_id = 1;
+  JobState state = 2;
+  // [0, 1]
+  double progress = 3;
+  // "terrain" | "horizon" | "ephemeris" | "metrics" ...
+  string stage = 4;
+  // Al terminar, repetir la llamada original: el resultado ya está en caché.
+  optional string error = 5;
+}

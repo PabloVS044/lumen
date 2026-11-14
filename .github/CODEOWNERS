@@ -1,0 +1,107 @@
+# Ownership por carpeta (docs/team/ROLES.md). La última regla que coincide gana.
+# Sin jerarquía: lo compartido lista a todo el equipo (contratos: 2 aprobaciones, ver WORKFLOW.md).
+# R1 Backend: @bcastillo-2022474 · R2 Geo: @carlosaltan18 · R3 Ciencia: @PabloVS044
+# R4 3D: @asanabria-2021067 · R5 Charts: @JonathanTubac · R6 Analysis: (por asignar → R5)
+# R7 Producto: @24750Montenegro
+
+*                                                     @bcastillo-2022474 @carlosaltan18 @PabloVS044 @asanabria-2021067 @JonathanTubac @24750Montenegro
+
+# ---------- Contratos (proto/) ----------
+# Contrato: owner del área + 2 aprobaciones (zona compartida).
+/proto/                                               @bcastillo-2022474 @carlosaltan18 @PabloVS044 @asanabria-2021067 @JonathanTubac @24750Montenegro
+/buf.yaml                                             @bcastillo-2022474 @carlosaltan18 @PabloVS044 @asanabria-2021067 @JonathanTubac @24750Montenegro
+/buf.lock                                             @bcastillo-2022474 @carlosaltan18 @PabloVS044 @asanabria-2021067 @JonathanTubac @24750Montenegro
+/buf.gen.yaml                                         @bcastillo-2022474 @carlosaltan18 @PabloVS044 @asanabria-2021067 @JonathanTubac @24750Montenegro
+/proto/lumen/v1/terrain.proto                         @carlosaltan18
+/proto/lumen/v1/horizon.proto                         @carlosaltan18
+/proto/lumen/v1/search.proto                          @carlosaltan18
+/proto/lumen/v1/ephemeris.proto                       @PabloVS044
+/proto/lumen/v1/power.proto                           @PabloVS044
+/proto/lumen/v1/whatif.proto                          @PabloVS044
+/proto/lumen/v1/validation.proto                      @PabloVS044
+/proto/lumen/v1/analysis.proto                        @bcastillo-2022474 @PabloVS044
+/proto/lumen/v1/sites.proto                           @bcastillo-2022474 @24750Montenegro
+/proto/lumen/v1/health.proto                          @bcastillo-2022474
+/proto/lumen/v1/jobs.proto                            @bcastillo-2022474
+/proto/lumen/v1/export.proto                          @bcastillo-2022474
+
+# ---------- SDK ----------
+/packages/sdk/                                        @bcastillo-2022474 @carlosaltan18 @PabloVS044 @asanabria-2021067 @JonathanTubac @24750Montenegro
+# Mocks: cada área amplía su generador en el SDK (nunca datos en apps/web)
+/packages/sdk/src/mocks/                              @bcastillo-2022474 @carlosaltan18 @PabloVS044 @asanabria-2021067 @JonathanTubac @24750Montenegro
+
+# ---------- Motor ----------
+/services/engine/                                     @bcastillo-2022474
+/services/engine/lumen_engine/dem/                    @carlosaltan18
+/services/engine/lumen_engine/horizon/                @carlosaltan18
+/services/engine/lumen_engine/search/                 @carlosaltan18
+/services/engine/lumen_engine/services/terrain.py     @carlosaltan18
+/services/engine/lumen_engine/services/horizon.py     @carlosaltan18
+/services/engine/lumen_engine/services/search.py      @carlosaltan18
+/services/engine/tests/unit/test_geometry.py          @carlosaltan18
+/services/engine/lumen_engine/ephem/                  @PabloVS044
+/services/engine/lumen_engine/visibility/             @PabloVS044
+/services/engine/lumen_engine/metrics/                @PabloVS044
+/services/engine/lumen_engine/power/                  @PabloVS044
+/services/engine/lumen_engine/services/ephemeris.py   @PabloVS044
+/services/engine/lumen_engine/services/power.py       @PabloVS044
+/services/engine/lumen_engine/services/whatif.py      @PabloVS044
+/services/engine/lumen_engine/services/validation.py  @PabloVS044
+/services/engine/tests/validation/                    @PabloVS044
+/services/engine/tests/unit/test_visibility.py        @PabloVS044
+/services/engine/tests/unit/test_streaks.py           @PabloVS044
+# Código generado: solo cambia vía `pnpm proto:gen`
+/services/engine/gen/                                 @bcastillo-2022474 @carlosaltan18 @PabloVS044 @asanabria-2021067 @JonathanTubac @24750Montenegro
+
+# ---------- Datos ----------
+/data/scripts/                                        @carlosaltan18
+/data/scripts/download_kernels.sh                     @PabloVS044
+/data/notebooks/                                      @carlosaltan18 @PabloVS044
+/data/catalog/                                        @24750Montenegro @PabloVS044
+
+# ---------- Web ----------
+/apps/web/                                            @bcastillo-2022474 @carlosaltan18 @PabloVS044 @asanabria-2021067 @JonathanTubac @24750Montenegro
+/apps/web/components/globe/                           @asanabria-2021067
+/apps/web/components/terrain/                         @asanabria-2021067
+/apps/web/components/time-controls/                   @asanabria-2021067
+/apps/web/app/explore/                                @asanabria-2021067
+/apps/web/scripts/copy-cesium-assets.mjs              @asanabria-2021067
+/apps/web/components/horizon/                         @JonathanTubac
+/apps/web/components/timeline/                        @JonathanTubac
+/apps/web/components/metrics/                         @JonathanTubac
+/apps/web/components/site-picker/                     @JonathanTubac
+/apps/web/app/site/                                   @JonathanTubac
+/apps/web/lib/coords.ts                               @JonathanTubac
+/apps/web/lib/coords.test.ts                          @JonathanTubac
+# R6 Analysis (reasignar cuando se incorpore la persona)
+/apps/web/components/compare/                         @JonathanTubac
+/apps/web/components/power/                           @JonathanTubac
+/apps/web/components/whatif/                          @JonathanTubac
+/apps/web/app/compare/                                @JonathanTubac
+/apps/web/app/search/                                 @JonathanTubac
+# R7 Producto/Diseño
+/apps/web/app/(marketing)/                            @24750Montenegro
+/apps/web/app/learn/                                  @24750Montenegro
+/apps/web/app/about/                                  @24750Montenegro
+/apps/web/app/validation/                             @24750Montenegro @PabloVS044
+/apps/web/components/layout/                          @24750Montenegro
+/apps/web/components/learn/                           @24750Montenegro
+/apps/web/components/ui/                              @24750Montenegro
+/apps/web/app/globals.css                             @24750Montenegro
+# Infra web compartida: todo el equipo
+/apps/web/lib/api/                                    @bcastillo-2022474 @carlosaltan18 @PabloVS044 @asanabria-2021067 @JonathanTubac @24750Montenegro
+/apps/web/stores/                                     @bcastillo-2022474 @carlosaltan18 @PabloVS044 @asanabria-2021067 @JonathanTubac @24750Montenegro
+/apps/web/lib/url-state.ts                            @bcastillo-2022474 @carlosaltan18 @PabloVS044 @asanabria-2021067 @JonathanTubac @24750Montenegro
+/apps/web/app/api/                                    @bcastillo-2022474
+/apps/web/app/providers.tsx                           @bcastillo-2022474 @carlosaltan18 @PabloVS044 @asanabria-2021067 @JonathanTubac @24750Montenegro
+
+# ---------- Docs / gobernanza ----------
+/docs/                                                @bcastillo-2022474 @carlosaltan18 @PabloVS044 @asanabria-2021067 @JonathanTubac @24750Montenegro
+/docs/methodology.md                                  @PabloVS044
+/docs/validation.md                                   @PabloVS044
+/docs/pitch/                                          @24750Montenegro
+/docs/LUMEN_documento_tecnico.md                      @bcastillo-2022474 @PabloVS044 @24750Montenegro
+/CLAUDE.md                                            @bcastillo-2022474 @carlosaltan18 @PabloVS044 @asanabria-2021067 @JonathanTubac @24750Montenegro
+/.claude/                                             @bcastillo-2022474 @carlosaltan18 @PabloVS044 @asanabria-2021067 @JonathanTubac @24750Montenegro
+/.github/                                             @bcastillo-2022474 @carlosaltan18 @PabloVS044 @asanabria-2021067 @JonathanTubac @24750Montenegro
+/infra/                                               @bcastillo-2022474

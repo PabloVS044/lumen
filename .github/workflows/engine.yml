@@ -1,0 +1,25 @@
+name: engine
+
+on:
+  pull_request:
+    paths: ["services/engine/**", "proto/**", "data/catalog/**", ".github/workflows/engine.yml"]
+  push:
+    branches: [main]
+
+defaults:
+  run:
+    working-directory: services/engine
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - run: uv sync --locked
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run mypy lumen_engine tests
+      - run: uv run pytest -m "not network"

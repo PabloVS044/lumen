@@ -1,0 +1,45 @@
+name: proto
+
+# Contratos front <-> back (ADR-0012): lint, formato, cambios incompatibles y código generado al día.
+on:
+  pull_request:
+    paths:
+      [
+        "proto/**",
+        "buf.yaml",
+        "buf.lock",
+        "buf.gen.yaml",
+        "packages/sdk/src/gen/**",
+        "services/engine/gen/**",
+        ".github/workflows/proto.yml",
+      ]
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Lint y formato
+        run: pnpm proto:lint
+      - name: Cambios incompatibles contra main
+        run: |
+          if git ls-tree -d --name-only origin/main proto | grep -q proto; then
+            pnpm exec buf breaking --against ".git#ref=origin/main"
+          else
+            echo "main aún no tiene proto/: se omite"
+          fi
+      - name: Código generado al día
+        run: |
+          pnpm proto:gen
+          if ! git diff --exit-code -- packages/sdk/src/gen services/engine/gen || [ -n "$(git status --porcelain -- packages/sdk/src/gen services/engine/gen)" ]; then
+            echo "::error::Código generado desactualizado. Corre 'pnpm proto:gen' y commitea."
+            exit 1
+          fi

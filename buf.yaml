@@ -1,0 +1,12 @@
+# Contratos front <-> back (ADR-0012). Compartido (todo el equipo). Cada .proto tiene owner de área (ver CODEOWNERS).
+version: v2
+modules:
+  - path: proto
+deps:
+  - buf.build/bufbuild/protovalidate
+lint:
+  use:
+    - STANDARD
+breaking:
+  use:
+    - WIRE_JSON

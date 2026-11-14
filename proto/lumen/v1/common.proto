@@ -1,0 +1,95 @@
+// Tipos compartidos por todos los servicios. Archivo compartido (2 aprobaciones).
+// Convenciones (sección 0): grados, azimut desde el norte horario, longitud este positiva,
+// latitud sur negativa, metros, UTC. Marco MOON_ME.
+syntax = "proto3";
+
+package lumen.v1;
+
+import "buf/validate/validate.proto";
+import "google/protobuf/timestamp.proto";
+
+// Punto de observación sobre la superficie lunar.
+message Site {
+  // Latitud en grados, sur negativa.
+  double lat = 1 [(buf.validate.field).double = {
+    gte: -90
+    lte: 90
+  }];
+  // Longitud este en grados. Se acepta [-180, 360); el motor normaliza a [-180, 180).
+  double lon = 2 [(buf.validate.field).double = {
+    gte: -180
+    lt: 360
+  }];
+  // Altura del observador sobre el terreno en metros. 0 = valor por defecto (2 m).
+  double obs_height_m = 3 [(buf.validate.field).double = {
+    gte: 0
+    lte: 100
+  }];
+  optional string name = 4;
+  optional string catalog_id = 5;
+}
+
+message LatLon {
+  double lat = 1 [(buf.validate.field).double = {
+    gte: -90
+    lte: 90
+  }];
+  double lon = 2 [(buf.validate.field).double = {
+    gte: -180
+    lt: 360
+  }];
+}
+
+// Rango temporal UTC. Límite: end - start <= MAX_RANGE_DAYS (validado en el motor).
+message TimeRange {
+  option (buf.validate.message).cel = {
+    id: "time_range.order"
+    message: "end must be after start"
+    expression: "this.end > this.start"
+  };
+  google.protobuf.Timestamp start = 1 [(buf.validate.field).required = true];
+  google.protobuf.Timestamp end = 2 [(buf.validate.field).required = true];
+  // Paso en minutos, [5, 360]. 0 = valor por defecto (30).
+  uint32 step_minutes = 3 [(buf.validate.field).uint32 = {lte: 360}];
+}
+
+// Umbrales de visibilidad (sección 9.5).
+message Thresholds {
+  // Fracción mínima del disco solar para considerar el Sol visible. Default 0.5.
+  optional double sun_min_fraction = 1 [(buf.validate.field).double = {
+    gte: 0
+    lte: 1
+  }];
+  // Margen sobre el horizonte para la Tierra (máscara de antena). Default 0.
+  optional double earth_margin_deg = 2 [(buf.validate.field).double = {
+    gte: 0
+    lte: 5
+  }];
+}
+
+// Posición de un cuerpo a lo largo de una serie temporal.
+message BodySeries {
+  repeated double az_deg = 1;
+  repeated double el_deg = 2;
+  // Fracción visible del disco [0, 1].
+  repeated double fraction = 3;
+  repeated double dist_km = 4;
+}
+
+message Interval {
+  google.protobuf.Timestamp start = 1;
+  google.protobuf.Timestamp end = 2;
+  // La racha toca un borde del rango: podría ser más larga (sección 9.6).
+  bool truncated = 3;
+}
+
+// Referencia a un trabajo asíncrono (ADR-06). Consultar con JobService.GetJob.
+message JobRef {
+  string job_id = 1;
+}
+
+// Detalle de error adjunto a los errores Connect. `code` es estable (NO_COVERAGE, ...).
+message ErrorDetail {
+  string code = 1;
+  map<string, string> context = 2;
+}

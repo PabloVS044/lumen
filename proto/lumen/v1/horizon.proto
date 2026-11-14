@@ -1,0 +1,57 @@
+// Máscara de horizonte por ray-casting (sección 9.3). Owner: R2 Geo/Datos.
+syntax = "proto3";
+
+package lumen.v1;
+
+import "buf/validate/validate.proto";
+import "lumen/v1/common.proto";
+
+service HorizonService {
+  rpc ComputeHorizon(ComputeHorizonRequest) returns (ComputeHorizonResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+}
+
+message HorizonOptions {
+  // Resolución azimutal. 0 = default 0.25°.
+  double az_step_deg = 1 [(buf.validate.field).double = {
+    gte: 0
+    lte: 2
+  }];
+  // Alcance del ray-casting. 0 = default 200 km.
+  double max_range_km = 2 [(buf.validate.field).double = {
+    gte: 0
+    lte: 400
+  }];
+}
+
+message Observer {
+  double lat = 1;
+  double lon = 2;
+  double terrain_height_m = 3;
+  double obs_height_m = 4;
+}
+
+message HorizonMask {
+  double az_step_deg = 1;
+  // Elevación del horizonte por azimut, desde az = 0 en pasos de az_step_deg.
+  repeated double elevation_deg = 2;
+  // Distancia al obstáculo que define el horizonte en cada azimut.
+  repeated double obstacle_distance_m = 3;
+  Observer observer = 4;
+  repeated string layers_used = 5;
+  double max_range_km = 6;
+}
+
+message ComputeHorizonRequest {
+  Site site = 1 [(buf.validate.field).required = true];
+  HorizonOptions options = 2;
+}
+
+message ComputeHorizonResponse {
+  oneof outcome {
+    HorizonMask mask = 1;
+    // Sin caché: cálculo encolado.
+    JobRef job = 2;
+  }
+}

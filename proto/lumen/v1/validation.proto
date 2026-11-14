@@ -1,0 +1,26 @@
+// Resultados de validación científica (sección 14, HU-13). Owner: R3.
+syntax = "proto3";
+
+package lumen.v1;
+
+service ValidationService {
+  rpc GetReport(GetReportRequest) returns (GetReportResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+}
+
+message GetReportRequest {}
+
+message ValidationCheck {
+  // p. ej. "ephemeris_vs_horizons", "horizon_flat_dem"
+  string id = 1;
+  string description = 2;
+  double tolerance = 3;
+  double max_error = 4;
+  bool passed = 5;
+  string notes = 6;
+}
+
+message GetReportResponse {
+  repeated ValidationCheck checks = 1;
+}

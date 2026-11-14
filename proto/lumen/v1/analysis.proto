@@ -1,0 +1,117 @@
+// Pipeline completo y comparador (secciones 9.1, 9.6, 9.7, 10). Owner: R1 (orquestación).
+// Las métricas las define R3: cambios en Metrics requieren review de R3.
+syntax = "proto3";
+
+package lumen.v1;
+
+import "buf/validate/validate.proto";
+import "google/protobuf/timestamp.proto";
+import "lumen/v1/common.proto";
+import "lumen/v1/ephemeris.proto";
+import "lumen/v1/horizon.proto";
+import "lumen/v1/terrain.proto";
+
+service AnalysisService {
+  rpc Analyze(AnalyzeRequest) returns (AnalyzeResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+  // 2–4 escenarios (sitio + rango): comparar sitios (M5) o fechas (M6).
+  rpc Compare(CompareRequest) returns (CompareResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+}
+
+message AnalyzeOptions {
+  HorizonOptions horizon = 1;
+  // Incluir series temporales completas (pesadas). Default true en la UI de detalle.
+  bool include_series = 2;
+  bool include_mask = 3;
+}
+
+message AnalyzeRequest {
+  Site site = 1 [(buf.validate.field).required = true];
+  TimeRange range = 2 [(buf.validate.field).required = true];
+  Thresholds thresholds = 3;
+  AnalyzeOptions options = 4;
+}
+
+message Series {
+  repeated google.protobuf.Timestamp time = 1;
+  BodySeries sun = 2;
+  BodySeries earth = 3;
+  repeated double horizon_at_sun_deg = 4;
+  repeated double horizon_at_earth_deg = 5;
+  repeated double eclipse_fraction = 6;
+  repeated bool sun_visible = 7;
+  repeated bool earth_visible = 8;
+  repeated bool operable = 9;
+}
+
+// Definiciones exactas en la sección 9.6.
+message Metrics {
+  double illumination_pct = 1;
+  double illumination_pct_weighted = 2;
+  double longest_dark_h = 3;
+  Interval longest_dark_interval = 4;
+  uint32 dark_periods_count = 5;
+  double earth_visible_pct = 6;
+  double earth_visible_h = 7;
+  double longest_comm_window_h = 8;
+  double longest_comm_blackout_h = 9;
+  double operable_pct = 10;
+  double longest_operable_window_h = 11;
+  optional double sun_elev_mean_visible_deg = 12;
+  optional double sun_elev_max_deg = 13;
+  optional double sun_elev_min_deg = 14;
+  optional double earth_elev_mean_deg = 15;
+  optional double earth_elev_max_deg = 16;
+  optional double earth_elev_min_deg = 17;
+  double eclipse_hours = 18;
+  google.protobuf.Timestamp first_sunrise_after_landing = 19;
+  optional double energy_kwh_per_m2 = 20;
+}
+
+message Meta {
+  string engine_version = 1;
+  repeated string kernels = 2;
+  google.protobuf.Timestamp computed_at = 3;
+  bool cache_hit = 4;
+  uint32 elapsed_ms = 5;
+}
+
+message AnalysisResult {
+  Observer site = 1;
+  Coverage coverage = 2;
+  HorizonMask horizon = 3;
+  Series series = 4;
+  Metrics metrics = 5;
+  repeated Event events = 6;
+  Meta meta = 7;
+}
+
+message AnalyzeResponse {
+  oneof outcome {
+    AnalysisResult result = 1;
+    // Sin caché: análisis encolado (ADR-06). Consultar JobService.
+    JobRef job = 2;
+  }
+}
+
+message Scenario {
+  Site site = 1 [(buf.validate.field).required = true];
+  TimeRange range = 2 [(buf.validate.field).required = true];
+}
+
+message CompareRequest {
+  repeated Scenario scenarios = 1 [(buf.validate.field).repeated = {
+    min_items: 2
+    max_items: 4
+  }];
+  Thresholds thresholds = 2;
+}
+
+message CompareResponse {
+  repeated AnalysisResult results = 1;
+  // Nombre de métrica -> índice del escenario con mejor valor.
+  map<string, uint32> best_by_metric = 2;
+}

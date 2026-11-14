@@ -1,0 +1,43 @@
+// Cobertura DEM y muestreo de terreno (secciones 8.1, 11.4). Owner: R2 Geo/Datos.
+syntax = "proto3";
+
+package lumen.v1;
+
+import "buf/validate/validate.proto";
+import "lumen/v1/common.proto";
+
+service TerrainService {
+  rpc GetCoverage(GetCoverageRequest) returns (GetCoverageResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+  rpc GetTerrainPoint(GetTerrainPointRequest) returns (GetTerrainPointResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+}
+
+message Coverage {
+  repeated string layers = 1;
+  // Resolución de la capa más fina que cubre el punto, en metros.
+  optional double near_res_m = 2;
+  // Fracción de píxeles interpolados (LDEC = 0) alrededor del punto.
+  optional double interpolated_fraction = 3;
+  repeated string warnings = 4;
+}
+
+message GetCoverageRequest {
+  LatLon point = 1 [(buf.validate.field).required = true];
+}
+
+message GetCoverageResponse {
+  Coverage coverage = 1;
+}
+
+message GetTerrainPointRequest {
+  LatLon point = 1 [(buf.validate.field).required = true];
+}
+
+message GetTerrainPointResponse {
+  // Altura sobre la esfera de 1737.4 km, en metros.
+  double height_m = 1;
+  double slope_deg = 2;
+}

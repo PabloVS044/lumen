@@ -1,0 +1,61 @@
+// Buscador de mejor punto cercano (sección 9.10, HU-09). Owner: R2 (cálculo), R6 (UI).
+syntax = "proto3";
+
+package lumen.v1;
+
+import "buf/validate/validate.proto";
+import "lumen/v1/common.proto";
+
+service SearchService {
+  // Siempre asíncrono: devuelve un job; el resultado se pide con GetBestSpotResult.
+  rpc FindBestSpot(FindBestSpotRequest) returns (FindBestSpotResponse);
+  rpc GetBestSpotResult(GetBestSpotResultRequest) returns (GetBestSpotResultResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+}
+
+message FindBestSpotRequest {
+  LatLon center = 1 [(buf.validate.field).required = true];
+  double radius_km = 2 [(buf.validate.field).double = {
+    gte: 0.5
+    lte: 20
+  }];
+  double spacing_m = 3 [(buf.validate.field).double = {
+    gte: 50
+    lte: 2000
+  }];
+  double max_slope_deg = 4 [(buf.validate.field).double = {
+    gte: 0
+    lte: 45
+  }];
+  TimeRange range = 5 [(buf.validate.field).required = true];
+  // Campo de Metrics a maximizar (o "score" con weights).
+  string objective = 6 [(buf.validate.field).string.min_len = 1];
+  map<string, double> weights = 7;
+  uint32 top_k = 8 [(buf.validate.field).uint32 = {
+    gte: 1
+    lte: 50
+  }];
+}
+
+message FindBestSpotResponse {
+  JobRef job = 1;
+}
+
+message GetBestSpotResultRequest {
+  string job_id = 1 [(buf.validate.field).string.min_len = 1];
+}
+
+message SpotCandidate {
+  LatLon point = 1;
+  double score = 2;
+  map<string, double> metrics = 3;
+}
+
+message GetBestSpotResultResponse {
+  repeated SpotCandidate top = 1;
+  // Grilla de la métrica objetivo para el mapa de calor (fila mayor, NaN = filtrado).
+  uint32 grid_cols = 2;
+  uint32 grid_rows = 3;
+  repeated double grid_values = 4;
+}

@@ -1,0 +1,48 @@
+# Node
+node_modules/
+.pnpm-store/
+*.tsbuildinfo
+.next/
+out/
+coverage/
+apps/web/public/cesium/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Data (pesados: nunca al repo, viven en object storage o data/local)
+data/local/
+*.tif
+*.tiff
+*.img
+*.vrt
+*.bsp
+*.bpc
+*.tls
+*.tf
+*.tpc
+services/engine/kernels/*
+!services/engine/kernels/.gitkeep
+!services/engine/kernels/README.md
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+
+# Claude local
+.claude/settings.local.json
