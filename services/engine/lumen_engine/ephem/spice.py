@@ -28,6 +28,11 @@ class BodyEphemeris:
     el_deg: FloatArray
     dist_km: FloatArray
 
+    def window(self, start: int, stop: int) -> "BodyEphemeris":
+        return BodyEphemeris(
+            self.az_deg[start:stop], self.el_deg[start:stop], self.dist_km[start:stop]
+        )
+
 
 @dataclass(frozen=True)
 class EphemerisSeries:
