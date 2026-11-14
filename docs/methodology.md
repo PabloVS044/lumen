@@ -55,6 +55,13 @@ Código: `services/engine/lumen_engine/power/simulator.py` · RPC `PowerService.
   - Sin brownout: energía mínima alcanzada por encima de la reserva.
   - Con brownout: valor **negativo**, igual a la energía que el consumo pidió y la batería no pudo entregar.
 
+### Elección de orientación
+
+El default (vertical con seguimiento, g = cos el) está pensado para **sitios polares**, donde el Sol va
+a 0–3° de elevación (sección 4.6). Cerca del ecuador el Sol pasa cerca del cénit y un panel vertical
+casi no genera al mediodía: allí conviene un panel horizontal (g = sin el). El simulador no elige la
+orientación por el usuario.
+
 ### Limitaciones
 
 - No modela **temperatura** (rendimiento de celdas y batería, calentadores de supervivencia).

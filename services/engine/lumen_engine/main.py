@@ -39,9 +39,9 @@ from lumen_engine.services.stubs import (
     JobServiceImpl,
     SearchServiceImpl,
     ValidationServiceImpl,
-    WhatIfServiceImpl,
 )
 from lumen_engine.services.terrain import TerrainServiceImpl
+from lumen_engine.services.whatif import WhatIfServiceImpl
 
 CONNECT_HEADERS = ["Connect-Protocol-Version", "Connect-Timeout-Ms", "Content-Type"]
 

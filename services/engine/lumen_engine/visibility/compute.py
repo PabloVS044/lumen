@@ -5,7 +5,7 @@ Entrada: efemérides del sitio (`ephem.spice`) y la máscara de horizonte (R2, `
 La máscara se recibe como parámetro: este módulo no depende de cómo se calcula el terreno.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 
 import numpy as np
 import numpy.typing as npt
@@ -33,6 +33,9 @@ class Visibility:
     sun_visible: BoolArray
     earth_visible: BoolArray
     operable: BoolArray  # Sol y Tierra visibles a la vez
+
+    def window(self, start: int, stop: int) -> "Visibility":
+        return Visibility(**{f.name: getattr(self, f.name)[start:stop] for f in fields(self)})
 
 
 def resolve_thresholds(th: common_pb2.Thresholds) -> tuple[float, float]:

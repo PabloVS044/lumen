@@ -29,6 +29,10 @@ class TimeGrid:
     def __len__(self) -> int:
         return int(self.utc.size)
 
+    def window(self, start: int, stop: int) -> "TimeGrid":
+        """Sub-malla [start, stop) con el mismo paso."""
+        return TimeGrid(self.utc[start:stop], self.et[start:stop], self.step_minutes)
+
     def datetimes(self) -> list[datetime]:
         return [t.astype("datetime64[us]").item().replace(tzinfo=UTC) for t in self.utc]
 
