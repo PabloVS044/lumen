@@ -17,3 +17,9 @@ def longest_run(mask: npt.NDArray[np.bool_], value: bool) -> tuple[int, int, int
     starts, ends = edges[0::2], edges[1::2]
     k = int(np.argmax(ends - starts))
     return int(ends[k] - starts[k]), int(starts[k]), int(ends[k])
+
+
+def run_count(mask: npt.NDArray[np.bool_], value: bool) -> int:
+    """Número de rachas consecutivas iguales a `value`."""
+    target = (mask == value).astype(np.int8)
+    return int(np.count_nonzero(np.diff(np.concatenate(([0], target))) == 1))
