@@ -55,15 +55,15 @@ cota de regresión de 1 × 10⁻⁵°.
 
 ### Diferencias de convención y modelo entre motor y Horizons
 
-| Aspecto                      | Motor LUMEN                           | Horizons                                               | Efecto                                           |
-| ---------------------------- | ------------------------------------- | ------------------------------------------------------ | ------------------------------------------------ |
-| Efeméride planetaria         | DE440 (`de440s.bsp`)                  | DE441                                                  | Mismo ajuste en el rango moderno; despreciable   |
-| Marco lunar                  | `MOON_ME` → `MOON_ME_DE440_ME421`     | `MEAN_ME (high precision)`                             | Equivalentes                                     |
-| Forma lunar / vertical local | Esfera R = 1737.4 km, vertical radial | Esfera 1737.4 km                                       | Idénticos                                        |
-| Corrección aparente          | `LT+S` (tiempo de luz + aberración)   | Aparente + flexión relativista de la luz (Sol, Tierra) | ≤ 5e-7° (es la diferencia residual de la Tierra) |
-| Refracción                   | Ninguna (sin atmósfera)               | `APPARENT=AIRLESS`                                     | Idénticos                                        |
-| Azimut                       | Desde el norte, sentido horario       | Desde el norte, hacia el este                          | Idénticos                                        |
-| Escala de tiempo de entrada  | UTC → ET con LSK `naif0012.tls`       | UT                                                     | Idénticos desde 1972                             |
+| Aspecto                      | Motor LUMEN                           | Horizons                                               | Efecto                                                         |
+| ---------------------------- | ------------------------------------- | ------------------------------------------------------ | -------------------------------------------------------------- |
+| Efeméride planetaria         | DE440 (`de440s.bsp`)                  | DE441                                                  | Mismo ajuste en el rango moderno; despreciable                 |
+| Marco lunar                  | `MOON_ME` → `MOON_ME_DE440_ME421`     | `MEAN_ME (high precision)`                             | Equivalentes                                                   |
+| Forma lunar / vertical local | Esfera R = 1737.4 km, vertical radial | Esfera 1737.4 km                                       | Idénticos                                                      |
+| Corrección aparente          | `LT+S` (tiempo de luz + aberración)   | Aparente + flexión relativista de la luz (Sol, Tierra) | ≤ 5e-7°; origen probable del residuo de la Tierra (no aislado) |
+| Refracción                   | Ninguna (sin atmósfera)               | `APPARENT=AIRLESS`                                     | Idénticos                                                      |
+| Azimut                       | Desde el norte, sentido horario       | Desde el norte, hacia el este                          | Idénticos                                                      |
+| Escala de tiempo de entrada  | UTC → ET con LSK `naif0012.tls`       | UT                                                     | Idénticos desde 1972                                           |
 
 La diferencia entre los marcos ME y PA en DE440 es una rotación de ≈ 0.02886° (≈ 875 m en la superficie),
 según el FK `moon_de440_250416.tf`. Usar PA en lugar de ME sería un error visible frente a esta validación;
