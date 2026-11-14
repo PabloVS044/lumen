@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Marca LUMEN (components/ui/lumen-mark.tsx). Colores = tokens surface, muted, sun, earth de globals.css. -->
+  <circle cx="14" cy="18" r="11.5" fill="#2a2f3a" stroke="#9aa3b2" stroke-width="1"/>
+  <path d="M14 6.5A11.5 11.5 0 0 0 14 29.5A5.5 11.5 0 0 1 14 6.5Z" fill="#f5b700"/>
+  <circle cx="25.5" cy="6.5" r="3.5" fill="#3fa7ff"/>
+</svg>

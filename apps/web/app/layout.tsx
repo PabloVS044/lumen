@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 
+import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 
 import { Providers } from "./providers";
@@ -20,7 +21,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="flex min-h-full flex-col font-sans">
         <Providers>
           <SiteHeader />
-          <main className="flex flex-1 flex-col">{children}</main>
+          <main id="main" tabIndex={-1} className="flex flex-1 flex-col outline-none">
+            {children}
+          </main>
+          <SiteFooter />
         </Providers>
       </body>
     </html>
