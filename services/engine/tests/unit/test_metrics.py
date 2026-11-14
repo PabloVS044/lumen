@@ -113,3 +113,21 @@ def test_eclipse_hours_and_energy() -> None:
     assert m.eclipse_hours == pytest.approx(2.0)
     # Panel vertical con seguimiento, el = 0 -> cos(el) = 1; fracciones 1 + 0.5 + 0 + 1 = 2.5 h·S0
     assert m.energy_kwh_per_m2 == pytest.approx(2.5 * SOLAR_CONSTANT_W_M2 / 1000.0)
+
+
+def test_first_sunrise_after_night_landing() -> None:
+    from lumen.v1 import common_pb2
+
+    from lumen_engine.metrics.events import detect
+
+    n = 4
+    vis = _vis([False, False, True, True], [True] * n)
+    vis = Visibility(**{**vis.__dict__, "sun_fraction": np.array([0.0, 0.0, 1.0, 1.0])})
+    sun, earth = _body([-1, -1, 1, 1], AU_KM), _body([5] * n, 384_400.0)
+    events = detect(_grid(n), earth, vis, common_pb2.Thresholds())
+    m = compute(_grid(n), sun, earth, vis, events)
+    assert m.first_sunrise_after_landing.ToDatetime(tzinfo=UTC) == T0 + timedelta(
+        hours=1, minutes=30
+    )
+    day = compute(_grid(n), sun, earth, _vis([True] * n, [True] * n), events)
+    assert not day.HasField("first_sunrise_after_landing")

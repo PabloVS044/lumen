@@ -8,7 +8,7 @@ from datetime import timedelta
 
 import numpy as np
 from google.protobuf.timestamp_pb2 import Timestamp
-from lumen.v1 import analysis_pb2, common_pb2
+from lumen.v1 import analysis_pb2, common_pb2, ephemeris_pb2
 
 from lumen_engine.core.constants import AU_KM, SOLAR_CONSTANT_W_M2
 from lumen_engine.ephem.spice import BodyEphemeris
@@ -38,9 +38,25 @@ def solar_irradiance_w_m2(sun_dist_km: FloatArray) -> FloatArray:
     return out
 
 
+def _first_sunrise(vis: Visibility, events: list[ephemeris_pb2.Event] | None) -> Timestamp | None:
+    """Si se aterriza de noche (Sol no visible al inicio), instante del primer amanecer."""
+    if events is None or not vis.sun_visible.size or vis.sun_visible[0]:
+        return None
+    for ev in events:
+        if ev.type == ephemeris_pb2.EVENT_TYPE_SUNRISE:
+            return ev.time
+    return None
+
+
 def compute(
-    grid: TimeGrid, sun: BodyEphemeris, earth: BodyEphemeris, vis: Visibility
+    grid: TimeGrid,
+    sun: BodyEphemeris,
+    earth: BodyEphemeris,
+    vis: Visibility,
+    events: list[ephemeris_pb2.Event] | None = None,
 ) -> analysis_pb2.Metrics:
+    """Métricas del rango. Con `events` (de `metrics.events.detect`) se calcula también
+    `first_sunrise_after_landing`."""
     step_h = grid.step_minutes / 60.0
     dark_len, dark_start, dark_end = longest_run(vis.sun_visible, False)
     # Panel vertical con seguimiento azimutal: g = cos(el) (sección 9.8)
@@ -68,5 +84,6 @@ def compute(
         earth_elev_max_deg=float(np.max(earth.el_deg)),
         earth_elev_min_deg=float(np.min(earth.el_deg)),
         eclipse_hours=float(np.count_nonzero(vis.eclipse_fraction > 0) * step_h),
+        first_sunrise_after_landing=_first_sunrise(vis, events),
         energy_kwh_per_m2=float(np.sum(irradiance) * step_h / 1000.0),
     )
