@@ -35,7 +35,8 @@ class Visibility:
     operable: BoolArray  # Sol y Tierra visibles a la vez
 
 
-def _thresholds(th: common_pb2.Thresholds) -> tuple[float, float]:
+def resolve_thresholds(th: common_pb2.Thresholds) -> tuple[float, float]:
+    """(sun_min_fraction, earth_margin_deg) aplicando los defaults de proto3 `optional`."""
     sun_min = th.sun_min_fraction if th.HasField("sun_min_fraction") else DEFAULT_SUN_MIN_FRACTION
     margin = th.earth_margin_deg if th.HasField("earth_margin_deg") else DEFAULT_EARTH_MARGIN_DEG
     return sun_min, margin
@@ -53,7 +54,7 @@ def compute(
     - Sol visible: fracción del disco (tras eclipse) >= `sun_min_fraction` (0 = cualquier parte).
     - Tierra visible (comunicación): centro de la Tierra >= horizonte + `earth_margin_deg`.
     """
-    sun_min, margin = _thresholds(thresholds)
+    sun_min, margin = resolve_thresholds(thresholds)
     h_sun = horizon_at(sun.az_deg, mask_el_deg, az_step_deg)
     h_earth = horizon_at(earth.az_deg, mask_el_deg, az_step_deg)
 

@@ -9,6 +9,7 @@ from lumen.v1.ephemeris_connect import EphemerisService
 from lumen_engine.ephem import spice
 from lumen_engine.ephem.geometry import FloatArray
 from lumen_engine.ephem.kernels import run_spice
+from lumen_engine.metrics.upcoming import upcoming_events
 from lumen_engine.rpc.context import Ctx
 
 
@@ -48,4 +49,11 @@ class EphemerisServiceImpl(EphemerisService):
             time=_timestamp(st.time), sun_dir=_vector(st.sun_dir), earth_dir=_vector(st.earth_dir)
         )
 
-    # list_events: requiere visibilidad + horizonte (Fase 4); el stub responde UNIMPLEMENTED.
+    async def list_events(
+        self, request: ephemeris_pb2.ListEventsRequest, ctx: Ctx
+    ) -> ephemeris_pb2.ListEventsResponse:
+        start = getattr(request, "from").ToDatetime(tzinfo=UTC)  # `from` es palabra reservada
+        events = await run_spice(
+            upcoming_events, request.site, start, request.horizon_days, set(request.types)
+        )
+        return ephemeris_pb2.ListEventsResponse(events=events)
