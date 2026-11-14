@@ -26,7 +26,7 @@ from buf.validate import validate_pb2 as buf_dot_validate_dot_validate__pb2
 from lumen.v1 import common_pb2 as lumen_dot_v1_dot_common__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x15lumen/v1/search.proto\x12\x08lumen.v1\x1a\x1b\x62uf/validate/validate.proto\x1a\x15lumen/v1/common.proto\"\xec\x03\n\x13\x46indBestSpotRequest\x12\x30\n\x06\x63\x65nter\x18\x01 \x01(\x0b\x32\x10.lumen.v1.LatLonB\x06\xbaH\x03\xc8\x01\x01R\x06\x63\x65nter\x12\x34\n\tradius_km\x18\x02 \x01(\x01\x42\x17\xbaH\x14\x12\x12\x19\x00\x00\x00\x00\x00\x00\x34@)\x00\x00\x00\x00\x00\x00\xe0?R\x08radiusKm\x12\x34\n\tspacing_m\x18\x03 \x01(\x01\x42\x17\xbaH\x14\x12\x12\x19\x00\x00\x00\x00\x00@\x9f@)\x00\x00\x00\x00\x00\x00I@R\x08spacingM\x12;\n\rmax_slope_deg\x18\x04 \x01(\x01\x42\x17\xbaH\x14\x12\x12\x19\x00\x00\x00\x00\x00\x80\x46@)\x00\x00\x00\x00\x00\x00\x00\x00R\x0bmaxSlopeDeg\x12\x31\n\x05range\x18\x05 \x01(\x0b\x32\x13.lumen.v1.TimeRangeB\x06\xbaH\x03\xc8\x01\x01R\x05range\x12%\n\tobjective\x18\x06 \x01(\tB\x07\xbaH\x04r\x02\x10\x01R\tobjective\x12\x44\n\x07weights\x18\x07 \x03(\x0b\x32*.lumen.v1.FindBestSpotRequest.WeightsEntryR\x07weights\x12\x1e\n\x05top_k\x18\x08 \x01(\rB\t\xbaH\x06*\x04\x18\x32(\x01R\x04topK\x1a:\n\x0cWeightsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x01R\x05value:\x02\x38\x01\":\n\x14\x46indBestSpotResponse\x12\"\n\x03job\x18\x01 \x01(\x0b\x32\x10.lumen.v1.JobRefR\x03job\":\n\x18GetBestSpotResultRequest\x12\x1e\n\x06job_id\x18\x01 \x01(\tB\x07\xbaH\x04r\x02\x10\x01R\x05jobId\"\xc9\x01\n\rSpotCandidate\x12&\n\x05point\x18\x01 \x01(\x0b\x32\x10.lumen.v1.LatLonR\x05point\x12\x14\n\x05score\x18\x02 \x01(\x01R\x05score\x12>\n\x07metrics\x18\x03 \x03(\x0b\x32$.lumen.v1.SpotCandidate.MetricsEntryR\x07metrics\x1a:\n\x0cMetricsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x01R\x05value:\x02\x38\x01\"\xa1\x01\n\x19GetBestSpotResultResponse\x12)\n\x03top\x18\x01 \x03(\x0b\x32\x17.lumen.v1.SpotCandidateR\x03top\x12\x1b\n\tgrid_cols\x18\x02 \x01(\rR\x08gridCols\x12\x1b\n\tgrid_rows\x18\x03 \x01(\rR\x08gridRows\x12\x1f\n\x0bgrid_values\x18\x04 \x03(\x01R\ngridValues2\xc1\x01\n\rSearchService\x12M\n\x0c\x46indBestSpot\x12\x1d.lumen.v1.FindBestSpotRequest\x1a\x1e.lumen.v1.FindBestSpotResponse\x12\x61\n\x11GetBestSpotResult\x12\".lumen.v1.GetBestSpotResultRequest\x1a#.lumen.v1.GetBestSpotResultResponse\"\x03\x90\x02\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x15lumen/v1/search.proto\x12\x08lumen.v1\x1a\x1b\x62uf/validate/validate.proto\x1a\x15lumen/v1/common.proto\"\x83\x04\n\x13\x46indBestSpotRequest\x12\x30\n\x06\x63\x65nter\x18\x01 \x01(\x0b\x32\x10.lumen.v1.LatLonB\x06\xbaH\x03\xc8\x01\x01R\x06\x63\x65nter\x12\x34\n\tradius_km\x18\x02 \x01(\x01\x42\x17\xbaH\x14\x12\x12\x19\x00\x00\x00\x00\x00\x00\x34@)\x00\x00\x00\x00\x00\x00\xe0?R\x08radiusKm\x12\x34\n\tspacing_m\x18\x03 \x01(\x01\x42\x17\xbaH\x14\x12\x12\x19\x00\x00\x00\x00\x00@\x9f@)\x00\x00\x00\x00\x00\x00I@R\x08spacingM\x12@\n\rmax_slope_deg\x18\x04 \x01(\x01\x42\x17\xbaH\x14\x12\x12\x19\x00\x00\x00\x00\x00\x80\x46@)\x00\x00\x00\x00\x00\x00\x00\x00H\x00R\x0bmaxSlopeDeg\x88\x01\x01\x12\x31\n\x05range\x18\x05 \x01(\x0b\x32\x13.lumen.v1.TimeRangeB\x06\xbaH\x03\xc8\x01\x01R\x05range\x12%\n\tobjective\x18\x06 \x01(\tB\x07\xbaH\x04r\x02\x10\x01R\tobjective\x12\x44\n\x07weights\x18\x07 \x03(\x0b\x32*.lumen.v1.FindBestSpotRequest.WeightsEntryR\x07weights\x12\x1e\n\x05top_k\x18\x08 \x01(\rB\t\xbaH\x06*\x04\x18\x32(\x01R\x04topK\x1a:\n\x0cWeightsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x01R\x05value:\x02\x38\x01\x42\x10\n\x0e_max_slope_deg\":\n\x14\x46indBestSpotResponse\x12\"\n\x03job\x18\x01 \x01(\x0b\x32\x10.lumen.v1.JobRefR\x03job\":\n\x18GetBestSpotResultRequest\x12\x1e\n\x06job_id\x18\x01 \x01(\tB\x07\xbaH\x04r\x02\x10\x01R\x05jobId\"\xc9\x01\n\rSpotCandidate\x12&\n\x05point\x18\x01 \x01(\x0b\x32\x10.lumen.v1.LatLonR\x05point\x12\x14\n\x05score\x18\x02 \x01(\x01R\x05score\x12>\n\x07metrics\x18\x03 \x03(\x0b\x32$.lumen.v1.SpotCandidate.MetricsEntryR\x07metrics\x1a:\n\x0cMetricsEntry\x12\x10\n\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n\x05value\x18\x02 \x01(\x01R\x05value:\x02\x38\x01\"\xa1\x01\n\x19GetBestSpotResultResponse\x12)\n\x03top\x18\x01 \x03(\x0b\x32\x17.lumen.v1.SpotCandidateR\x03top\x12\x1b\n\tgrid_cols\x18\x02 \x01(\rR\x08gridCols\x12\x1b\n\tgrid_rows\x18\x03 \x01(\rR\x08gridRows\x12\x1f\n\x0bgrid_values\x18\x04 \x03(\x01R\ngridValues2\xc1\x01\n\rSearchService\x12M\n\x0c\x46indBestSpot\x12\x1d.lumen.v1.FindBestSpotRequest\x1a\x1e.lumen.v1.FindBestSpotResponse\x12\x61\n\x11GetBestSpotResult\x12\".lumen.v1.GetBestSpotResultRequest\x1a#.lumen.v1.GetBestSpotResultResponse\"\x03\x90\x02\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -56,19 +56,19 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_SEARCHSERVICE'].methods_by_name['GetBestSpotResult']._loaded_options = None
   _globals['_SEARCHSERVICE'].methods_by_name['GetBestSpotResult']._serialized_options = b'\220\002\001'
   _globals['_FINDBESTSPOTREQUEST']._serialized_start=88
-  _globals['_FINDBESTSPOTREQUEST']._serialized_end=580
-  _globals['_FINDBESTSPOTREQUEST_WEIGHTSENTRY']._serialized_start=522
-  _globals['_FINDBESTSPOTREQUEST_WEIGHTSENTRY']._serialized_end=580
-  _globals['_FINDBESTSPOTRESPONSE']._serialized_start=582
-  _globals['_FINDBESTSPOTRESPONSE']._serialized_end=640
-  _globals['_GETBESTSPOTRESULTREQUEST']._serialized_start=642
-  _globals['_GETBESTSPOTRESULTREQUEST']._serialized_end=700
-  _globals['_SPOTCANDIDATE']._serialized_start=703
-  _globals['_SPOTCANDIDATE']._serialized_end=904
-  _globals['_SPOTCANDIDATE_METRICSENTRY']._serialized_start=846
-  _globals['_SPOTCANDIDATE_METRICSENTRY']._serialized_end=904
-  _globals['_GETBESTSPOTRESULTRESPONSE']._serialized_start=907
-  _globals['_GETBESTSPOTRESULTRESPONSE']._serialized_end=1068
-  _globals['_SEARCHSERVICE']._serialized_start=1071
-  _globals['_SEARCHSERVICE']._serialized_end=1264
+  _globals['_FINDBESTSPOTREQUEST']._serialized_end=603
+  _globals['_FINDBESTSPOTREQUEST_WEIGHTSENTRY']._serialized_start=527
+  _globals['_FINDBESTSPOTREQUEST_WEIGHTSENTRY']._serialized_end=585
+  _globals['_FINDBESTSPOTRESPONSE']._serialized_start=605
+  _globals['_FINDBESTSPOTRESPONSE']._serialized_end=663
+  _globals['_GETBESTSPOTRESULTREQUEST']._serialized_start=665
+  _globals['_GETBESTSPOTRESULTREQUEST']._serialized_end=723
+  _globals['_SPOTCANDIDATE']._serialized_start=726
+  _globals['_SPOTCANDIDATE']._serialized_end=927
+  _globals['_SPOTCANDIDATE_METRICSENTRY']._serialized_start=869
+  _globals['_SPOTCANDIDATE_METRICSENTRY']._serialized_end=927
+  _globals['_GETBESTSPOTRESULTRESPONSE']._serialized_start=930
+  _globals['_GETBESTSPOTRESULTRESPONSE']._serialized_end=1091
+  _globals['_SEARCHSERVICE']._serialized_start=1094
+  _globals['_SEARCHSERVICE']._serialized_end=1287
 # @@protoc_insertion_point(module_scope)

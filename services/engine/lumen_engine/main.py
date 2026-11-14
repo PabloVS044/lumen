@@ -33,11 +33,11 @@ from lumen_engine.services.ephemeris import EphemerisServiceImpl
 from lumen_engine.services.health import HealthServiceImpl
 from lumen_engine.services.horizon import HorizonServiceImpl
 from lumen_engine.services.power import PowerServiceImpl
+from lumen_engine.services.search import SearchServiceImpl
 from lumen_engine.services.sites import SiteServiceImpl
 from lumen_engine.services.stubs import (
     ExportServiceImpl,
     JobServiceImpl,
-    SearchServiceImpl,
 )
 from lumen_engine.services.terrain import TerrainServiceImpl
 from lumen_engine.services.validation import ValidationServiceImpl

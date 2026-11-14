@@ -580,14 +580,14 @@ lumen/
 | **LOLA 5 m/px – sitios de aterrizaje del polo sur** (Barker et al. 2021) | Regiones de ~20×20 km: Site01 Connecting ridge, Site04 Shackleton rim, Site06 Nobile rim 1, Site07 Peak near Shackleton, Site11 de Gerlache rim, Site20 Leibnitz beta plateau, Site23 Malapert massif, Haworth, Shoemaker, DM2 Nobile rim 2 | 5 m | GeoTIFF, estereográfica polar sur, MOON_ME (DE421). Incluye LDEM (altura), LDEC (conteo de disparos), pendiente, incertidumbre Z, incertidumbre de pendiente, 100 "clones" | https://pgda.gsfc.nasa.gov/data/LOLA_5mpp/ · README: https://core2.gsfc.nasa.gov/PGDA/LOLA_5mpp/README | Capa fina cerca del observador; clones para incertidumbre (🧪) |
 | **Mosaico LOLA 5 m/px 87°–90°S** (Barker, PGDA product 81) | Todo el casquete 87–90°S | 5 m | GeoTIFF; `ldem_87s_5mpp` ≈ 3.3 GB; hillshade ≈ 820 MB; pendiente ≈ 4.9 GB | https://pgda.gsfc.nasa.gov/data/LOLA_5mpp/87S/ · https://pgda.gsfc.nasa.gov/products/81 | Capa principal para coordenadas personalizadas cerca del polo |
 | **DEMs mejorados con Shape-from-Shading** (Bertone, PGDA product 104) | 13 regiones originales candidatas de Artemis III | 5 m (resolución efectiva mayor en zonas iluminadas) | GeoTIFF | https://pgda.gsfc.nasa.gov/products/104 | 🧪 Mayor detalle cercano; comparar contra LOLA |
-| **DEMs polares de LOLA (GDR)** | Casquetes polares (p. ej. 75°/80°/85°–90°) | ~20–240 m según producto | PDS IMG/GeoTIFF, estereográfica polar | PDS LOLA: https://imbrium.mit.edu/ (DATA → GDR) ⚠️ VERIFICAR nombres exactos (p. ej. `LDEM_80S_20M`, `LDEM_75S_*`) | Capa gruesa para horizonte lejano (hasta 150–200 km) |
+| **DEMs polares de LOLA** | Casquetes polares (p. ej. 75°/80°/85°–90°) | ~20–240 m según producto | PDS IMG/JP2 o COG PGDA, estereográfica polar | PDS LOLA: https://imbrium.mit.edu/BROWSE/LOLA_GDR/POLAR/SOUTH_POLE/ · PGDA: https://pgda.gsfc.nasa.gov/products/90 | Capa gruesa para horizonte lejano; actualmente instalado `LDEM_80S_80MPP_ADJ.TIF` de PGDA (80 m) |
 | **SLDEM2015** (LOLA + Kaguya TC) | ±60° lat | ~60 m | PDS | https://imbrium.mit.edu/ (SLDEM2015) | Coordenadas fuera de los polos (latitudes medias) |
-| **LOLA global DEM** (LDEM_64 / LDEM_128 / etc.) | Global | ~118 m (128 ppd) y menores | PDS / USGS Astropedia | https://imbrium.mit.edu/ · USGS Astrogeology ⚠️ VERIFICAR enlaces | Fallback global (Apollo, cara oculta, etc.) |
+| **LOLA global DEM** (LDEM_128) | Global | ~237 m (128 ppd) | PDS JP2 | https://imbrium.mit.edu/DATA/LOLA_GDR/CYLINDRICAL/JP2/ | Fallback global opcional (`prepare_dem.py --global`); etiqueta PDS: alturas = 0.5 × valor entero en metros sobre la esfera de 1 737.4 km |
 | **Productos de iluminación polar de LOLA** | Polos | Varios | PDS EXTRAS | https://imbrium.mit.edu/ (EXTRAS: polar illumination) | **Validación** de % iluminación (M15) y capa regional (M16) |
 
 **Notas de procesamiento**
 - Convertir todo a **COG** con overviews: `gdal_translate in.tif out_cog.tif -of COG -co COMPRESS=DEFLATE -co PREDICTOR=3 -co BLOCKSIZE=512 -co OVERVIEWS=AUTO` (para Float32 usar `PREDICTOR=3`).
-- Crear un **VRT** o índice propio que indique, para un punto, qué capas lo cubren y con qué resolución.
+- Crear un **VRT** o índice propio que indique, para un punto, qué capas lo cubren y con qué resolución. R2 usa `data/scripts/prepare_dem.py` para producir `data/local/dem/index.json` de Site01 5 m y polar 80S 80 m; ambos datasets permanecen fuera de Git.
 - Verificar **NoData** y el porcentaje de píxeles interpolados (LDEC = 0 → interpolado). Los DEM 5 m polares tienen ~90% de píxeles interpolados por el espaciado de LOLA (según PGDA). Mostrar esto como advertencia de precisión.
 - Registrar **datum vertical**: LOLA reporta alturas respecto a la esfera de 1 737.4 km. ⚠️ VERIFICAR para cada producto.
 
@@ -685,19 +685,22 @@ entrada: lat, lon, h_obs (altura del observador sobre el terreno, default 2 m),
 **Parámetros por defecto**
 | Parámetro | Valor | Nota |
 |---|---|---|
-| Resolución azimutal | 0.25° (N = 1440) | 0.5° para búsquedas masivas |
+| Resolución azimutal | 0.25° (N = 1440) | 1° en la búsqueda M12; 0.25° para los mejores candidatos |
 | Alcance máximo | 200 km | El polo sur tiene relieves de varios km; a 200 km la caída por curvatura es ~11.5 km |
 | Altura del observador | 2 m | Configurable (mástil de antena, panel en altura: 1–10 m) |
-| Muestreo radial | adaptativo | Paso ≈ resolución de la capa usada a esa distancia |
+| Muestreo radial | adaptativo | 1 m en los primeros 200 m; luego paso ≈ resolución de la capa usada a esa distancia |
 
-**Capas multi-resolución (ejemplo)**
+**Capas multi-resolución instaladas**
 | Distancia | Capa | Paso radial |
 |---|---|---|
-| 0 – 10 km | 5 m (sitio o mosaico 87S) | 5 m |
-| 10 – 40 km | 5 m mosaico o 20 m polar | 20 m |
-| 40 – 200 km | 20–120 m polar | 60–120 m |
+| 0 – 10 km en Site01 | 5 m; fallback polar 80 m en NoData | 1 m hasta 200 m; luego 5 m |
+| 10 – 200 km cerca del polo sur | polar 80 m | 80 m |
+| Fuera de la cobertura polar, con `--global` | PDS LDEM_128 de ~237 m/píxel | ~237 m |
 
 Si la capa fina no cubre una distancia, se usa la siguiente más gruesa disponible.
+La capa instalada de 80 m cubre actualmente el rango exterior de Site01. Si falta cobertura
+al final de un rayo, el motor devuelve `INSUFFICIENT_DEM_RANGE` en vez de afirmar una máscara
+completa. La validación sintética y la convergencia de Site01 están en `docs/validation.md`.
 
 **Ángulo de elevación de un punto del terreno (esfera exacta)**
 
@@ -719,43 +722,26 @@ Esto incluye curvatura sin aproximaciones. (Aproximación equivalente para d ≪
 λ2 = λ1 + atan2( sin α sin δ cos φ1, cos δ − sin φ1 sin φ2 )
 ```
 
-Luego `(φ2, λ2)` → proyección estereográfica polar → índice de píxel → **interpolación bilineal** de la altura.
+Luego `(φ2, λ2)` → proyección propia de la capa (estereográfica polar o cilíndrica global) → índice de píxel → **interpolación bilineal** de la altura.
 
-**Pseudocódigo (numba)**
+**Pseudocódigo del cálculo por bloques NumPy**
 
 ```python
-@njit(parallel=True)
-def horizon_mask(lat0, lon0, r0, az_deg, dist_m, layer_ids, dems, transforms, R):
-    N = az_deg.size
-    out = np.full(N, -90.0)
-    out_dist = np.zeros(N)
-    for k in prange(N):
-        a = np.radians(az_deg[k])
-        best = -np.pi / 2
-        best_d = 0.0
-        for j in range(dist_m.size):
-            d = dist_m[j]
-            lat, lon = destination(lat0, lon0, a, d / R)
-            h1 = sample_bilinear(dems[layer_ids[j]], transforms[layer_ids[j]], lat, lon)
-            if np.isnan(h1):
-                continue
-            g = d / R
-            r1 = R + h1
-            dx = r1 * np.sin(g)
-            dz = r1 * np.cos(g) - r0
-            th = np.arctan2(dz, dx)
-            if th > best:
-                best = th; best_d = d
-        out[k] = np.degrees(best)
-        out_dist[k] = best_d
-    return out, out_dist   # elevación del horizonte y distancia al obstáculo
+for azimuth_block in chunks(azimuths, 32):
+    for distances, usable_layers in radial_tiers:
+        lat, lon = destination_grid(site, azimuth_block, distances)
+        height = sample_bilinear_with_fallback(usable_layers, lat, lon)
+        gamma = distances / R
+        elevation = degrees(arctan2((R + height) * cos(gamma) - r0,
+                                    (R + height) * sin(gamma)))
+        update_maximum_per_azimuth(elevation, distances)
+require_terrain_at_far_end_of_every_ray()
 ```
 
 **Optimizaciones**
-- Precomputar en el motor la lista de distancias por capa y cargar **solo las ventanas** de los COG que cubren el disco de 200 km (bounding box en estereográfica).
-- Para el mosaico de 5 m, un disco de 40 km de radio son 16 000 × 16 000 píxeles (~1 GB en float32) → **no** cargar entero a 5 m; usar 5 m solo hasta ~10 km (4 000 × 4 000 = 64 MB) y overviews más allá.
-- Early exit: no se puede descartar fácilmente porque una montaña lejana puede superar el máximo; pero se puede usar el límite superior `h_max_global` para cortar cuando ni el punto más alto posible superaría `best`.
-- Complejidad: 1440 azimuts × ~3 000 muestras ≈ 4.3 M muestras → < 1 s con numba en un core moderno.
+- Precomputar distancias por capa y cargar bajo demanda solo las ventanas que cubren el disco requerido; el JP2 global no se abre cuando la capa polar cubre todos los rayos.
+- Limitar Site01 de 5 m a 10 km; cargarlo entero a 200 km excedería la memoria razonable.
+- Procesar 32 azimuts a la vez. Una corrida local de Site01 con 1440 azimuts y 200 km tomó ~3 s; depende del disco y de la caché del sistema.
 
 **Salida**
 ```json
@@ -764,7 +750,7 @@ def horizon_mask(lat0, lon0, r0, az_deg, dist_m, layer_ids, dems, transforms, R)
   "elevation_deg": [ ... 1440 valores ... ],
   "obstacle_distance_m": [ ... ],
   "observer": {"lat": -89.45, "lon": -137.3, "terrain_height_m": 1820.5, "obs_height_m": 2},
-  "layers_used": ["LOLA_5mpp_87S", "LDEM_80S_20M"],
+  "layers_used": ["PGDA_Site01_5m", "PGDA_80S_80m"],
   "max_range_km": 200
 }
 ```
@@ -939,14 +925,19 @@ graficar métrica vs k; marcar k óptimos y "zonas prohibidas"
 entrada: centro (lat, lon), radio_km, espaciado (m), métrica objetivo, pendiente_max
 1. malla de candidatos en estereográfica alrededor del centro (espaciado 100–500 m)
 2. filtrar por pendiente (capa de pendiente LOLA) ≤ pendiente_max
-3. para cada candidato: máscara de horizonte rápida (0.5–1° az, alcance 200 km, sin capa 5 m más allá de 2 km)
-4. evaluar métricas con las efemérides (la dirección Sol/Tierra casi no cambia en pocos km:
-   reusar az/el del centro y corregir por desplazamiento → error despreciable para radios < 20 km;
-   ⚠️ validar el error con 2–3 puntos completos)
-5. ranking top-K; mapa de calor de la métrica
-6. refinar top-K con cálculo completo (0.25°)
+3. muestrear una malla gruesa distribuida por toda la región y densificar los vecindarios mejor puntuados
+4. para cada candidato seleccionado: máscara rápida (1° az, alcance 200 km, sin capa 5 m más allá de 2 km)
+5. evaluar métricas con efemérides calculadas una vez en el centro, reconstruyendo vectores MOON_ME
+   y reproyectándolos al candidato con corrección de paralaje y vertical local (test vs SPICE directo)
+6. ranking top-K; mapa de calor aproximado por vecino evaluado más cercano
+7. refinar top-K con cálculo completo (0.25°)
 ```
-Costo: 20 km de radio con 250 m de espaciado ≈ 20 000 candidatos → paralelizar (numba prange / multiprocessing) y procesar como **job** con progreso. Precalcular para las regiones del catálogo.
+Costo: 20 km de radio con 250 m de espaciado ≈ 20 000 celdas; la búsqueda jerárquica evalúa
+un subconjunto y no garantiza el óptimo global. El resultado corre como **job** con progreso;
+la implementación actual guarda esos jobs en memoria del proceso hasta integrar la cola R1.
+El COG regional experimental de M16 se genera con `data/scripts/precompute_regional_map.py`.
+`data/scripts/precompute_catalog_horizons.py` materializa máscaras JSON del catálogo para el
+warmup local; la carga automática en caché queda a cargo de la integración de R1.
 
 ### 9.11 Iluminación para el globo 3D
 
@@ -957,7 +948,7 @@ Costo: 20 km de radio con 250 m de espaciado ≈ 20 000 candidatos → paraleliz
 
 ### 9.12 Incertidumbre (🧪)
 
-- Los DEMs 5 m de sitios traen **100 clones** (realizaciones con error). Calcular la máscara con N clones (p. ej. 20) → banda de incertidumbre del horizonte y rango de métricas (p5–p95). Excelente para el criterio de Validity.
+- Los DEMs 5 m de sitios traen **100 clones** (realizaciones con error). `clone_envelope` calcula la máscara con N clones (p. ej. 20) → banda de incertidumbre del horizonte y, si recibe las efemérides del sitio, de las métricas (p5–p95). Dos clones sirven para probar el pipeline, no para reportar intervalos estables.
 
 ---
 

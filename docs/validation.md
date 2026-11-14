@@ -8,10 +8,38 @@ El motor los sirve en `ValidationService.GetReport` (generado con
 | --------------------------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------ |
 | Sol/Tierra az/el vs JPL Horizons, 5 sitios × 20 instantes | ≤ 0.01°                  | ✅ máx. 5.4e-7° (ver abajo)                                                          |
 | Ventanas del eclipse 2026-03-03 vs CSPICE `occult()`      | ≤ 3 min                  | ✅ máx. 1 min (ver abajo)                                                            |
-| Horizonte DEM sintético plano                             | 1e-4°                    | pendiente (R2)                                                                       |
-| Horizonte montaña analítica                               | exacto                   | pendiente (R2)                                                                       |
-| Convergencia paso radial / alcance                        | sin cambio significativo | pendiente (R2)                                                                       |
+| Horizonte DEM sintético plano                             | 1e-4°                    | ✅ test sintético en 8 azimuts; incluye curvatura y dip                                 |
+| Horizonte montaña sintética a 2 km                        | 0.2° por píxel/muestreo   | ✅ el rumbo este detecta la cresta y su distancia                                       |
+| Convergencia paso radial / alcance, Site01                 | reportar Δ máximo        | ✅ 0.0409° con paso radial/2; 0° de 200 a 250 km (ver abajo)                           |
 | % iluminación vs Mazarico 2011 / Barker 2021              | documentar diferencias   | pendiente, requiere horizonte ([#10](https://github.com/PabloVS044/lumen/issues/10)) |
+
+## Horizonte LOLA (secciones 9.3 y 14.2)
+
+Los tests `services/engine/tests/unit/test_dem_horizon.py` crean un GeoTIFF lunar sintético sin
+red: comprueban horizonte plano contra el dip analítico a 2 m, una montaña de 100 m a 2 km al
+este, y el fallback de lectura bilineal. Para Site01 (coordenada de catálogo aproximada
+−89.45°, −137.31°), una corrida local con el LDEM de 5 m y la capa polar de 80 m produjo 1 440
+azimuts. Al reducir a la mitad el paso radial, la diferencia máxima fue **0.0409°** (percentil
+99: **0.0163°**). Al ampliar el alcance de 200 a 250 km no cambió el perfil. La capa fina y el
+conteo LDEC local indican que **8 de 9 píxeles** alrededor del punto no tienen retorno LOLA directo;
+esto es una advertencia de precisión, no una medición de exactitud del horizonte.
+
+Estas pruebas verifican geometría y estabilidad numérica. Aún falta comparación visual contra
+QuickMap/Moon Trek y comparación de porcentajes de iluminación para periodos idénticos contra
+la literatura. El RPC público `ValidationService.GetReport` sigue mostrando por ahora solo las
+pruebas de efemérides y eclipse que genera R3.
+
+El respaldo global PDS LDEM_128 se probó localmente en Apollo 11 (0.674°, 23.473°): lectura de
+altura −1934.43 m sobre la esfera de referencia y pendiente local 0.79°. También se generaron
+COG regionales de prueba de 3×3 celdas para Site01 y Apollo 11. Son pruebas de integración,
+no validaciones de exactitud contra una fuente independiente. Los tests unitarios cubren la
+escala de 0.5 m del JP2 y la continuidad en ±180° de longitud. La cobertura de líneas de
+`dem/`, `horizon/` y `search/` fue 89 % (145 tests no marcados `network`).
+
+Una prueba local adicional con dos clones reales de Site01 ejecutó el percentil de horizonte
+p5–p95; la anchura mediana fue 0.080° y la máxima 1.059° entre 360 azimuts. Solo comprueba la
+compatibilidad de los archivos. Dos clones son insuficientes para estimar una distribución de
+incertidumbre; se necesitan más realizaciones para comunicar intervalos estables.
 
 ## Efemérides vs JPL Horizons (sección 14.1)
 

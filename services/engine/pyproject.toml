@@ -28,6 +28,7 @@ science = [
 geo = [
     "rasterio>=1.4",
     "pyproj>=3.7",
+    "matplotlib>=3.9", # notebook de validación R2
 ]
 # Persistencia y jobs. Owner: Backend/Infra
 infra = [
@@ -77,6 +78,10 @@ exclude = ["^gen/"]
 [[tool.mypy.overrides]]
 module = ["lumen.*", "buf.*", "protovalidate.*", "celpy.*"]
 ignore_errors = true
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["rasterio", "rasterio.*", "scipy", "scipy.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

@@ -42,12 +42,6 @@ def test_range_too_long_is_invalid_argument(rpc: ConnectJSON) -> None:
     assert r.json()["code"] == "invalid_argument"
 
 
-def test_list_events_unimplemented_until_horizon_exists(rpc: ConnectJSON) -> None:
-    body = {"site": SITE, "from": "2027-01-01T00:00:00Z"}
-    r = rpc.call("EphemerisService", "ListEvents", body)
-    assert r.json()["code"] == "unimplemented"
-
-
 @pytest.mark.usefixtures("flat_horizon")
 def test_list_events_with_horizon(rpc: ConnectJSON) -> None:
     body = {
