@@ -55,3 +55,44 @@ def compare_all(fixture: Path = FIXTURE) -> list[CaseErrors]:
             )
         )
     return out
+
+
+ECLIPSE_TOLERANCE_MIN = 3.0
+# Punto sub-Tierra el 2026-03-03 11:30 UTC: ahí la dirección a la Tierra coincide con la del centro
+# lunar, que es desde donde observa CSPICE occult().
+_ECLIPSE_SITE = (0.49, 4.74)
+
+
+def eclipse_vs_spice_minutes() -> float:
+    """Máx. diferencia (min) entre los bordes parcial/total del eclipse del 2026-03-03 según el
+    motor y según CSPICE occult(), a resolución de 1 minuto."""
+    from datetime import UTC, datetime, timedelta
+
+    from lumen_engine.visibility.eclipse import sun_occulted_by_earth
+
+    load_kernels()
+    t0 = datetime(2026, 3, 3, 8, 0, tzinfo=UTC)
+    times = [t0 + timedelta(minutes=k) for k in range(8 * 60)]
+    ets = np.array([sp.str2et(t.strftime("%Y-%m-%dT%H:%M:%S")) for t in times])
+    lat, lon = _ECLIPSE_SITE
+    frac = sun_occulted_by_earth(
+        body_azel("SUN", ets, lat, lon, obs_height_m=DEFAULT_OBS_HEIGHT_M),
+        body_azel("EARTH", ets, lat, lon, obs_height_m=DEFAULT_OBS_HEIGHT_M),
+    )
+    codes = [
+        sp.occult("SUN", "ELLIPSOID", "IAU_SUN", "EARTH", "ELLIPSOID", "IAU_EARTH", "LT", "MOON", e)
+        for e in ets
+    ]
+
+    def edges(flags: list[bool]) -> tuple[datetime, datetime]:
+        hits = [t for t, f in zip(times, flags, strict=True) if f]
+        return hits[0], hits[-1]
+
+    worst = 0.0
+    for ours, ref in [
+        (edges([f > 0 for f in frac]), edges([c != 0 for c in codes])),
+        (edges([f >= 1 - 1e-12 for f in frac]), edges([c == -3 for c in codes])),
+    ]:
+        for a, b in zip(ours, ref, strict=True):
+            worst = max(worst, abs((a - b).total_seconds()) / 60.0)
+    return worst

@@ -1,14 +1,17 @@
 # Validación
 
 Owner: R3 Efemérides/Ciencia. Resultados de la sección 14 que alimentan `/validation`.
+El motor los sirve en `ValidationService.GetReport` (generado con
+`uv run python -m tests.validation.tools.build_report`; un test exige que esté al día).
 
-| Prueba                                                    | Tolerancia               | Estado                         |
-| --------------------------------------------------------- | ------------------------ | ------------------------------ |
-| Sol/Tierra az/el vs JPL Horizons, 5 sitios × 20 instantes | ≤ 0.01°                  | ✅ máx. 5.4e-7° (ver abajo)    |
-| Horizonte DEM sintético plano                             | 1e-4°                    | pendiente (R2)                 |
-| Horizonte montaña analítica                               | exacto                   | pendiente (R2)                 |
-| Convergencia paso radial / alcance                        | sin cambio significativo | pendiente (R2)                 |
-| % iluminación vs Mazarico 2011 / Barker 2021              | documentar diferencias   | pendiente (requiere horizonte) |
+| Prueba                                                    | Tolerancia               | Estado                                                                               |
+| --------------------------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------ |
+| Sol/Tierra az/el vs JPL Horizons, 5 sitios × 20 instantes | ≤ 0.01°                  | ✅ máx. 5.4e-7° (ver abajo)                                                          |
+| Ventanas del eclipse 2026-03-03 vs CSPICE `occult()`      | ≤ 3 min                  | ✅ máx. 1 min (ver abajo)                                                            |
+| Horizonte DEM sintético plano                             | 1e-4°                    | pendiente (R2)                                                                       |
+| Horizonte montaña analítica                               | exacto                   | pendiente (R2)                                                                       |
+| Convergencia paso radial / alcance                        | sin cambio significativo | pendiente (R2)                                                                       |
+| % iluminación vs Mazarico 2011 / Barker 2021              | documentar diferencias   | pendiente, requiere horizonte ([#10](https://github.com/PabloVS044/lumen/issues/10)) |
 
 ## Efemérides vs JPL Horizons (sección 14.1)
 
@@ -73,3 +76,19 @@ el motor usa ME en todo el pipeline.
 
 - Valida la geometría Sol/Tierra **sin terreno**: no valida el horizonte (R2) ni las métricas de visibilidad.
 - Coordenadas de sitios aproximadas: no afectan a la validación, porque ambos lados usan las mismas.
+
+## Eclipses vs CSPICE `occult()` (sección 9.4.4)
+
+**Resultado:** en el eclipse lunar total del 2026-03-03, las ventanas parcial y total del motor coinciden con
+CSPICE `occult()` con una diferencia máxima de **1 minuto** (resolución de 1 min; tolerancia 3 min).
+
+| Ventana | CSPICE (centro lunar) | Motor (punto sub-Tierra) |
+| ------- | --------------------- | ------------------------ |
+| Parcial | 09:18 – 13:50 UTC     | 09:17 – 13:50 UTC        |
+| Total   | 10:26 – 12:41 UTC     | 10:25 – 12:42 UTC        |
+
+- `occult()` observa desde el centro lunar, así que el motor se evalúa en el punto sub-Tierra de ese instante (0.49°, 4.74°), donde la dirección a la Tierra coincide con la del centro.
+- Desde otros sitios la ventana se desplaza por **paralaje**: desde Apollo 11 llega unos 10 minutos más tarde. Es un efecto real, no un error.
+- Diferencias de modelo: SPICE usa el elipsoide terrestre (6378/6357 km); el motor, una esfera de 6371 km. Ninguno modela la luz refractada por la atmósfera terrestre.
+
+Test: `services/engine/tests/unit/test_eclipse.py`.

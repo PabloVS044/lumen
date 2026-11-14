@@ -198,12 +198,12 @@ Esta sección es obligatoria para todo el equipo, especialmente para quien traba
 - Con el Sol rozando el horizonte, **una montaña a decenas de km** puede tapar el Sol, y un **pico o borde de cráter** puede recibir luz casi continua (los llamados "**picos de luz casi eterna**").
 - Al revés, el fondo de cráteres profundos queda en **sombra permanente** (**PSR, Permanently Shadowed Regions**), con temperaturas que permiten conservar hielo de agua. Por eso son científicamente valiosos, pero sin energía solar.
 - La Luna rota una vez por **mes sinódico (~29.53 días)**: un "día lunar" dura ~29.5 días terrestres. En el polo, el Sol da una vuelta completa al horizonte (360° de azimut) en ese periodo.
-- Las **estaciones lunares** (debidas a la inclinación de 1.54°) cambian la elevación máxima del Sol a lo largo del **año de eclipses (~346.6 días)**. ⚠️ VERIFICAR: el ciclo relevante de iluminación polar se relaciona con el año draconítico/de eclipses; documentar con fuente al escribir la sección educativa.
+- Las **estaciones lunares** (debidas a la inclinación de 1.54°) cambian la elevación máxima del Sol a lo largo del **año de eclipses (~346.6 días)**. ✅ Verificado con el motor (SPICE DE440, 2026–2045): la latitud sub-solar oscila entre −1.59° y +1.59° con un período medio entre máximos de **346.64 días**.
 
 ### 4.2 La Tierra vista desde la Luna
 
 - La Luna tiene **rotación síncrona**: muestra casi siempre la misma cara a la Tierra. Desde un punto fijo de la cara visible, la Tierra **casi no se mueve** en el cielo: describe una pequeña figura por la **libración**.
-- **Libración en longitud** ≈ ±7.9° (por la excentricidad de la órbita) y **libración en latitud** ≈ ±6.7° (por la inclinación). ⚠️ VERIFICAR valores exactos.
+- **Libración en longitud** ≈ ±7.9° (por la excentricidad de la órbita) y **libración en latitud** ≈ ±6.7° (por la inclinación), valores ópticos clásicos. ✅ Medido con el motor (punto sub-Tierra en MOON_ME, 2026–2045, incluye libración física): longitud −8.04°…+8.08°, latitud ±6.86°, combinada hasta 10.48° del cénit en el punto sub-Tierra medio.
 - Consecuencia en el polo sur: la Tierra está **cerca del horizonte norte** del sitio y su elevación oscila varios grados con un periodo de ~27.2 días (mes draconítico) → **la comunicación directa aparece y desaparece** según la libración y el relieve hacia el norte.
 - En la **cara oculta** la Tierra nunca es visible (excepto en franjas del limbo que la libración muestra a veces). Mensaje educativo potente.
 - **Diámetro angular de la Tierra** vista desde la Luna ≈ **1.9°** (≈ 3.7 veces el del Sol). **Diámetro angular del Sol** ≈ **0.53°**.
@@ -234,7 +234,7 @@ Esta sección es obligatoria para todo el equipo, especialmente para quien traba
 
 ### 4.7 Sistemas de referencia (importante para no equivocarse)
 
-- **MOON_PA** (Principal Axes) y **MOON_ME** (Mean Earth / polar axis): dos marcos fijos a la Luna; difieren por una rotación constante pequeña (del orden de cientos de metros en la superficie). ⚠️ VERIFICAR magnitud.
+- **MOON_PA** (Principal Axes) y **MOON_ME** (Mean Earth / polar axis): dos marcos fijos a la Luna; difieren por una rotación constante pequeña. ✅ Para DE440 son ≈ **0.02886°** (≈ 875 m en la superficie), según el FK `moon_de440_250416.tf`.
 - **Los productos de LOLA y las coordenadas de sitios se publican en MOON_ME** (los DEMs polares de PGDA indican MOON_ME basado en DE421).
 - **Todo el motor trabaja en MOON_ME.** Las efemérides se calculan con el PCK DE440 + frame kernel que define MOON_ME para DE440. La diferencia entre MOON_ME de DE421 y de DE440 es pequeña (metros); documentar y considerar despreciable para nuestro propósito.
 - **Proyección estereográfica polar sur** (la de los DEMs LOLA polares):
@@ -595,10 +595,10 @@ lumen/
 
 | Kernel | Tipo | Contenido | URL |
 |---|---|---|---|
-| `naif0012.tls` | LSK | Segundos intercalares (UTC↔TDB) | https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/ ⚠️ VERIFICAR versión vigente |
+| `naif0012.tls` | LSK | Segundos intercalares (UTC↔TDB) | https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/ ✅ vigente (verificado 2026-11-14) |
 | `de440s.bsp` (≈32 MB, 1849–2150) o `de440.bsp` (≈114 MB, rango mayor) | SPK | Posiciones de Sol, Tierra, Luna | https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/ |
 | `moon_pa_de440_200625.bpc` | PCK binario | Orientación del marco MOON_PA (DE440), cobertura ~1550–2650 | https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/ |
-| `moon_de440_220930.tf` (o más reciente, p. ej. `moon_de440_250416.tf`) | FK | Define MOON_PA y MOON_ME (alias) para DE440 | https://naif.jpl.nasa.gov/pub/naif/generic_kernels/fk/satellites/ ⚠️ VERIFICAR versión más reciente |
+| `moon_de440_250416.tf` | FK | Define MOON_PA y MOON_ME (alias) para DE440 | https://naif.jpl.nasa.gov/pub/naif/generic_kernels/fk/satellites/ ✅ vigente (verificado 2026-11-14; `moon_de440_220930.tf` ya no se publica). Versiones y SHA-256 fijados en `data/scripts/download_kernels.sh` |
 | `pck00011.tpc` | PCK texto | Radios y constantes de cuerpos | https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/ |
 | `earth_*`/`earth_latest_high_prec.bpc` | PCK | 🧪 Orientación terrestre de alta precisión (solo si se calculan estaciones de la DSN) | idem |
 
@@ -606,7 +606,7 @@ Librerías: **SpiceyPy** (`pip install spiceypy`) — wrapper de CSPICE. Funcion
 
 **Skyfield** (alternativa/cross-check): soporta cargar `.tf` y `.bpc` lunares y definir posiciones sobre la superficie lunar para observar el Sol y la Tierra (https://rhodesmill.org/skyfield/planetary.html).
 
-**JPL Horizons API** (validación): https://ssd-api.jpl.nasa.gov/doc/horizons.html. Para observador en la Luna: `CENTER='coord@301'`, `COORD_TYPE='GEODETIC'`, `SITE_COORD='lon,lat,alt_km'`, `QUANTITIES='4'` (azimut/elevación aparente), `COMMAND='10'` (Sol) o `'399'` (Tierra). ⚠️ VERIFICAR parámetros exactos al implementar.
+**JPL Horizons API** (validación): https://ssd-api.jpl.nasa.gov/doc/horizons.html. Para observador en la Luna: `CENTER='coord@301'`, `COORD_TYPE='GEODETIC'`, `SITE_COORD='lon,lat,alt_km'`, `QUANTITIES='4'` (azimut/elevación aparente), `COMMAND='10'` (Sol) o `'399'` (Tierra). ✅ Verificado: además `APPARENT='AIRLESS'`, `ANG_FORMAT='DEG'`, `TIME_TYPE='UT'`, `QUANTITIES='4,20'` para la distancia. Horizons usa la esfera de 1737.4 km y el marco `MEAN_ME`. Script: `services/engine/tests/validation/tools/fetch_horizons.py`.
 
 **NAIF WebGeocalc** (validación manual): https://wgc.jpl.nasa.gov:8443/webgeocalc/ ⚠️ VERIFICAR URL.
 
@@ -778,10 +778,10 @@ def horizon_mask(lat0, lon0, r0, az_deg, dist_m, layer_ids, dems, transforms, R)
 ```python
 import spiceypy as sp
 for k in ["naif0012.tls", "de440s.bsp", "moon_pa_de440_200625.bpc",
-          "moon_de440_220930.tf", "pck00011.tpc"]:
+          "moon_de440_250416.tf", "pck00011.tpc"]:
     sp.furnsh(f"kernels/{k}")
 ```
-⚠️ Al cargar el FK, verificar que el alias `MOON_ME` apunte a la realización DE440 (`MOON_ME_DE440_ME421`) y documentarlo.
+✅ Verificado: con `moon_de440_250416.tf` el alias `MOON_ME` apunta a `MOON_ME_DE440_ME421` (test `test_moon_me_is_de440_realization`).
 
 #### 9.4.2 Az/El desde el sitio (opción A: `azlcpo`)
 
@@ -792,7 +792,7 @@ azlsta, lt = sp.azlcpo(method="ELLIPSOID", target="SUN", et=et, abcorr="LT+S",
                        obsctr="MOON", obsref="MOON_ME")
 # azlsta[0]=range, [1]=az (rad), [2]=el (rad)
 ```
-⚠️ `method="ELLIPSOID"` usa la forma de la Luna de los kernels (esfera en pck00011) para definir la vertical local; verificar que coincide con nuestra definición de Up (radial). Si no, usar la opción B.
+✅ Verificado: pck00011 define la Luna como esfera de 1737.4 km, así que la vertical de `azlcpo` es radial. El motor usa la opción B y coincide con `azlcpo` a 1e-6° (test `test_series_matches_spice_azlcpo`).
 
 #### 9.4.3 Opción B: vector + base ENU propia
 
@@ -1701,8 +1701,8 @@ Fase 1 (horizonte + efemérides validados)
 | Q3 | Hosting del motor (Fly/Render/VM propia) | Backend | Fly.io o Render |
 | Q4 | ¿Arq o RQ para jobs? | Backend | arq (async, encaja con FastAPI) |
 | Q5 | ¿D3 o ECharts para el polar? | Front Charts | D3 (control total de la escala no lineal) |
-| Q6 | Altura del observador por defecto (2 m) | Ciencia | 2 m, configurable |
-| Q7 | Umbral de visibilidad del Sol (centro vs fracción > 0) | Ciencia | Centro visible (fracción ≥ 0.5) |
+| Q6 | Altura del observador por defecto (2 m) | Ciencia | ✅ Decidido: 2 m, configurable (`Site.obs_height_m`) |
+| Q7 | Umbral de visibilidad del Sol (centro vs fracción > 0) | Ciencia | ✅ Decidido: centro visible (fracción ≥ 0.5); `sun_min_fraction` configurable, 0 = cualquier parte |
 | Q8 | Rango temporal por defecto | Producto | Próximos 12 meses desde hoy, paso 30 min |
 | Q9 | ¿Idioma principal de la UI? | Producto | Inglés para jueces + ES vía i18n |
 | Q10 | ¿Incluir incertidumbre con clones (M12.x)? | Geo | Solo si sobra tiempo |
@@ -1718,13 +1718,13 @@ Antes de la entrega, revisar y tachar:
 - [ ] Criterios de evaluación y formato de entrega 2026 (sección 3).
 - [ ] Proyección exacta de cada GeoTIFF (sección 4.7, 8.1).
 - [ ] Nombres de productos DEM polares de 20 m+ en imbrium (8.1).
-- [ ] Versión vigente de LSK y FK lunar (8.2).
-- [ ] Parámetros exactos de Horizons API para observador lunar (8.2).
+- [x] Versión vigente de LSK y FK lunar (8.2).
+- [x] Parámetros exactos de Horizons API para observador lunar (8.2).
 - [ ] Asset ID y plan de Cesium Moon; API `Ellipsoid` en la versión de CesiumJS (8.3, 12.2).
 - [ ] ID del CGI Moon Kit en SVS (8.3).
 - [ ] Coordenadas de todos los sitios del catálogo (13).
 - [ ] Estado actual de Artemis y Chang'e-7 (13).
-- [ ] Valores de libración y ciclo estacional (4.1, 4.2).
+- [x] Valores de libración y ciclo estacional (4.1, 4.2).
 - [ ] Números usados en el pitch (18.3).
 
 ### Anexo B — Ejemplo mínimo de cálculo (para Fase 1)
@@ -1735,7 +1735,7 @@ import numpy as np, spiceypy as sp, rasterio
 from pyproj import CRS, Transformer
 
 R = 1_737_400.0
-for k in ["naif0012.tls","de440s.bsp","moon_pa_de440_200625.bpc","moon_de440_220930.tf","pck00011.tpc"]:
+for k in ["naif0012.tls","de440s.bsp","moon_pa_de440_200625.bpc","moon_de440_250416.tf","pck00011.tpc"]:
     sp.furnsh(f"kernels/{k}")
 
 lat, lon, h_obs = -89.45, -137.31, 2.0     # ⚠️ coordenadas de ejemplo, verificar
