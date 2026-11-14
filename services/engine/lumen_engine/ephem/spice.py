@@ -60,6 +60,25 @@ def _body_vectors(target: str, ets: FloatArray, obspos_km: FloatArray) -> FloatA
     return out
 
 
+def body_azel(
+    target: str,
+    ets: FloatArray,
+    lat_deg: float,
+    lon_deg: float,
+    *,
+    obs_height_m: float,
+    terrain_height_m: float = 0.0,
+) -> BodyEphemeris:
+    """az/el/distancia de `target` ("SUN" | "EARTH") desde el sitio en los instantes ET dados."""
+    load_kernels()
+    lon = normalize_lon(lon_deg)
+    obspos = site_position_km(
+        lat_deg, lon, terrain_height_m=terrain_height_m, obs_height_m=obs_height_m
+    )
+    az, el, dist = azel(_body_vectors(target, ets, obspos), lat_deg, lon)
+    return BodyEphemeris(az_deg=az, el_deg=el, dist_km=dist)
+
+
 def series(
     site: common_pb2.Site, time_range: common_pb2.TimeRange, *, terrain_height_m: float = 0.0
 ) -> EphemerisSeries:
@@ -69,15 +88,18 @@ def series(
     < 0.001° para alturas lunares típicas (paralaje de pocos km frente a 384 000 km).
     """
     grid = build_grid(time_range)
-    lat, lon = site.lat, normalize_lon(site.lon)
-    obspos = site_position_km(
-        lat, lon, terrain_height_m=terrain_height_m, obs_height_m=obs_height(site)
+    sun, earth = (
+        body_azel(
+            target,
+            grid.et,
+            site.lat,
+            site.lon,
+            obs_height_m=obs_height(site),
+            terrain_height_m=terrain_height_m,
+        )
+        for target in ("SUN", "EARTH")
     )
-    bodies = {}
-    for target in ("SUN", "EARTH"):
-        az, el, dist = azel(_body_vectors(target, grid.et, obspos), lat, lon)
-        bodies[target] = BodyEphemeris(az_deg=az, el_deg=el, dist_km=dist)
-    return EphemerisSeries(grid=grid, sun=bodies["SUN"], earth=bodies["EARTH"])
+    return EphemerisSeries(grid=grid, sun=sun, earth=earth)
 
 
 def state(t: datetime) -> EphemerisState:
