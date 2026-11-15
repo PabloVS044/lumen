@@ -27,13 +27,13 @@ vi.mock("resium", () => ({
     ...props
   }: {
     children?: React.ReactNode;
-    globe?: boolean;
+    baseLayer?: boolean;
     ellipsoid?: { name: string };
   }) => (
     <div
       data-testid="viewer"
       data-ellipsoid={props.ellipsoid?.name}
-      data-globe={String(props.globe)}
+      data-base-layer={String(props.baseLayer)}
     >
       {children}
     </div>
@@ -43,6 +43,9 @@ vi.mock("resium", () => ({
     <div data-testid="fallback-sphere">{children}</div>
   ),
   EllipsoidGraphics: () => null,
+  Globe: ({ show }: { show?: boolean }) => (
+    <div data-testid="cesium-globe" data-show={String(show)} />
+  ),
 }));
 
 vi.mock("./site-markers", () => ({
@@ -100,11 +103,24 @@ describe("Globe", () => {
     expect(screen.queryByTestId("fallback-sphere")).not.toBeInTheDocument();
   });
 
-  it("creates the viewer without the default globe, using the lunar ellipsoid", () => {
+  it("creates the viewer with the lunar ellipsoid, no imagery and the default globe hidden", () => {
     renderGlobe();
     const viewer = screen.getByTestId("viewer");
     expect(viewer).toHaveAttribute("data-ellipsoid", "moon");
-    expect(viewer).toHaveAttribute("data-globe", "false");
+    expect(viewer).toHaveAttribute("data-base-layer", "false");
+    // Resium 1.28 falla con globe={false}: se deja el globo de Cesium, oculto.
+    expect(screen.getByTestId("cesium-globe")).toHaveAttribute("data-show", "false");
+  });
+
+  it("shows the NASA and USGS attribution next to the real tileset, not next to the fallback", () => {
+    vi.stubEnv("NEXT_PUBLIC_CESIUM_ION_TOKEN", "tok");
+    vi.stubEnv("NEXT_PUBLIC_CESIUM_MOON_ASSET_ID", "123");
+    const { unmount } = renderGlobe();
+    expect(screen.getByText(/NASA and the USGS Astrogeology Science Center/)).toBeInTheDocument();
+    unmount();
+    vi.stubEnv("NEXT_PUBLIC_CESIUM_ION_TOKEN", "");
+    renderGlobe();
+    expect(screen.queryByText(/USGS Astrogeology/)).not.toBeInTheDocument();
   });
 
   it("shows a marker layer with the catalog once ListSites answers", async () => {
