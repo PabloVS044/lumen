@@ -72,4 +72,27 @@ describe("mock transport", () => {
       expect(sunsets.events.every((e) => e.type === EventType.SUNSET)).toBe(true);
     });
   });
+
+  describe("getSeries", () => {
+    const range = {
+      start: timestampFromDate(new Date("2027-01-15T00:00:00Z")),
+      end: timestampFromDate(new Date("2027-01-15T03:00:00Z")),
+      stepMinutes: 30,
+    };
+    const site = { lat: -89.45, lon: -137.31 };
+
+    it("returns aligned time, azimuth and elevation arrays for Sun and Earth", async () => {
+      const res = await client.ephemeris.getSeries({ site, range });
+      expect(res.time.length).toBeGreaterThan(1);
+      expect(res.sun?.azDeg.length).toBe(res.time.length);
+      expect(res.sun?.elDeg.length).toBe(res.time.length);
+      expect(res.earth?.azDeg.length).toBe(res.time.length);
+    });
+
+    it("is deterministic", async () => {
+      expect(await client.ephemeris.getSeries({ site, range })).toEqual(
+        await client.ephemeris.getSeries({ site, range }),
+      );
+    });
+  });
 });

@@ -19,6 +19,7 @@ import {
   EventSchema,
   EventType,
   type Event,
+  type GetSeriesRequest,
   type ListEventsRequest,
 } from "../gen/lumen/v1/ephemeris_pb";
 import { HorizonMaskSchema, ObserverSchema, type HorizonMask } from "../gen/lumen/v1/horizon_pb";
@@ -219,4 +220,12 @@ export function mockEvents(req: ListEventsRequest): Event[] {
     }),
   );
   return analysis.events.filter((e) => !req.types.length || req.types.includes(e.type));
+}
+
+/** Series az/el de Sol y Tierra del sitio: las mismas que `mockAnalysis` para el rango pedido. */
+export function mockSeries(req: GetSeriesRequest) {
+  const { series } = mockAnalysis(
+    create(AnalyzeRequestSchema, { site: req.site, range: req.range }),
+  );
+  return { time: series?.time ?? [], sun: series?.sun, earth: series?.earth };
 }
