@@ -1,2 +1,2 @@
 export { createMockTransport } from "./transport";
-export { MOCK_VERSION, mockAnalysis, mockCatalog, mockHorizon } from "./data";
+export { MOCK_VERSION, mockAnalysis, mockCatalog, mockEvents, mockHorizon } from "./data";

@@ -14,7 +14,7 @@ import { HorizonService } from "../gen/lumen/v1/horizon_pb";
 import { Region, SiteService } from "../gen/lumen/v1/sites_pb";
 import { TerrainService } from "../gen/lumen/v1/terrain_pb";
 
-import { MOCK_VERSION, mockAnalysis, mockCatalog, mockHorizon } from "./data";
+import { MOCK_VERSION, mockAnalysis, mockCatalog, mockEvents, mockHorizon } from "./data";
 
 export function createMockTransport(): Transport {
   return createRouterTransport(({ service }) => {
@@ -67,6 +67,7 @@ export function createMockTransport(): Transport {
           earthDir: { x: 1, y: 0, z: 0 },
         };
       },
+      listEvents: (req) => ({ events: mockEvents(req) }),
     });
 
     service(AnalysisService, {
