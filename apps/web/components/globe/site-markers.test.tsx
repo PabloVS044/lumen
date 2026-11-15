@@ -64,14 +64,40 @@ describe("SiteMarkers", () => {
 
   it("paints sites of the scenario with their store color and the rest with the muted token", () => {
     useScenarioStore.setState({
-      sites: [{ id: mockCatalog[0]!.id, name: "a", lat: 0, lon: 0, obsHeightM: 2, color: "tomato" }],
+      sites: [
+        { id: mockCatalog[0]!.id, name: "a", lat: 0, lon: 0, obsHeightM: 2, color: "tomato" },
+      ],
     });
     render(<SiteMarkers sites={mockCatalog} onSelect={() => {}} />);
     expect(screen.getByTestId(`marker-${mockCatalog[0]!.id}`)).toHaveAttribute(
       "data-color",
       "tomato",
     );
-    expect(screen.getByTestId(`marker-${mockCatalog[1]!.id}`)).toHaveAttribute("data-color", "gray");
+    expect(screen.getByTestId(`marker-${mockCatalog[1]!.id}`)).toHaveAttribute(
+      "data-color",
+      "gray",
+    );
+  });
+
+  it("resolves var(--token) colors from the store", () => {
+    document.documentElement.style.setProperty("--color-site-1", "hotpink");
+    useScenarioStore.setState({
+      sites: [
+        {
+          id: mockCatalog[0]!.id,
+          name: "a",
+          lat: 0,
+          lon: 0,
+          obsHeightM: 2,
+          color: "var(--color-site-1)",
+        },
+      ],
+    });
+    render(<SiteMarkers sites={mockCatalog} onSelect={() => {}} />);
+    expect(screen.getByTestId(`marker-${mockCatalog[0]!.id}`)).toHaveAttribute(
+      "data-color",
+      "hotpink",
+    );
   });
 
   it("shows the label only near the site, and always for the selected one", () => {

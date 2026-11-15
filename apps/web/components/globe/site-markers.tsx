@@ -5,12 +5,12 @@
  * Neutros por defecto; los sitios del escenario usan su color del store.
  */
 import type { CatalogSite } from "@lumen/sdk";
-import { Cartesian2, Cartesian3, Color, DistanceDisplayCondition, Ellipsoid } from "cesium";
+import { Cartesian2, Cartesian3, DistanceDisplayCondition, Ellipsoid } from "cesium";
 import { Entity } from "resium";
 
 import { useScenarioStore } from "@/stores/scenario-store";
 
-import { tokenColor } from "./token-color";
+import { cssColor, tokenColor } from "./token-color";
 
 const LABEL_FAR_M = 1_500_000;
 
@@ -28,11 +28,7 @@ export function SiteMarkers({ sites, selectedId, onSelect }: Props) {
   return sites.map((site) => {
     const selected = site.id === selectedId;
     const activeColor = active.find((a) => a.id === site.id)?.color;
-    const color = activeColor
-      ? Color.fromCssColorString(activeColor)
-      : selected
-        ? selectedColor
-        : neutral;
+    const color = activeColor ? cssColor(activeColor) : selected ? selectedColor : neutral;
     return (
       <Entity
         key={site.id}

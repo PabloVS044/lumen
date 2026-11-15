@@ -6,3 +6,9 @@ export function tokenColor(token: string) {
     getComputedStyle(document.documentElement).getPropertyValue(token).trim(),
   );
 }
+
+/** Color de Cesium desde un valor CSS o un `var(--token)`, como los colores de sitio del store. */
+export function cssColor(value: string) {
+  const token = /^var\((--[\w-]+)\)$/.exec(value)?.[1];
+  return token ? tokenColor(token) : Color.fromCssColorString(value);
+}
