@@ -6,7 +6,7 @@ SPICE mantiene estado global en el proceso: la carga se hace una sola vez y bajo
 
 import asyncio
 import ctypes
-import os
+import sys
 import threading
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
@@ -57,7 +57,7 @@ _loaded: list[str] = []
 def _spice_path(path: Path) -> str:
     """CSPICE en Windows abre rutas ANSI; usar el alias 8.3 para carpetas Unicode."""
     resolved = str(path.resolve())
-    if os.name != "nt" or resolved.isascii():
+    if sys.platform != "win32" or resolved.isascii():
         return resolved
     get_short = ctypes.WinDLL("kernel32", use_last_error=True).GetShortPathNameW
     get_short.argtypes = [ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_uint]
