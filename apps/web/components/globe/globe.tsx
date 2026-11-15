@@ -5,9 +5,10 @@
  * Especificación: sección 12.2 del documento técnico.
  * Sin token de ion o sin asset ID de Cesium Moon: esfera simple y aviso.
  */
+import "cesium/Build/Cesium/Widgets/widgets.css";
 import { Cartesian3, Color, Ellipsoid, IonResource } from "cesium";
 import { useMemo } from "react";
-import { Cesium3DTileset, EllipsoidGraphics, Entity, Viewer } from "resium";
+import { Cesium3DTileset, EllipsoidGraphics, Entity, Globe as CesiumGlobe, Viewer } from "resium";
 
 export function Globe() {
   const ionToken = process.env.NEXT_PUBLIC_CESIUM_ION_TOKEN;
@@ -27,7 +28,7 @@ export function Globe() {
       <Viewer
         className="h-full w-full"
         ellipsoid={Ellipsoid.MOON}
-        globe={false}
+        baseLayer={false}
         geocoder={false}
         baseLayerPicker={false}
         sceneModePicker={false}
@@ -37,6 +38,8 @@ export function Globe() {
         timeline={false}
         fullscreenButton={false}
       >
+        {/* Resium 1.28 exige scene.globe: se deja uno oculto y sin capas en vez de globe={false}. */}
+        <CesiumGlobe show={false} />
         {moonTiles ? (
           <Cesium3DTileset url={moonTiles} />
         ) : (
@@ -52,6 +55,11 @@ export function Globe() {
           </Entity>
         )}
       </Viewer>
+      {moonTiles && (
+        <p className="pointer-events-none absolute right-3 bottom-2 rounded-sm bg-panel/80 px-2 py-1 text-xs text-muted">
+          Moon terrain and imagery: NASA and the USGS Astrogeology Science Center, via Cesium ion.
+        </p>
+      )}
       {missing && (
         <p
           role="status"
