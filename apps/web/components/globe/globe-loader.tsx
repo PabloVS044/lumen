@@ -6,7 +6,13 @@
  */
 import dynamic from "next/dynamic";
 
-export const GlobeLoader = dynamic(() => import("./globe").then((m) => m.Globe), {
-  ssr: false,
-  loading: () => <div className="p-6 text-sm text-muted">Cargando globo…</div>,
-});
+export const GlobeLoader = dynamic(
+  () => {
+    (window as unknown as { CESIUM_BASE_URL?: string }).CESIUM_BASE_URL = "/cesium";
+    return import("./globe").then((m) => m.Globe);
+  },
+  {
+    ssr: false,
+    loading: () => <div className="p-6 text-sm text-muted">Cargando globo…</div>,
+  },
+);
