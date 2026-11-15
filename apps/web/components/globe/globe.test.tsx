@@ -1,7 +1,7 @@
 import { TransportProvider } from "@connectrpc/connect-query";
 import { createMockTransport, mockCatalog } from "@lumen/sdk/mocks";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import type { ComponentProps } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -51,6 +51,14 @@ vi.mock("./site-markers", () => ({
   ),
 }));
 
+vi.mock("./sky-overlay", () => ({
+  SkyOverlay: ({ sun, site }: { sun?: unknown; site?: { id: string } }) => (
+    <div data-testid="sky" data-has-sun={String(Boolean(sun))} data-site={site?.id} />
+  ),
+}));
+
+import { useScenarioStore } from "@/stores/scenario-store";
+
 import { Globe } from "./globe";
 
 function renderGlobe(props: ComponentProps<typeof Globe> = {}, transport = createMockTransport()) {
@@ -65,6 +73,7 @@ function renderGlobe(props: ComponentProps<typeof Globe> = {}, transport = creat
 }
 
 beforeEach(() => {
+  useScenarioStore.setState({ currentTime: null });
   IonResource.fromAssetId.mockClear();
 });
 
@@ -123,5 +132,25 @@ describe("Globe", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent(/catalog/i);
     expect(screen.getByTestId("viewer")).toBeInTheDocument();
     expect(screen.queryByTestId("markers")).not.toBeInTheDocument();
+  });
+
+  it("passes the Sun vector and the selected site to the sky overlay once the time is set", async () => {
+    useScenarioStore.setState({ currentTime: "2027-01-15T06:30:00Z" });
+    renderGlobe({ selectedSiteId: mockCatalog[1]!.id });
+    expect(screen.getByTestId("sky")).toHaveAttribute("data-has-sun", "false");
+    await waitFor(() => expect(screen.getByTestId("sky")).toHaveAttribute("data-has-sun", "true"));
+    expect(screen.getByTestId("sky")).toHaveAttribute("data-site", mockCatalog[1]!.id);
+  });
+
+  it("warns in text when GetState fails and keeps the globe", async () => {
+    useScenarioStore.setState({ currentTime: "2027-01-15T06:30:00Z" });
+    const failing = {
+      unary: () => Promise.reject(new Error("engine down")),
+      stream: () => Promise.reject(new Error("engine down")),
+    } as unknown as ReturnType<typeof createMockTransport>;
+    renderGlobe({}, failing);
+    const alerts = await screen.findAllByRole("alert");
+    expect(alerts.some((a) => /Sun and Earth/i.test(a.textContent ?? ""))).toBe(true);
+    expect(screen.getByTestId("viewer")).toBeInTheDocument();
   });
 });

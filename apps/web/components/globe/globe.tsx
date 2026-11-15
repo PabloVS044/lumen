@@ -11,8 +11,12 @@ import { Cartesian3, Ellipsoid, IonResource } from "cesium";
 import { useMemo } from "react";
 import { Cesium3DTileset, EllipsoidGraphics, Entity, Viewer } from "resium";
 
+import { useScenarioStore } from "@/stores/scenario-store";
+
 import { SiteMarkers } from "./site-markers";
+import { SkyOverlay } from "./sky-overlay";
 import { tokenColor } from "./token-color";
+import { useSunEarth } from "./use-sun-earth";
 
 interface GlobeProps {
   selectedSiteId?: string;
@@ -21,6 +25,9 @@ interface GlobeProps {
 
 export function Globe({ selectedSiteId, onSelectSite }: GlobeProps = {}) {
   const { data: catalog, error: catalogError } = useQuery(SiteService.method.listSites, {});
+  const currentTime = useScenarioStore((s) => s.currentTime);
+  const { sun, earth, error: stateError } = useSunEarth(currentTime);
+  const selectedSite = catalog?.sites.find((x) => x.id === selectedSiteId);
   const ionToken = process.env.NEXT_PUBLIC_CESIUM_ION_TOKEN;
   const assetId = Number.parseInt(process.env.NEXT_PUBLIC_CESIUM_MOON_ASSET_ID ?? "", 10);
   const missing = !ionToken
@@ -38,6 +45,7 @@ export function Globe({ selectedSiteId, onSelectSite }: GlobeProps = {}) {
       <Viewer
         className="h-full w-full"
         ellipsoid={Ellipsoid.MOON}
+        requestRenderMode
         globe={false}
         geocoder={false}
         baseLayerPicker={false}
@@ -58,6 +66,7 @@ export function Globe({ selectedSiteId, onSelectSite }: GlobeProps = {}) {
             />
           </Entity>
         )}
+        <SkyOverlay sun={sun} earth={earth} site={selectedSite} />
         {catalog && (
           <SiteMarkers
             sites={catalog.sites}
@@ -72,6 +81,14 @@ export function Globe({ selectedSiteId, onSelectSite }: GlobeProps = {}) {
           className="absolute bottom-3 left-3 max-w-sm rounded-md bg-panel px-3 py-2 text-sm text-bad"
         >
           Could not load the site catalog. Markers are hidden.
+        </p>
+      )}
+      {stateError && (
+        <p
+          role="alert"
+          className="absolute bottom-14 left-3 max-w-sm rounded-md bg-panel px-3 py-2 text-sm text-bad"
+        >
+          Could not load the Sun and Earth positions. Lighting may be out of date.
         </p>
       )}
       {missing && (
