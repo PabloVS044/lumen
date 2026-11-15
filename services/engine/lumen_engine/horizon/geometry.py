@@ -26,6 +26,30 @@ def destination(
     return float(np.degrees(phi2)), float(lon2)
 
 
+def destination_grid(
+    lat_deg: float,
+    lon_deg: float,
+    az_deg: FloatArray,
+    dist_m: FloatArray,
+    radius_m: float = MOON_RADIUS_M,
+) -> tuple[FloatArray, FloatArray]:
+    """Versión vectorizada de destination para rayos y distancias en metros."""
+    phi1, lam1 = np.radians(lat_deg), np.radians(lon_deg)
+    alpha, delta = np.radians(az_deg), dist_m / radius_m
+    phi2 = np.arcsin(
+        np.clip(
+            np.sin(phi1) * np.cos(delta) + np.cos(phi1) * np.sin(delta) * np.cos(alpha), -1.0, 1.0
+        )
+    )
+    lam2 = lam1 + np.arctan2(
+        np.sin(alpha) * np.sin(delta) * np.cos(phi1),
+        np.cos(delta) - np.sin(phi1) * np.sin(phi2),
+    )
+    lat = np.asarray(np.degrees(phi2), dtype=np.float64)
+    lon = np.asarray((np.degrees(lam2) + 180.0) % 360.0 - 180.0, dtype=np.float64)
+    return lat, lon
+
+
 def terrain_elevation_angle(
     r0_m: float, h1_m: float, dist_m: float, radius_m: float = MOON_RADIUS_M
 ) -> float:

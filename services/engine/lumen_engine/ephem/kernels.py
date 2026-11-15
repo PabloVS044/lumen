@@ -5,6 +5,8 @@ SPICE mantiene estado global en el proceso: la carga se hace una sola vez y bajo
 """
 
 import asyncio
+import ctypes
+import sys
 import threading
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
@@ -51,6 +53,24 @@ class KernelsMissingError(EngineError):
 _lock = threading.Lock()
 _loaded: list[str] = []
 
+
+def _spice_path(path: Path) -> str:
+    """CSPICE en Windows abre rutas ANSI; usar el alias 8.3 para carpetas Unicode."""
+    resolved = str(path.resolve())
+    if sys.platform != "win32" or resolved.isascii():
+        return resolved
+    get_short = ctypes.WinDLL("kernel32", use_last_error=True).GetShortPathNameW
+    get_short.argtypes = [ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_uint]
+    get_short.restype = ctypes.c_uint
+    needed = get_short(resolved, None, 0)
+    if not needed:
+        return resolved
+    buffer = ctypes.create_unicode_buffer(needed)
+    if not get_short(resolved, buffer, needed):
+        return resolved
+    return buffer.value
+
+
 # CSPICE no es thread-safe (estado global): todo cálculo SPICE del servidor pasa por este hilo,
 # y así no bloquea el event loop de ASGI.
 _spice_executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="spice")
@@ -80,7 +100,7 @@ def load_kernels() -> list[str]:
             if missing:
                 raise KernelsMissingError(missing)
             for path in kernel_paths():
-                sp.furnsh(str(path))
+                sp.furnsh(_spice_path(path))
             _loaded.extend(REQUIRED_KERNELS)
         return list(_loaded)
 
@@ -102,9 +122,9 @@ def coverage_window() -> tuple[datetime, datetime]:
     """Intervalo UTC cubierto a la vez por las efemérides (SPK) y la orientación lunar (PCK)."""
     load_kernels()
     base = get_settings().kernels_dir
-    spk = sp.spkcov(str(base / _SPK), _MOON_NAIF_ID)
+    spk = sp.spkcov(_spice_path(base / _SPK), _MOON_NAIF_ID)
     pck = sp.stypes.SPICEDOUBLE_CELL(2000)
-    sp.pckcov(str(base / _PCK), _MOON_PA_DE440_FRAME_ID, pck)
+    sp.pckcov(_spice_path(base / _PCK), _MOON_PA_DE440_FRAME_ID, pck)
     spk_start, spk_end = sp.wnfetd(spk, 0)
     pck_start, pck_end = sp.wnfetd(pck, 0)
     return _et_to_datetime(max(spk_start, pck_start)), _et_to_datetime(min(spk_end, pck_end))

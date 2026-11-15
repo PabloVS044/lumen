@@ -4,7 +4,7 @@ Owner: R3 Efemérides/Ciencia. Versión pública y resumida de las secciones 4 y
 para `/about` y la entrega de Space Apps. Se completa a medida que cada algoritmo queda implementado y
 validado.
 
-- [ ] Horizonte (9.3): capas, alcance, resolución azimutal, curvatura. _(R2)_
+- [x] Horizonte (9.3): capas, alcance, resolución azimutal, curvatura. _(R2; validación sintética y convergencia)_
 - [x] Efemérides (9.4): kernels, marco MOON_ME, aberración.
 - [x] Visibilidad (9.5), eclipses (9.4.4) y umbrales por defecto.
 - [x] Métricas (9.6), eventos y score (9.7).
@@ -12,6 +12,39 @@ validado.
 - [x] What-if de retraso (9.9).
 
 Resultados de validación: [validation.md](validation.md) y RPC `ValidationService.GetReport`.
+
+## Terreno y horizonte (secciones 8.1, 9.2 y 9.3)
+
+Código: `services/engine/lumen_engine/{dem,horizon}/` · RPCs `TerrainService.GetCoverage`,
+`GetTerrainPoint` y `HorizonService.ComputeHorizon`.
+
+- **Datos instalados:** [PGDA Site01](https://pgda.gsfc.nasa.gov/products/78) de 5 m (LDEM, LDEC y
+  pendiente) y [PGDA polar 80S](https://pgda.gsfc.nasa.gov/products/90) de 80 m. El primero se convierte
+  a COG; el segundo ya se publica como COG. `data/scripts/prepare_dem.py` genera un índice de capas
+  en `data/local/dem/index.json`. Con `--global` añade el JP2 PDS LDEM_128 de ~237 m/píxel como
+  respaldo fuera del polo; se aplica su escala PDS de 0.5 m por valor entero. Los rasters no se versionan.
+- **Alturas:** metros respecto de la esfera LOLA de 1 737,4 km. La proyección usa una esfera lunar
+  propia; no se mezclan coordenadas EPSG terrestres. El muestreo de altura es bilineal y baja a la
+  siguiente capa si encuentra NoData. LDEC estima la fracción local de píxeles sin retornos directos.
+- **Máscara:** 0,25° de azimut y 200 km de alcance por defecto. Se barre cada rumbo sobre la esfera,
+  proyectando al DEM y calculando el ángulo de elevación con curvatura exacta. Los primeros 200 m
+  se muestrean cada 1 m para no perder una cresta cercana por el paso de píxel. Site01 usa 5 m hasta
+  10 km; fuera de ese alcance usa la capa polar de 80 m. La búsqueda M12 usa 1° y limita la capa
+  fina a 2 km antes de refinar los mejores candidatos a 0,25°.
+- **Cobertura:** sin una capa válida se devuelve `NO_COVERAGE`; si un rayo no tiene datos en su
+  último kilómetro, `INSUFFICIENT_DEM_RANGE`. Fuera del casquete 80–90°S se debe preparar el
+  respaldo global con `--global`; su resolución limita el detalle de relieve cercano.
+- **Precisión:** las coordenadas de Site01 en el catálogo siguen aproximadas. PGDA publica estos
+  GeoTIFF en MOON_ME de DE421; la efeméride usa la realización de DE440. La concordancia entre
+  realizaciones y la validación visual externa del perfil siguen pendientes.
+
+El buscador M12 evalúa una malla gruesa, densifica los vecindarios prometedores y devuelve top-K
+recalculado con horizonte completo. El mapa de calor asigna a las celdas no evaluadas el valor
+del candidato medido más cercano: es exploratorio y no garantiza el óptimo global. Los jobs de
+búsqueda se almacenan en memoria del proceso hasta que R1 integre la cola persistente.
+La banda experimental de incertidumbre usa los clones oficiales de Site01 para reportar
+p5/p50/p95 del horizonte y de las métricas de iluminación, visibilidad y operación cuando se
+proporciona una serie de efemérides del sitio.
 
 ## Efemérides (sección 9.4)
 

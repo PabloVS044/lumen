@@ -1,5 +1,10 @@
-import pytest
+import base64
 
+import pytest
+from lumen.v1.common_pb2 import ErrorDetail
+
+from lumen_engine.core.errors import NoCoverageError
+from lumen_engine.dem import coverage as dem_coverage
 from tests.conftest import ConnectJSON
 
 pytestmark = pytest.mark.requires_kernels
@@ -12,9 +17,19 @@ BASE = {
 }
 
 
-def test_evaluate_unimplemented_until_horizon_exists(rpc: ConnectJSON) -> None:
+def test_evaluate_reports_no_dem_coverage_for_equatorial_site(
+    rpc: ConnectJSON, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def no_coverage(lat: float, lon: float) -> None:
+        raise NoCoverageError(lat, lon)
+
+    monkeypatch.setattr(dem_coverage, "require_coverage", no_coverage)
     r = rpc.call("WhatIfService", "Evaluate", BASE)
-    assert r.json()["code"] == "unimplemented"
+    assert r.json()["code"] == "failed_precondition"
+    assert (
+        ErrorDetail.FromString(base64.b64decode(r.json()["details"][0]["value"])).code
+        == "NO_COVERAGE"
+    )
 
 
 def test_unknown_metric_is_rejected_before_computing(rpc: ConnectJSON) -> None:

@@ -24,7 +24,8 @@ message FindBestSpotRequest {
     gte: 50
     lte: 2000
   }];
-  double max_slope_deg = 4 [(buf.validate.field).double = {
+  // Pendiente máxima permitida. Ausente = 15°; 0° exige terreno plano.
+  optional double max_slope_deg = 4 [(buf.validate.field).double = {
     gte: 0
     lte: 45
   }];
