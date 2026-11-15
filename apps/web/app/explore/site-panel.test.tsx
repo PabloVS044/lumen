@@ -3,9 +3,16 @@ import { mockCatalog } from "@lumen/sdk/mocks";
 import type { createMockTransport } from "@lumen/sdk/mocks";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useScenarioStore } from "@/stores/scenario-store";
+
+vi.mock("@/components/horizon/horizon-polar", () => ({
+  HorizonPolar: (p: unknown) => <div data-testid="polar" data-props={JSON.stringify(p)} />,
+}));
+vi.mock("@/components/timeline/visibility-heatmap", () => ({
+  VisibilityHeatmap: (p: unknown) => <div data-testid="heatmap" data-props={JSON.stringify(p)} />,
+}));
 
 import { SitePanel } from "./site-panel";
 
@@ -105,5 +112,15 @@ describe("SitePanel", () => {
     useScenarioStore.setState({ playing: true });
     await screen.findByText(/az 123\.4°/);
     expect(container.querySelector("[aria-live='polite']")!.textContent).toBe("");
+  });
+
+  it("mounts the horizon polar and the visibility heatmap for the selected site and range", () => {
+    setup();
+    const expected = {
+      site: { lat: site.lat, lon: site.lon, obsHeightM: 2 },
+      range,
+    };
+    expect(JSON.parse(screen.getByTestId("polar").dataset.props!)).toEqual(expected);
+    expect(JSON.parse(screen.getByTestId("heatmap").dataset.props!)).toEqual(expected);
   });
 });
