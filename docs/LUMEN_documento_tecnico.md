@@ -470,6 +470,9 @@ Landing (/)  ──►  Explorador (/explore)
 | ADR-08 | Globo con **CesiumJS + Cesium Moon (3D Tiles)** | three.js con texturas | Terreno real de alta resolución en polos ya listo; three.js queda como fallback |
 | ADR-09 | Tipos compartidos generados desde **OpenAPI** (`openapi-typescript`) | Escribir a mano | Evita desincronización front/back |
 | ADR-10 | **Monorepo** (pnpm workspaces + carpeta Python con uv) | Repos separados | Un solo lugar, CI unificado |
+| ADR-13 | **`Analyze` síncrono** con caché de horizonte y de análisis (por ahora, sin cola arq/Redis); **sustituye a ADR-06** mientras se mantenga | Jobs asíncronos (ADR-06) | Con DEM real un análisis nuevo tarda ~2.5 s y uno en caché ~80 ms; la cola añade piezas sin ganancia visible. Los jobs siguen para búsqueda (`search-*`) y exportación (registro en memoria). Reabrir si `Analyze` pasa de ~10 s |
+| ADR-14 | **Puerto `Store`** (`db/store.py`): `InMemoryStore` (default) o `PostgresStore` (`STORE=postgres`); tabla por clave + payload proto serializado (BYTEA) | Tablas normalizadas de 11.2, Redis | Atajo de hackathon: ambas implementaciones pasan una misma suite de contrato (`tests/contracts/store_contract.py`). Sin Alembic: `CREATE TABLE IF NOT EXISTS` |
+| ADR-15 | **Exportación en el motor** como CSV/JSON entregada en una URL `data:` (máx. 25 MB); el PDF se imprime en el navegador | Object storage + URL firmada, PDF en servidor | Sin bucket en MVP; el PDF ya existe en la UI. Pasar a URL firmada al desplegar con object storage |
 
 ### 7.3 Stack detallado
 
