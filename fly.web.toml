@@ -10,6 +10,8 @@ primary_region = "iad"
 
   [build.args]
     NEXT_PUBLIC_ENGINE_MOCK = "0"
+    # URL pública (canónicos, sitemap, Open Graph): cámbiala al dominio propio cuando exista
+    NEXT_PUBLIC_APP_URL = "https://lumen-web.fly.dev"
     # NEXT_PUBLIC_CESIUM_ION_TOKEN y NEXT_PUBLIC_CESIUM_MOON_ASSET_ID: solo por --build-arg (no versionar el token)
 
 [env]
