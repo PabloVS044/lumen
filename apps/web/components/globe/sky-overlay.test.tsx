@@ -54,7 +54,7 @@ import { SkyOverlay } from "./sky-overlay";
 const dot = (a: Vec3, b: Vec3) => a.x * b.x + a.y * b.y + a.z * b.z;
 interface Found {
   position: { lat: number; lon: number };
-  polyline: { positions: Vec3[] };
+  polyline: { positions: Vec3[]; material?: unknown; depthFailMaterial?: unknown };
 }
 const byId = (id: string) => entities.find((e) => e.id === id) as Found | undefined;
 const site = { id: "s", name: "S", lat: -89, lon: 10 } as CatalogSite;
@@ -114,5 +114,12 @@ describe("SkyOverlay", () => {
     render(<SkyOverlay earth={{ x: 0, y: 0, z: 1 }} site={site} />);
     const [from, to] = byId("earth-arrow")!.polyline.positions as Vec3[];
     expect(to!.z - from!.z).toBeCloseTo(300_000, 6);
+  });
+
+  it("keeps the arrow visible when real relief is in front of it", () => {
+    render(<SkyOverlay earth={{ x: 0, y: 0, z: 1 }} site={site} />);
+    const arrow = byId("earth-arrow")!.polyline;
+    expect(arrow.depthFailMaterial).toBeDefined();
+    expect(arrow.depthFailMaterial).not.toBe(arrow.material);
   });
 });

@@ -111,6 +111,9 @@ export function SkyOverlay({ shader, sun, earth, site }: Props) {
             width: 8,
             arcType: ArcType.NONE,
             material: new PolylineArrowMaterialProperty(earthColor),
+            // El sitio está a altura 0 y el relieve real puede quedar por encima: sin esto el
+            // primer tramo de la flecha desaparece tras el terreno.
+            depthFailMaterial: new PolylineArrowMaterialProperty(earthColor),
           }}
         />
       )}
