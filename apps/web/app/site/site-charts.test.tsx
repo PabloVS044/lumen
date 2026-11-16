@@ -17,6 +17,9 @@ vi.mock("@/components/terrain/local-terrain-section", () => ({
 vi.mock("@/components/timeline/visibility-heatmap", () => ({
   VisibilityHeatmap: () => <div data-testid="heatmap" />,
 }));
+vi.mock("@/components/export/site-export", () => ({
+  SiteExport: () => <div data-testid="export" />,
+}));
 vi.mock("@/components/power/power-simulator", () => ({
   PowerSimulator: (p: object) => <div data-testid="power" data-props={JSON.stringify(p)} />,
 }));

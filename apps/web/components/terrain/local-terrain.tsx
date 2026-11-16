@@ -5,6 +5,10 @@
  * El horizonte, la sombra y la posición del Sol y la Tierra salen del motor (Analyze: máscara de
  * horizonte y az/el topocéntricos), no del relieve del tileset. El tileset de Cesium Moon es solo
  * una imagen de fondo opcional.
+ *
+ * ⚠️ El tileset está ~659 m sobre el DEM del motor (causa sin determinar; marco horizontal ME confirmado por
+ * R3). Por eso la cámara a ras de suelo se ubica con la altura del propio tileset en el sitio más la altura
+ * del observador, nunca con `HorizonMask.observer`. Los ángulos (az/el) del motor no dependen de esa altura.
  */
 import dynamic from "next/dynamic";
 import { useId, useMemo, useState } from "react";
@@ -41,7 +45,6 @@ const FOV_DEG = 60;
 const SUN_DIAMETER_DEG = 0.53;
 const EARTH_DIAMETER_DEG = 1.9;
 const MIN_DISC_PX = 5; // el Sol real mide ~2 px a 60° de FOV: se agranda para poder verlo
-const GROUND_MARGIN_M = 20; // el tileset es más grueso que el DEM del motor: evita enterrar la cámara
 const AZ_TICKS = Array.from({ length: 12 }, (_, i) => i * 30);
 const CARDINAL: Record<number, string> = { 0: "N", 90: "E", 180: "S", 270: "W" };
 
@@ -111,7 +114,6 @@ export function LocalTerrain({ site, range }: Props) {
   const groundPath = `M0,${H} L${pts.join(" L")} L${W},${H} Z`;
   const horizonRange = viewHorizonRange(mask, view);
   const sunHidden = now ? !now.sun.visible : false;
-  const camHeight = (mask.observer?.terrainHeightM ?? 0) + (site.obsHeightM || 2) + GROUND_MARGIN_M;
 
   const disc = (b: Body, diameter: number, cls: string, label: string) => {
     const p = project(b, view);
@@ -184,7 +186,7 @@ export function LocalTerrain({ site, range }: Props) {
             <GroundView
               lat={site.lat}
               lon={site.lon}
-              heightM={camHeight}
+              observerHeightM={site.obsHeightM || 2}
               heading={effectiveHeading}
               fovDeg={FOV_DEG}
             />

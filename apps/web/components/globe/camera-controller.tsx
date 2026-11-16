@@ -15,6 +15,8 @@ import { useEffect } from "react";
 import { useCesium } from "resium";
 
 const POLE_ALTITUDE_M = 3_500_000; // ~2 radios lunares desde el centro
+// A 150 km del sitio, los ~659 m de diferencia entre el tileset y el DEM del motor no se notan; el centro del
+// vuelo no usa ninguna altura del motor (altura 0 sobre la esfera).
 const SITE_RANGE_M = 150_000;
 const FLY_SECONDS = 2;
 

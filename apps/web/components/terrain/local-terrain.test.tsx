@@ -124,16 +124,15 @@ describe("LocalTerrain (engine horizon and shadow)", () => {
 });
 
 describe("LocalTerrain (Cesium Moon imagery option)", () => {
-  it("puts the tileset camera at the site, at ground level, looking where the view looks", async () => {
+  it("hands the tileset camera the site and the observer height, not an engine terrain height", async () => {
     vi.stubEnv("NEXT_PUBLIC_CESIUM_ION_TOKEN", "tok");
     vi.stubEnv("NEXT_PUBLIC_CESIUM_MOON_ASSET_ID", "123");
     setup();
     await chart();
     const props = JSON.parse((await screen.findByTestId("ground-view")).dataset.props!);
-    expect(props).toMatchObject({ lat: site.lat, lon: site.lon, fovDeg: 60 });
-    // altura del terreno del motor (mock: 1500 m) + observador (2 m) + margen
-    expect(props.heightM).toBeGreaterThan(1500);
-    expect(props.heightM).toBeLessThan(1600);
+    expect(props).toMatchObject({ lat: site.lat, lon: site.lon, observerHeightM: 2, fovDeg: 60 });
+    // el motor da terrainHeightM (mock: 1500 m), pero el tileset está ~659 m más alto: no se usa
+    expect(props.heightM).toBeUndefined();
     fireEvent.change(screen.getByRole("slider", { name: /direction/i }), {
       target: { value: "45" },
     });

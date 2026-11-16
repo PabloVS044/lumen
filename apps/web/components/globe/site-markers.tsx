@@ -5,17 +5,25 @@
  * Neutros por defecto; los sitios del escenario usan su color del store.
  */
 import type { CatalogSite } from "@lumen/sdk";
-import { Cartesian2, Cartesian3, DistanceDisplayCondition, Ellipsoid } from "cesium";
+import {
+  Cartesian2,
+  Cartesian3,
+  DistanceDisplayCondition,
+  Ellipsoid,
+  HeightReference,
+} from "cesium";
 import { Entity } from "resium";
 
 import { useScenarioStore } from "@/stores/scenario-store";
 
+import {
+  LABEL_DEPTH_TEST_OFF_M,
+  POINT_DEPTH_TEST_OFF_M,
+  SELECTED_POINT_DEPTH_TEST_OFF_M,
+} from "./marker-depth";
 import { cssColor, tokenColor } from "./token-color";
 
 const LABEL_FAR_M = 1_500_000;
-// Sin prueba de profundidad a menos de 1 000 km: el relieve real (cráteres, crestas) no tapa el marcador
-// al acercarse, pero los sitios del lado oculto siguen escondidos tras el limbo.
-const DEPTH_TEST_OFF_M = 1_000_000;
 
 export interface SiteStatus {
   sun: boolean;
@@ -43,8 +51,17 @@ export function SiteMarkers({ sites, selectedId, selectedStatus, onSelect }: Pro
       <Entity
         key={site.id}
         id={site.id}
+        // Altura 0 + CLAMP_TO_3D_TILE: la altura la pone el propio tileset. No se usa ninguna altura del
+        // motor (el tileset está ~659 m sobre el DEM; ver use-tileset-height.ts).
         position={Cartesian3.fromDegrees(site.lon, site.lat, 0, Ellipsoid.MOON)}
-        point={{ pixelSize: selected ? 14 : 9, color, disableDepthTestDistance: DEPTH_TEST_OFF_M }}
+        point={{
+          pixelSize: selected ? 14 : 9,
+          color,
+          heightReference: HeightReference.CLAMP_TO_3D_TILE,
+          disableDepthTestDistance: selected
+            ? SELECTED_POINT_DEPTH_TEST_OFF_M
+            : POINT_DEPTH_TEST_OFF_M,
+        }}
         label={{
           text:
             selected && selectedStatus
@@ -52,7 +69,8 @@ export function SiteMarkers({ sites, selectedId, selectedStatus, onSelect }: Pro
 Sun ${selectedStatus.sun ? "visible" : "not visible"}, Earth ${selectedStatus.earth ? "visible" : "not visible"}`
               : site.name,
           show: true,
-          disableDepthTestDistance: DEPTH_TEST_OFF_M,
+          heightReference: HeightReference.CLAMP_TO_3D_TILE,
+          disableDepthTestDistance: LABEL_DEPTH_TEST_OFF_M,
           font: "13px sans-serif",
           fillColor: selectedColor,
           pixelOffset: new Cartesian2(0, -18),

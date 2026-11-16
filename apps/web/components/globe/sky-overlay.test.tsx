@@ -3,8 +3,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { Vec3 } from "./lighting";
 
-const { R, scene, entities } = vi.hoisted(() => ({
+const { R, scene, entities, tileset, hookArgs } = vi.hoisted(() => ({
   R: 1_737_400,
+  tileset: { height: undefined as number | undefined },
+  hookArgs: [] as unknown[][],
   scene: { light: undefined as unknown, requestRender: vi.fn() },
   entities: [] as Record<string, unknown>[],
 }));
@@ -16,8 +18,8 @@ vi.mock("cesium", () => {
       public y: number,
       public z: number,
     ) {}
-    static fromDegrees(lon: number, lat: number) {
-      return { lon, lat, x: 0, y: 0, z: 0 };
+    static fromDegrees(lon: number, lat: number, h = 0) {
+      return { lon, lat, h, x: 0, y: 0, z: 0 };
     }
   }
   return {
@@ -28,6 +30,7 @@ vi.mock("cesium", () => {
       constructor(public options: { direction: Vec3 }) {}
     },
     Ellipsoid: { MOON: { maximumRadius: R } },
+    HeightReference: { CLAMP_TO_3D_TILE: 5 },
     PolylineArrowMaterialProperty: class {
       constructor(public color: unknown) {}
     },
@@ -36,6 +39,13 @@ vi.mock("cesium", () => {
 });
 
 vi.mock("./moon-shader", () => ({ setSunDirection: vi.fn() }));
+
+vi.mock("./use-tileset-height", () => ({
+  useTilesetHeight: (...args: unknown[]) => {
+    hookArgs.push(args);
+    return tileset.height;
+  },
+}));
 
 vi.mock("resium", () => ({
   useCesium: () => ({ scene }),
@@ -54,7 +64,13 @@ import { SkyOverlay } from "./sky-overlay";
 const dot = (a: Vec3, b: Vec3) => a.x * b.x + a.y * b.y + a.z * b.z;
 interface Found {
   position: { lat: number; lon: number };
-  polyline: { positions: Vec3[] };
+  polyline: {
+    positions: (Vec3 & { h?: number })[];
+    material?: unknown;
+    depthFailMaterial?: unknown;
+  };
+  point?: { heightReference?: number; disableDepthTestDistance?: number };
+  label?: { heightReference?: number; disableDepthTestDistance?: number };
 }
 const byId = (id: string) => entities.find((e) => e.id === id) as Found | undefined;
 const site = { id: "s", name: "S", lat: -89, lon: 10 } as CatalogSite;
@@ -64,6 +80,8 @@ beforeEach(() => {
   scene.requestRender.mockClear();
   vi.mocked(setSunDirection).mockClear();
   entities.length = 0;
+  hookArgs.length = 0;
+  tileset.height = undefined;
 });
 
 describe("SkyOverlay", () => {
@@ -114,5 +132,36 @@ describe("SkyOverlay", () => {
     render(<SkyOverlay earth={{ x: 0, y: 0, z: 1 }} site={site} />);
     const [from, to] = byId("earth-arrow")!.polyline.positions as Vec3[];
     expect(to!.z - from!.z).toBeCloseTo(300_000, 6);
+  });
+
+  it("keeps the arrow visible when real relief is in front of it", () => {
+    render(<SkyOverlay earth={{ x: 0, y: 0, z: 1 }} site={site} />);
+    const arrow = byId("earth-arrow")!.polyline;
+    expect(arrow.depthFailMaterial).toBeDefined();
+    expect(arrow.depthFailMaterial).not.toBe(arrow.material);
+  });
+
+  it("clamps the sub-solar and sub-Earth markers to the tileset surface", () => {
+    render(<SkyOverlay sun={{ x: 0, y: 1, z: 0 }} earth={{ x: 1, y: 0, z: 0 }} />);
+    for (const id of ["sub-sun", "sub-earth"]) {
+      expect(byId(id)!.point!.heightReference).toBe(5);
+      expect(byId(id)!.label!.heightReference).toBe(5);
+      expect(byId(id)!.point!.disableDepthTestDistance).toBeLessThanOrEqual(100_000);
+      expect(byId(id)!.label!.disableDepthTestDistance).toBe(Infinity);
+    }
+  });
+
+  it("starts the arrow on the tileset's own surface, not at an engine height", () => {
+    tileset.height = 1949.9;
+    render(<SkyOverlay earth={{ x: 0, y: 0, z: 1 }} site={site} tilesReady />);
+    const [from] = byId("earth-arrow")!.polyline.positions;
+    expect(from!.h).toBe(1949.9);
+    expect(hookArgs.at(-1)).toEqual([scene, true, site]);
+  });
+
+  it("falls back to the sphere surface (height 0) while the tileset height is unknown", () => {
+    render(<SkyOverlay earth={{ x: 0, y: 0, z: 1 }} site={site} />);
+    expect(byId("earth-arrow")!.polyline.positions[0]!.h).toBe(0);
+    expect(hookArgs.at(-1)![1]).toBe(false);
   });
 });

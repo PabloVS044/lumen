@@ -9,7 +9,7 @@ import { useQuery } from "@connectrpc/connect-query";
 import { SiteService, type CatalogSite } from "@lumen/sdk";
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import { Cartesian3, Ellipsoid, IonResource } from "cesium";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Cesium3DTileset, EllipsoidGraphics, Entity, Globe as CesiumGlobe, Viewer } from "resium";
 
 import { useScenarioStore } from "@/stores/scenario-store";
@@ -40,6 +40,8 @@ export function Globe({ selectedSiteId, selectedStatus, onSelectSite }: GlobePro
     : Number.isNaN(assetId)
       ? "Cesium Moon asset ID"
       : null;
+  // Con el tileset cargado se puede muestrear su altura (las alturas del motor no valen en la escena).
+  const [tilesReady, setTilesReady] = useState(false);
   const dayNight = useMemo(() => createDayNightShader(), []);
   const moonTiles = useMemo(
     () => (missing ? null : IonResource.fromAssetId(assetId, { accessToken: ionToken })),
@@ -66,7 +68,11 @@ export function Globe({ selectedSiteId, selectedStatus, onSelectSite }: GlobePro
         <CesiumGlobe show={false} />
         <CameraController target={selectedSite} />
         {moonTiles ? (
-          <Cesium3DTileset url={moonTiles} customShader={sun ? dayNight : undefined} />
+          <Cesium3DTileset
+            url={moonTiles}
+            customShader={sun ? dayNight : undefined}
+            onReady={() => setTilesReady(true)}
+          />
         ) : (
           <Entity position={Cartesian3.ZERO}>
             <EllipsoidGraphics
@@ -75,7 +81,13 @@ export function Globe({ selectedSiteId, selectedStatus, onSelectSite }: GlobePro
             />
           </Entity>
         )}
-        <SkyOverlay shader={dayNight} sun={sun} earth={earth} site={selectedSite} />
+        <SkyOverlay
+          shader={dayNight}
+          sun={sun}
+          earth={earth}
+          site={selectedSite}
+          tilesReady={tilesReady}
+        />
         {catalog && (
           <SiteMarkers
             sites={catalog.sites}
