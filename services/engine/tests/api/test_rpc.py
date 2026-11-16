@@ -40,7 +40,6 @@ def test_protovalidate_rejects_inverted_time_range(rpc: ConnectJSON) -> None:
     assert r.status_code == 400
 
 
-def test_unimplemented_rpc(rpc: ConnectJSON) -> None:
-    r = rpc.call("JobService", "GetJob", {"jobId": "j_1"})
-    assert r.status_code == 501
-    assert r.json()["code"] == "unimplemented"
+def test_unknown_method_is_not_found(rpc: ConnectJSON) -> None:
+    r = rpc.call("JobService", "NoSuchMethod", {})
+    assert r.status_code == 404
