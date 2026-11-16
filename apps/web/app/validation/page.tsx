@@ -1,7 +1,8 @@
 /**
  * Ruta /validation — Owner: Producto/Diseño + Efemérides/Ciencia (ver docs/team/ROLES.md). Sección 12.1, HU-13.
  * Las cifras salen del motor (ValidationService.GetReport); el método, las diferencias y los pendientes
- * resumen docs/validation.md. Actualizar "What is not validated yet" cuando R2/R3 añadan pruebas.
+ * resumen docs/validation.md (estado del 2026-11-15). Actualizar METHOD y PENDING cuando R2/R3 añadan
+ * pruebas: las del informe aparecen solas en la tabla, pero estos textos no.
  */
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
@@ -13,7 +14,7 @@ import { ValidationReport } from "./validation-report";
 export const metadata: Metadata = {
   title: "Validation",
   description:
-    "How LUMEN's Sun and Earth positions and eclipse times compare with JPL Horizons and NAIF SPICE.",
+    "How LUMEN's Sun and Earth positions, eclipse times and sunlight compare with JPL Horizons, NAIF SPICE and NASA PGDA.",
 };
 
 const METHOD = [
@@ -26,8 +27,16 @@ const METHOD = [
     body: "Start and end of the partial and total phases of the eclipse of 3 March 2026, when Earth covers the Sun as seen from the Moon, compared with CSPICE occult() at 1-minute resolution.",
   },
   {
+    title: "Sunlight at Connecting ridge",
+    body: "NASA's PGDA publishes seven regions near Connecting ridge that are lit more than 70 % of the time from 2024 to 2025, 1 m above the ground (Barker et al. 2021). The engine computes sunlight at the same points, height and period over its own horizon from LOLA terrain: all seven pass, between 74.4 % and 84.7 %.",
+  },
+  {
+    title: "Terrain horizon",
+    body: "Engine tests build synthetic terrain: on flat ground the horizon matches the analytic dip within 0.0001°, and a 100 m hill 2 km to the east is found at the right bearing and distance. On real LOLA terrain at Connecting ridge, halving the ray step moved the horizon by at most 0.041°, and extending the reach from 200 to 250 km changed nothing.",
+  },
+  {
     title: "Repeatable",
-    body: "The reference answers are stored with the engine's tests, so every change to the engine is checked again, without network access.",
+    body: "The Horizons and SPICE answers are stored with the engine's tests, so every engine change is checked again without network access. The checks on real terrain need the 5 m LOLA model and run on a local copy.",
   },
 ] as const;
 
@@ -38,10 +47,11 @@ const DIFFERENCES = [
 ] as const;
 
 const PENDING = [
-  "These checks cover where the Sun and Earth are in the sky. They do not test the terrain horizon or the sunlight and contact figures built on it.",
-  "Horizon tests on synthetic terrain are in progress: flat ground, an analytic mountain, and finer ray steps with a longer reach.",
-  "Sunlight percentages will be compared with published LOLA illumination maps (Mazarico et al. 2011, Barker et al. 2021). Differences will be listed here with their causes, such as the period, the observer height or the terrain resolution.",
-  "Catalog coordinates are approximate and still being checked. This does not affect the checks above, because the engine and the references use the same coordinates.",
+  "Sunlight is not yet compared value by value with the tables in Mazarico et al. (2011) and Barker et al. (2021), which are behind a paywall. PGDA publishes a threshold, more than 70 %, not a value for each region.",
+  "Sunlight is checked only at Connecting ridge. PGDA publishes regions for other sites too, but their 5 m terrain models are not downloaded yet.",
+  "Earth visibility over real terrain is not compared with an independent source yet.",
+  "The computed horizon has not been compared by eye with LROC QuickMap or NASA Moon Trek yet.",
+  "Catalog coordinates are approximate and still being checked. They do not affect the checks above, which use their own points.",
 ] as const;
 
 function ValidationSection({

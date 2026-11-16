@@ -9,8 +9,12 @@ export type CheckFields = Pick<
   ValidationCheck,
   "id" | "description" | "tolerance" | "maxError" | "passed"
 >;
-export type Unit = "deg" | "min";
-export type CheckInfo = { label: string; reference?: string; unit?: Unit };
+export type Unit = "deg" | "min" | "pct";
+/**
+ * `kind: "minimum"`: `tolerance` es un umbral que el valor debe superar y `maxError`, el déficit
+ * bajo ese umbral (p. ej. la iluminación de PGDA). Sin `kind`, `maxError` es un error absoluto.
+ */
+export type CheckInfo = { label: string; reference?: string; unit?: Unit; kind?: "minimum" };
 
 const NBSP = "\u00a0";
 
@@ -30,6 +34,12 @@ const KNOWN: Record<string, CheckInfo> = {
     label: "Eclipse start and end times",
     reference: "CSPICE occult()",
     unit: "min",
+  },
+  illumination_site01_rois_vs_pgda: {
+    label: "Sunlight at Connecting ridge",
+    reference: "NASA PGDA regions (Barker et al. 2021)",
+    unit: "pct",
+    kind: "minimum",
   },
 };
 
@@ -51,8 +61,9 @@ export function describeCheck(check: Pick<CheckFields, "id" | "description">): C
   return KNOWN[check.id] ?? { label: check.description || check.id };
 }
 
-const withUnit = (text: string, unit?: Unit) =>
-  unit === "deg" ? `${text}°` : unit === "min" ? `${text}${NBSP}min` : text;
+const SUFFIX: Record<Unit, string> = { deg: "°", min: `${NBSP}min`, pct: `${NBSP}%` };
+
+const withUnit = (text: string, unit?: Unit) => (unit ? `${text}${SUFFIX[unit]}` : text);
 
 /** Dos cifras significativas y miles separados por espacio (convención SI del sitio). */
 const twoDigits = (n: number) =>
@@ -73,6 +84,24 @@ export const margin = (tolerance: number, maxError: number) =>
   maxError > 0 ? tolerance / maxError : undefined;
 
 export const formatMargin = (ratio: number) => `${twoDigits(ratio)}×`;
+
+/** Textos de las columnas Limit, Worst error y Margin de una prueba. */
+export function checkCells(check: CheckFields): { limit: string; worst: string; margin: string } {
+  const { unit, kind } = describeCheck(check);
+  if (kind === "minimum") {
+    return {
+      limit: `>${NBSP}${formatMagnitude(check.tolerance, unit)}`,
+      worst: `${formatMagnitude(check.maxError, unit)}${NBSP}short`,
+      margin: "n/a",
+    };
+  }
+  const ratio = margin(check.tolerance, check.maxError);
+  return {
+    limit: formatMagnitude(check.tolerance, unit),
+    worst: formatMagnitude(check.maxError, unit),
+    margin: ratio === undefined ? "exact" : formatMargin(ratio),
+  };
+}
 
 /** Resumen en texto del informe (sección 12.5: cada gráfico o tabla lleva su resumen). */
 export function summarize(checks: CheckFields[]): string {

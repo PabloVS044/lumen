@@ -39,11 +39,17 @@ describe("ValidationTable", () => {
             passed: true,
           }),
           check({ id: "eclipse_vs_spice_occult", tolerance: 3, maxError: 4, passed: false }),
+          check({
+            id: "illumination_site01_rois_vs_pgda",
+            tolerance: 70,
+            maxError: 0,
+            passed: true,
+          }),
         ]}
       />,
     );
     // toHaveTextContent convierte los espacios duros en espacios normales.
-    const [earth, eclipse] = screen.getAllByRole("row").slice(1);
+    const [earth, eclipse, pgda] = screen.getAllByRole("row").slice(1);
 
     expect(within(earth!).getByRole("rowheader")).toHaveTextContent(
       "Earth azimuth and elevationvs JPL Horizons",
@@ -55,6 +61,11 @@ describe("ValidationTable", () => {
 
     expect(eclipse).toHaveTextContent("4 min");
     expect(eclipse).toHaveTextContent("Fail");
+
+    expect(within(pgda!).getByRole("rowheader")).toHaveTextContent("Sunlight at Connecting ridge");
+    expect(pgda).toHaveTextContent("> 70 %");
+    expect(pgda).toHaveTextContent("0 % short");
+    expect(pgda).toHaveTextContent("n/a");
   });
 
   it("can be scrolled with the keyboard on narrow screens", () => {
