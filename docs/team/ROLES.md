@@ -9,15 +9,15 @@
 
 > Asignación inicial. Cualquier cambio se hace aquí **y** en `.github/CODEOWNERS` en el mismo PR.
 
-| Rol                        | Persona (GitHub)                  | Backup |
-| -------------------------- | --------------------------------- | ------ |
-| R1 · Backend/Infra         | @bcastillo-2022474                | R3     |
-| R2 · Geo/Datos             | @carlosaltan18                    | R1     |
-| R3 · Efemérides/Ciencia    | @PabloVS044                       | R2     |
-| R4 · Frontend 3D           | @asanabria-2021067                | R5     |
-| R5 · Frontend Charts/UX    | @JonathanTubac                    | R6     |
-| R6 · Frontend Analysis     | _por asignar_ (mientras tanto R5) | R5     |
-| R7 · Producto/Diseño/Pitch | @24750Montenegro                  | R1     |
+| Rol                        | Persona (GitHub)                          | Backup |
+| -------------------------- | ----------------------------------------- | ------ |
+| R1 · Backend/Infra         | @bcastillo-2022474                        | R3     |
+| R2 · Geo/Datos             | @carlosaltan18                            | R1     |
+| R3 · Efemérides/Ciencia    | @PabloVS044                               | R2     |
+| R4 · Frontend 3D           | @asanabria-2021067                        | R5     |
+| R5 · Frontend Charts/UX    | @JonathanTubac                            | R6     |
+| R6 · Frontend Analysis     | @PabloVS044, por partes (issues `rol:R6`) | R5     |
+| R7 · Producto/Diseño/Pitch | @24750Montenegro                          | R1     |
 
 ## Qué posee cada rol
 
@@ -51,6 +51,10 @@
 - **Primer entregable:** `<HorizonPolar />` con `NEXT_PUBLIC_ENGINE_MOCK=1` (mocks del SDK).
 
 ### R6 · Frontend Analysis
+
+> **Se toma por partes:** cada módulo es un issue con la etiqueta `rol:R6` (#38–#43). Su dueño es quien
+> tenga el issue asignado. Si una parte no se termina, se reasigna el issue sin cambiar este archivo.
+> Hoy: @PabloVS044 (R3) toma las partes en orden: M8 → M9 → M5/M6 → M12 → M13 → M14.
 
 - **Carpetas:** `apps/web/components/{compare,power,whatif}/`, `apps/web/app/{compare,search}/`, UI de exportación.
 - **Módulos:** M5/M6 comparador sitios/fechas, M8 simulador (UI), M9 what-if (UI), M12 UI de búsqueda, M13 escenarios compartibles, M14 exportación (UI).

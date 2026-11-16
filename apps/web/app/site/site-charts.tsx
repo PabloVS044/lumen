@@ -10,6 +10,7 @@ import { Suspense } from "react";
 import { HorizonPolar } from "@/components/horizon/horizon-polar";
 import { PowerSimulator } from "@/components/power/power-simulator";
 import { CopyLinkButton } from "@/components/share/copy-link-button";
+import { LocalTerrainSection } from "@/components/terrain/local-terrain-section";
 import { VisibilityHeatmap } from "@/components/timeline/visibility-heatmap";
 import { WhatIfChart } from "@/components/whatif/what-if-chart";
 import { siteSearchParams } from "@/lib/url-state";
@@ -33,6 +34,7 @@ function Charts() {
       <CopyLinkButton />
       <HorizonPolar site={site} range={range} />
       <VisibilityHeatmap site={site} range={range} />
+      <LocalTerrainSection site={site} range={range} />
       <PowerSimulator site={site} range={range} />
       <WhatIfChart site={site} range={range} />
     </>

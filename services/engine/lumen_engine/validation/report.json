@@ -23,6 +23,14 @@
       "max_error": 1.0,
       "passed": true,
       "notes": "Minutos, resolución de 1 min. SPICE usa el elipsoide terrestre; el motor, una esfera de 6371 km."
+    },
+    {
+      "id": "illumination_site01_rois_vs_pgda",
+      "description": "Iluminación media 2024–2025 a 1 m en las 7 RoIs de PGDA Site01, definidas por PGDA como > 70 % (Barker et al. 2021)",
+      "tolerance": 70.0,
+      "max_error": 0.0,
+      "passed": true,
+      "notes": "% de disco solar visible. Mín. 74.4 % (RoI 3), máx. 84.7 % (RoI 6). max_error = déficit bajo 70 %."
     }
   ]
 }
