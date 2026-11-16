@@ -8,12 +8,14 @@ import { PageShell } from "@/components/layout/page-shell";
 import { SunHeightCompare } from "@/components/learn/sun-height-compare";
 import { Tour } from "@/components/learn/tour";
 import { TOURS } from "@/components/learn/tours";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Learn",
   description:
     "Guided tours on why sunlight and contact with Earth are so hard to plan at the lunar south pole.",
-};
+  path: "/learn",
+});
 
 const chip =
   "inline-flex min-h-11 items-center rounded-full border border-surface px-4 text-sm text-muted transition-colors hover:border-muted hover:text-text";

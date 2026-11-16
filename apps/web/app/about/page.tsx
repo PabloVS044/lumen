@@ -9,11 +9,13 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { PageShell } from "@/components/layout/page-shell";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About",
   description: "How LUMEN computes sunlight and Earth visibility, its data sources and the team.",
-};
+  path: "/about",
+});
 
 const PIPELINE = [
   {
