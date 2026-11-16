@@ -96,3 +96,33 @@ describe("mock transport", () => {
     });
   });
 });
+
+describe("power simulation mock", () => {
+  const scenario = {
+    site: { lat: -89.45, lon: -137.31 },
+    range: {
+      start: timestampFromDate(new Date("2027-01-01T00:00:00Z")),
+      end: timestampFromDate(new Date("2027-02-01T00:00:00Z")),
+      stepMinutes: 60,
+    },
+  };
+
+  it("returns aligned series within the battery bounds", async () => {
+    const res = await client.power.simulate({ scenario });
+    const n = res.time.length;
+    expect(n).toBeGreaterThan(24 * 30);
+    expect(res.pGenW).toHaveLength(n);
+    expect(res.pLoadW).toHaveLength(n);
+    expect(res.socPct).toHaveLength(n);
+    expect(Math.min(...res.socPct)).toBeGreaterThanOrEqual(20 - 1e-9);
+    expect(Math.max(...res.socPct)).toBeLessThanOrEqual(100 + 1e-9);
+    expect(res.minSocPct).toBeCloseTo(Math.min(...res.socPct));
+  });
+
+  it("a tiny battery browns out and reports when", async () => {
+    const res = await client.power.simulate({ scenario, config: { batteryWh: 50 } });
+    expect(res.survives).toBe(false);
+    expect(res.firstBrownoutTime).toBeDefined();
+    expect(res.energyMarginWh).toBeLessThan(0);
+  });
+});

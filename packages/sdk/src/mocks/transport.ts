@@ -11,6 +11,7 @@ import { ErrorDetailSchema } from "../gen/lumen/v1/common_pb";
 import { EphemerisService } from "../gen/lumen/v1/ephemeris_pb";
 import { CheckResponse_Status, HealthService } from "../gen/lumen/v1/health_pb";
 import { HorizonService } from "../gen/lumen/v1/horizon_pb";
+import { PowerService } from "../gen/lumen/v1/power_pb";
 import { Region, SiteService } from "../gen/lumen/v1/sites_pb";
 import { TerrainService } from "../gen/lumen/v1/terrain_pb";
 
@@ -21,6 +22,7 @@ import {
   mockEvents,
   mockHorizon,
   mockSeries,
+  mockSimulate,
 } from "./data";
 
 export function createMockTransport(): Transport {
@@ -76,6 +78,10 @@ export function createMockTransport(): Transport {
       },
       getSeries: (req) => mockSeries(req),
       listEvents: (req) => ({ events: mockEvents(req) }),
+    });
+
+    service(PowerService, {
+      simulate: (req) => mockSimulate(req),
     });
 
     service(AnalysisService, {
