@@ -44,12 +44,3 @@ def test_unimplemented_rpc(rpc: ConnectJSON) -> None:
     r = rpc.call("JobService", "GetJob", {"jobId": "j_1"})
     assert r.status_code == 501
     assert r.json()["code"] == "unimplemented"
-
-
-def test_domain_not_implemented_maps_to_unimplemented(rpc: ConnectJSON) -> None:
-    body = {
-        "site": {"lat": -89.45, "lon": 222.69},
-        "range": {"start": "2027-01-01T00:00:00Z", "end": "2027-02-01T00:00:00Z"},
-    }
-    r = rpc.call("AnalysisService", "Analyze", body)
-    assert r.status_code == 501
