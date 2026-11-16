@@ -8,6 +8,9 @@ vi.mock("@/components/horizon/horizon-polar", () => ({
     range: { start: string; end: string };
   }) => <div data-testid="polar" data-props={JSON.stringify(p)} />,
 }));
+vi.mock("@/components/terrain/local-terrain-section", () => ({
+  LocalTerrainSection: () => <div data-testid="local" />,
+}));
 vi.mock("@/components/timeline/visibility-heatmap", () => ({
   VisibilityHeatmap: () => <div data-testid="heatmap" />,
 }));
@@ -29,6 +32,7 @@ describe("SiteCharts", () => {
       range: { start: "2027-01-01", end: "2027-03-01" },
     });
     expect(screen.getByTestId("heatmap")).toBeInTheDocument();
+    expect(screen.getByTestId("local")).toBeInTheDocument();
   });
 
   it("asks for a site and range when the URL has none", () => {
