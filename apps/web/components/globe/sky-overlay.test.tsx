@@ -35,6 +35,8 @@ vi.mock("cesium", () => {
   };
 });
 
+vi.mock("./moon-shader", () => ({ setSunDirection: vi.fn() }));
+
 vi.mock("resium", () => ({
   useCesium: () => ({ scene }),
   Entity: (props: Record<string, unknown>) => {
@@ -44,6 +46,8 @@ vi.mock("resium", () => ({
 }));
 
 import type { CatalogSite } from "@lumen/sdk";
+
+import { setSunDirection } from "./moon-shader";
 
 import { SkyOverlay } from "./sky-overlay";
 
@@ -58,6 +62,7 @@ const site = { id: "s", name: "S", lat: -89, lon: 10 } as CatalogSite;
 beforeEach(() => {
   scene.light = undefined;
   scene.requestRender.mockClear();
+  vi.mocked(setSunDirection).mockClear();
   entities.length = 0;
 });
 
@@ -70,6 +75,13 @@ describe("SkyOverlay", () => {
       z: -0,
     });
     expect(scene.requestRender).toHaveBeenCalled();
+  });
+
+  it("also feeds the Sun direction to the tileset day/night shader", () => {
+    const shader = { id: "shader" } as unknown as Parameters<typeof SkyOverlay>[0]["shader"];
+    const sun = { x: 0, y: 1, z: 0 };
+    render(<SkyOverlay shader={shader} sun={sun} />);
+    expect(setSunDirection).toHaveBeenCalledWith(shader, sun);
   });
 
   it("does nothing to the light while there is no Sun vector", () => {
