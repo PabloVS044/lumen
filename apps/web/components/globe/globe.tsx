@@ -44,7 +44,7 @@ export function Globe({ selectedSiteId, onSelectSite }: GlobeProps = {}) {
   );
 
   return (
-    <section aria-label="Globe" className="relative h-[70vh] min-h-96 w-full">
+    <section aria-label="Globe" className="relative h-full min-h-96 w-full">
       <Viewer
         className="h-full w-full"
         ellipsoid={Ellipsoid.MOON}
