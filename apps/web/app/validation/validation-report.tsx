@@ -9,14 +9,7 @@ import { isUnimplemented, ValidationService } from "@lumen/sdk";
 import { CircleCheck, CircleX } from "lucide-react";
 import { useId } from "react";
 
-import {
-  type CheckFields,
-  describeCheck,
-  formatMagnitude,
-  formatMargin,
-  margin,
-  summarize,
-} from "./format";
+import { type CheckFields, checkCells, describeCheck, summarize } from "./format";
 
 const cell = "px-3 py-3 align-top first:pl-4 last:pr-4 sm:px-4";
 // En pantallas estrechas el margen (dato derivado, ya citado en el resumen) se oculta.
@@ -59,7 +52,7 @@ export function ValidationTable({ checks }: { checks: CheckFields[] }) {
         <tbody>
           {checks.map((c) => {
             const info = describeCheck(c);
-            const ratio = margin(c.tolerance, c.maxError);
+            const cells = checkCells(c);
             const Icon = c.passed ? CircleCheck : CircleX;
             return (
               <tr key={c.id} className="border-b border-surface last:border-0">
@@ -67,14 +60,10 @@ export function ValidationTable({ checks }: { checks: CheckFields[] }) {
                   <span className="block font-semibold text-text">{info.label}</span>
                   {info.reference && <span className="block text-muted">vs {info.reference}</span>}
                 </th>
-                <td className={`${cell} font-mono whitespace-nowrap`}>
-                  {formatMagnitude(c.tolerance, info.unit)}
-                </td>
-                <td className={`${cell} font-mono whitespace-nowrap text-text`}>
-                  {formatMagnitude(c.maxError, info.unit)}
-                </td>
+                <td className={`${cell} font-mono whitespace-nowrap`}>{cells.limit}</td>
+                <td className={`${cell} font-mono whitespace-nowrap text-text`}>{cells.worst}</td>
                 <td className={`${cell} ${marginCell} font-mono whitespace-nowrap`}>
-                  {ratio === undefined ? "exact" : formatMargin(ratio)}
+                  {cells.margin}
                 </td>
                 <td className={cell}>
                   <span
