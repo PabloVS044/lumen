@@ -16,6 +16,10 @@ const nextConfig: NextConfig = {
   /* config options here */
   // El SDK se consume como TypeScript fuente del workspace.
   transpilePackages: ["@lumen/sdk"],
+  // Despliegue en Fly (infra/fly/Dockerfile.web): servidor mínimo autocontenido. En el monorepo el trazado
+  // de archivos debe partir de la raíz para incluir packages/sdk y el node_modules hoisted.
+  output: "standalone",
+  outputFileTracingRoot: repoRoot,
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {

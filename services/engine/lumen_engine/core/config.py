@@ -6,7 +6,8 @@ from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ENGINE_ROOT = Path(__file__).resolve().parents[2]
-REPO_ROOT = ENGINE_ROOT.parents[1]
+# En el contenedor el motor vive en /app (sin abuelo): las rutas se fijan por variables de entorno.
+REPO_ROOT = ENGINE_ROOT.parents[1] if len(ENGINE_ROOT.parents) > 1 else ENGINE_ROOT
 
 
 class Settings(BaseSettings):
@@ -22,6 +23,10 @@ class Settings(BaseSettings):
     catalog_path: Path = REPO_ROOT / "data" / "catalog" / "sites.yaml"
     max_range_days: int = 730
     cors_origins: list[str] = ["http://localhost:3000"]
+    # Secreto compartido BFF -> motor (header x-lumen-secret). Vacío = sin autenticación (dev).
+    engine_shared_secret: str = ""
+    # Calienta la caché de horizontes del catálogo en segundo plano al arrancar.
+    warmup: bool = False
 
 
 @lru_cache

@@ -1,0 +1,38 @@
+# Imagen de la web (Next.js standalone + BFF /api/engine) para Fly.io. Contexto = raíz del repo
+# (`flyctl deploy -c fly.web.toml`). Los NEXT_PUBLIC_* se incrustan en build: pásalos como --build-arg.
+# ENGINE_URL / ENGINE_SHARED_SECRET / RATE_LIMIT_PER_MIN se leen en runtime (fly.web.toml y `flyctl secrets`).
+FROM node:22-slim AS base
+ENV PNPM_HOME=/pnpm CI=1 NEXT_TELEMETRY_DISABLED=1
+ENV PATH=$PNPM_HOME:$PATH
+RUN corepack enable && corepack prepare pnpm@11.2.2 --activate
+WORKDIR /repo
+
+FROM base AS build
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/web/package.json apps/web/package.json
+COPY packages/sdk/package.json packages/sdk/package.json
+# El postinstall de apps/web (copy-cesium-assets) necesita el script y el paquete cesium ya instalado
+COPY apps/web/scripts apps/web/scripts
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --filter web...
+COPY apps/web apps/web
+COPY packages/sdk packages/sdk
+ARG NEXT_PUBLIC_CESIUM_ION_TOKEN=""
+ARG NEXT_PUBLIC_CESIUM_MOON_ASSET_ID=""
+ARG NEXT_PUBLIC_ENGINE_MOCK="0"
+ARG NEXT_PUBLIC_APP_URL="http://localhost:3000"
+ENV NEXT_PUBLIC_CESIUM_ION_TOKEN=$NEXT_PUBLIC_CESIUM_ION_TOKEN \
+    NEXT_PUBLIC_CESIUM_MOON_ASSET_ID=$NEXT_PUBLIC_CESIUM_MOON_ASSET_ID \
+    NEXT_PUBLIC_ENGINE_MOCK=$NEXT_PUBLIC_ENGINE_MOCK \
+    NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
+RUN pnpm --filter web build
+
+FROM node:22-slim AS runtime
+ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000 HOSTNAME=0.0.0.0
+WORKDIR /app
+RUN groupadd -r app && useradd -r -g app app
+COPY --from=build --chown=app:app /repo/apps/web/.next/standalone ./
+COPY --from=build --chown=app:app /repo/apps/web/.next/static ./apps/web/.next/static
+COPY --from=build --chown=app:app /repo/apps/web/public ./apps/web/public
+USER app
+EXPOSE 3000
+CMD ["node", "apps/web/server.js"]

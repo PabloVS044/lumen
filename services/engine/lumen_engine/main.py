@@ -3,6 +3,10 @@
 Protocolo Connect (HTTP POST /lumen.v1.<Service>/<Method>, JSON o binario) — ADR-0012.
 """
 
+import asyncio
+import contextlib
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from typing import Any
 
 from connectrpc.server import ConnectASGIApplication
@@ -26,9 +30,11 @@ from starlette.responses import JSONResponse
 from starlette.routing import Mount, Route
 
 from lumen_engine import __version__
+from lumen_engine.analysis import warmup
 from lumen_engine.core.config import get_settings
 from lumen_engine.db.store import InMemoryStore, Store
 from lumen_engine.rpc.interceptors import INTERCEPTORS
+from lumen_engine.rpc.secret import SharedSecretMiddleware
 from lumen_engine.services.analysis import AnalysisServiceImpl
 from lumen_engine.services.ephemeris import EphemerisServiceImpl
 from lumen_engine.services.export import ExportServiceImpl
@@ -62,6 +68,20 @@ async def healthz(_: Request) -> JSONResponse:
 
 def create_app() -> Starlette:
     store = build_store()
+
+    @asynccontextmanager
+    async def lifespan(_: Starlette) -> AsyncIterator[None]:
+        task = None
+        if get_settings().warmup:
+            task = asyncio.create_task(warmup.warm_catalog(store))
+        try:
+            yield
+        finally:
+            if task is not None:
+                task.cancel()
+                with contextlib.suppress(asyncio.CancelledError):
+                    await task
+
     apps: list[ConnectASGIApplication[Any]] = [
         HealthServiceASGIApplication(HealthServiceImpl(), interceptors=INTERCEPTORS),
         SiteServiceASGIApplication(SiteServiceImpl(), interceptors=INTERCEPTORS),
@@ -77,6 +97,7 @@ def create_app() -> Starlette:
         ValidationServiceASGIApplication(ValidationServiceImpl(), interceptors=INTERCEPTORS),
     ]
     routes = [Route("/healthz", healthz), *(Mount(a.path, app=a) for a in apps)]
+    secret = get_settings().engine_shared_secret
     middleware = [
         Middleware(
             CORSMiddleware,
@@ -84,9 +105,11 @@ def create_app() -> Starlette:
             allow_methods=["GET", "POST"],
             allow_headers=CONNECT_HEADERS,
             expose_headers=["Grpc-Status", "Grpc-Message"],
-        )
+        ),
+        # Dentro de CORS: los 401 también llevan cabeceras CORS y el preflight pasa sin secreto.
+        Middleware(SharedSecretMiddleware, secret=secret),
     ]
-    return Starlette(routes=routes, middleware=middleware)
+    return Starlette(routes=routes, middleware=middleware, lifespan=lifespan)
 
 
 app = create_app()
