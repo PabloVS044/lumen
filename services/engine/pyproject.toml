@@ -33,7 +33,7 @@ geo = [
 # Persistencia y jobs. Owner: Backend/Infra
 infra = [
     "sqlalchemy>=2.0",
-    "psycopg[binary]>=3.2",
+    "psycopg[binary,pool]>=3.2",
     "alembic>=1.14",
     "redis>=5.2",
     "arq>=0.26",
