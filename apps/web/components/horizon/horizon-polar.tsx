@@ -6,7 +6,9 @@
  * Datos solo del motor (AnalysisService.Analyze); `currentTime` sale del store.
  */
 import { line } from "d3";
-import { useMemo, useState, type MouseEvent } from "react";
+import { useMemo, useRef, useState, type MouseEvent } from "react";
+
+import { SvgDownload } from "@/components/export/chart-download";
 
 import { useScenarioStore } from "@/stores/scenario-store";
 
@@ -48,6 +50,7 @@ export function HorizonPolar({ site, range }: Props) {
   const currentTime = useScenarioStore((s) => s.currentTime);
   const [mode, setMode] = useState<RadialMode>("full");
   const [realSize, setRealSize] = useState(false);
+  const svgRef = useRef<SVGSVGElement>(null);
   const [hover, setHover] = useState<{ body: Body; index: number }>();
 
   const scale = useMemo(() => radialScale(mode), [mode]);
@@ -205,7 +208,9 @@ export function HorizonPolar({ site, range }: Props) {
         </label>
       </div>
 
+      <SvgDownload svgRef={svgRef} name="Horizon and Sun and Earth paths" size={800} />
       <svg
+        ref={svgRef}
         role="img"
         aria-label={`Sun and Earth paths against the terrain horizon at ${site.lat.toFixed(2)}, ${site.lon.toFixed(2)}`}
         viewBox={`${-VIEW / 2} ${-VIEW / 2} ${VIEW} ${VIEW}`}

@@ -11,6 +11,7 @@ import {
   Cartesian3,
   DirectionalLight,
   Ellipsoid,
+  HeightReference,
   PolylineArrowMaterialProperty,
   type CustomShader,
   type Scene,
@@ -19,13 +20,18 @@ import { useEffect, useMemo } from "react";
 import { Entity, useCesium } from "resium";
 
 import { subpoint, terminatorRing, type Vec3 } from "./lighting";
+import { LABEL_DEPTH_TEST_OFF_M, POINT_DEPTH_TEST_OFF_M } from "./marker-depth";
 import { setSunDirection } from "./moon-shader";
 import { tokenColor } from "./token-color";
+import { useTilesetHeight } from "./use-tileset-height";
 
+// Altura fija sobre la esfera (no es una altura del motor): el terminador es solo una guía visual.
 const TERMINATOR_ALT_M = 5_000;
 const ARROW_LENGTH_M = 300_000;
 
 interface Props {
+  /** El tileset ya cargó: permite muestrear su altura en el sitio (ver use-tileset-height.ts). */
+  tilesReady?: boolean;
   /** Sombreado día/noche del tileset: se actualiza con el Sol. */
   shader?: CustomShader;
   sun?: Vec3;
@@ -39,8 +45,10 @@ function lightScene(scene: Scene, sun: Vec3) {
   scene.requestRender();
 }
 
-export function SkyOverlay({ shader, sun, earth, site }: Props) {
+export function SkyOverlay({ shader, sun, earth, site, tilesReady = false }: Props) {
   const { scene } = useCesium();
+  // Altura del propio tileset en el sitio: el DEM del motor está ~659 m más abajo (⚠️ causa sin determinar).
+  const surfaceM = useTilesetHeight(scene, tilesReady, site);
 
   useEffect(() => {
     if (!scene || !sun) return;
@@ -66,18 +74,27 @@ export function SkyOverlay({ shader, sun, earth, site }: Props) {
       <Entity
         id={`sub-${text.toLowerCase()}`}
         position={Cartesian3.fromDegrees(lonDeg, latDeg, 0, Ellipsoid.MOON)}
-        point={{ pixelSize: 12, color }}
+        point={{
+          pixelSize: 12,
+          color,
+          heightReference: HeightReference.CLAMP_TO_3D_TILE,
+          disableDepthTestDistance: POINT_DEPTH_TEST_OFF_M,
+        }}
         label={{
           text,
           font: "13px sans-serif",
           fillColor: color,
           pixelOffset: new Cartesian2(0, -18),
+          heightReference: HeightReference.CLAMP_TO_3D_TILE,
+          disableDepthTestDistance: LABEL_DEPTH_TEST_OFF_M,
         }}
       />
     );
   };
 
-  const sitePos = site ? Cartesian3.fromDegrees(site.lon, site.lat, 0, Ellipsoid.MOON) : null;
+  const sitePos = site
+    ? Cartesian3.fromDegrees(site.lon, site.lat, surfaceM ?? 0, Ellipsoid.MOON)
+    : null;
   const arrowEnd =
     sitePos && earth
       ? new Cartesian3(
@@ -111,6 +128,8 @@ export function SkyOverlay({ shader, sun, earth, site }: Props) {
             width: 8,
             arcType: ArcType.NONE,
             material: new PolylineArrowMaterialProperty(earthColor),
+            // El relieve real puede quedar por delante de la flecha: sin esto el primer tramo desaparece.
+            depthFailMaterial: new PolylineArrowMaterialProperty(earthColor),
           }}
         />
       )}

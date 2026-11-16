@@ -6,19 +6,26 @@
  */
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import { Cartesian3, Ellipsoid, IonResource, Math as CesiumMath, type Camera } from "cesium";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Cesium3DTileset, Globe, Viewer, useCesium } from "resium";
+
+import { useTilesetHeight } from "@/components/globe/use-tileset-height";
 
 interface Props {
   lat: number;
   lon: number;
-  /** Altura de la cámara sobre la esfera lunar, en metros. */
-  heightM: number;
+  /** Altura del observador sobre el terreno, en metros. La del terreno se mide en el propio tileset. */
+  observerHeightM: number;
   heading: number;
   fovDeg: number;
 }
 
-function aim(camera: Camera, p: Props) {
+interface AimProps extends Omit<Props, "observerHeightM"> {
+  /** Altura de la cámara sobre la esfera lunar: altura del tileset en el punto + altura del observador. */
+  heightM: number;
+}
+
+function aim(camera: Camera, p: AimProps) {
   // PerspectiveFrustum.fov es el FOV horizontal si el canvas es más ancho que alto.
   (camera.frustum as { fov: number }).fov = CesiumMath.toRadians(p.fovDeg);
   camera.setView({
@@ -27,18 +34,23 @@ function aim(camera: Camera, p: Props) {
   });
 }
 
-function GroundCamera(props: Props) {
+function GroundCamera({ tilesReady, ...props }: Props & { tilesReady: boolean }) {
   const { camera, scene } = useCesium();
-  const { lat, lon, heightM, heading, fovDeg } = props;
+  const { lat, lon, observerHeightM, heading, fovDeg } = props;
+  // ⚠️ El tileset está ~659 m sobre el DEM del motor (causa sin determinar): la cámara se ubica con la
+  // altura del propio tileset, no con terrain_height_m / HorizonMask.observer. El horizonte, el Sol y la
+  // Tierra que se dibujan encima salen del motor en ángulos (az/el), que no dependen de la altura absoluta.
+  const surfaceM = useTilesetHeight(scene, tilesReady, { lat, lon });
   useEffect(() => {
-    if (!camera) return;
-    aim(camera, { lat, lon, heightM, heading, fovDeg });
+    if (!camera || surfaceM === undefined) return;
+    aim(camera, { lat, lon, heightM: surfaceM + observerHeightM, heading, fovDeg });
     scene?.requestRender();
-  }, [camera, scene, lat, lon, heightM, heading, fovDeg]);
+  }, [camera, scene, lat, lon, surfaceM, observerHeightM, heading, fovDeg]);
   return null;
 }
 
 export function GroundView(props: Props) {
+  const [tilesReady, setTilesReady] = useState(false);
   const token = process.env.NEXT_PUBLIC_CESIUM_ION_TOKEN;
   const assetId = Number.parseInt(process.env.NEXT_PUBLIC_CESIUM_MOON_ASSET_ID ?? "", 10);
   const tiles = useMemo(
@@ -64,8 +76,8 @@ export function GroundView(props: Props) {
       fullscreenButton={false}
     >
       <Globe show={false} />
-      {tiles && <Cesium3DTileset url={tiles} />}
-      <GroundCamera {...props} />
+      {tiles && <Cesium3DTileset url={tiles} onReady={() => setTilesReady(true)} />}
+      <GroundCamera {...props} tilesReady={tilesReady} />
     </Viewer>
   );
 }

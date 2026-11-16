@@ -71,3 +71,24 @@ body {
   outline: 2px solid var(--color-earth);
   outline-offset: 2px;
 }
+
+/*
+ * Impresión / "Guardar como PDF" (M14, HU-12 AC3). Los navegadores no imprimen fondos: se pasa a
+ * tinta oscura sobre papel y se ocultan controles. El PDF del motor necesita ExportService (R1).
+ */
+@media print {
+  :root {
+    color-scheme: light;
+    --color-space: #ffffff;
+    --color-panel: #ffffff;
+    --color-surface: #c8ccd4;
+    --color-muted: #4a5160;
+    --color-text: #111318;
+  }
+  nav,
+  form,
+  button,
+  [data-print-hide] {
+    display: none !important;
+  }
+}

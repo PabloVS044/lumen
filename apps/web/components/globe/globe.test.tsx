@@ -2,7 +2,7 @@ import { TransportProvider } from "@connectrpc/connect-query";
 import { createMockTransport, mockCatalog } from "@lumen/sdk/mocks";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor } from "@testing-library/react";
-import type { ComponentProps } from "react";
+import { useEffect, type ComponentProps } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const { Ellipsoid, IonResource } = vi.hoisted(() => ({
@@ -38,9 +38,16 @@ vi.mock("resium", () => ({
       {children}
     </div>
   ),
-  Cesium3DTileset: ({ customShader }: { customShader?: unknown }) => (
-    <div data-testid="tileset" data-shader={customShader ? "on" : "off"} />
-  ),
+  Cesium3DTileset: ({
+    customShader,
+    onReady,
+  }: {
+    customShader?: unknown;
+    onReady?: () => void;
+  }) => {
+    useEffect(() => onReady?.(), [onReady]);
+    return <div data-testid="tileset" data-shader={customShader ? "on" : "off"} />;
+  },
   Entity: ({ children }: { children?: React.ReactNode }) => (
     <div data-testid="fallback-sphere">{children}</div>
   ),
@@ -78,8 +85,21 @@ vi.mock("./site-markers", () => ({
 vi.mock("./moon-shader", () => ({ createDayNightShader: () => ({ id: "day-night" }) }));
 
 vi.mock("./sky-overlay", () => ({
-  SkyOverlay: ({ sun, site }: { sun?: unknown; site?: { id: string } }) => (
-    <div data-testid="sky" data-has-sun={String(Boolean(sun))} data-site={site?.id} />
+  SkyOverlay: ({
+    sun,
+    site,
+    tilesReady,
+  }: {
+    sun?: unknown;
+    site?: { id: string };
+    tilesReady?: boolean;
+  }) => (
+    <div
+      data-testid="sky"
+      data-has-sun={String(Boolean(sun))}
+      data-site={site?.id}
+      data-tiles-ready={String(tilesReady)}
+    />
   ),
 }));
 
@@ -231,5 +251,18 @@ describe("Globe", () => {
       await screen.findByText(/shading is approximate and ignores terrain relief/i),
     ).toBeInTheDocument();
     expect(screen.getByText(/real visibility is in the side panel/i)).toBeInTheDocument();
+  });
+
+  it("tells the sky overlay when the tileset is ready, so it can sample the tileset's own heights", () => {
+    vi.stubEnv("NEXT_PUBLIC_CESIUM_ION_TOKEN", "tok");
+    vi.stubEnv("NEXT_PUBLIC_CESIUM_MOON_ASSET_ID", "123");
+    renderGlobe();
+    expect(screen.getByTestId("sky")).toHaveAttribute("data-tiles-ready", "true");
+  });
+
+  it("does not claim the tileset is ready on the fallback sphere", () => {
+    vi.stubEnv("NEXT_PUBLIC_CESIUM_ION_TOKEN", "");
+    renderGlobe();
+    expect(screen.getByTestId("sky")).toHaveAttribute("data-tiles-ready", "false");
   });
 });
