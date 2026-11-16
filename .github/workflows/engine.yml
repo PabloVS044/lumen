@@ -20,6 +20,17 @@ defaults:
 jobs:
   check:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: lumen
+          POSTGRES_PASSWORD: lumen
+          POSTGRES_DB: lumen
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U lumen" --health-interval 5s --health-timeout 5s
+          --health-retries 10
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
@@ -40,3 +51,14 @@ jobs:
       - run: uv run pytest -m "not network"
         env:
           LUMEN_REQUIRE_KERNELS: "1"
+          # Con CI definido, los tests de integración fallan (no se saltan) si Postgres no responde
+          CI: "1"
+          DATABASE_URL: postgresql://lumen:lumen@localhost:5432/lumen
+  docker:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build services/engine
