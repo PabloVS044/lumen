@@ -30,25 +30,26 @@ export function parseUtc(s: string) {
 const secs = (ms: number) => ({ seconds: BigInt(Math.floor(ms / 1000)) });
 const POLL_MS = 2000;
 
-export function useAnalysis(site: SiteProp, range: RangeProp) {
+/** Entrada de Analyze para un sitio y rango; null si el rango no es válido. La usa también la exportación. */
+export function analysisInput(site: SiteProp, range: RangeProp) {
   const start = parseUtc(range.start);
   const end = parseUtc(range.end);
-  const invalidRange = start === null || end === null || end <= start;
-  const query = useQuery(
-    AnalysisService.method.analyze,
-    invalidRange
-      ? skipToken
-      : {
-          site: { lat: site.lat, lon: site.lon, obsHeightM: site.obsHeightM ?? 0 },
-          range: { start: secs(start), end: secs(end), stepMinutes: 60 },
-          options: { includeSeries: true, includeMask: true },
-        },
-    {
-      staleTime: Infinity,
-      // Sin caché el motor encola el cálculo: se vuelve a preguntar hasta que haya resultado.
-      refetchInterval: (q) => (q.state.data?.outcome.case === "job" ? POLL_MS : false),
-    },
-  );
+  if (start === null || end === null || end <= start) return null;
+  return {
+    site: { lat: site.lat, lon: site.lon, obsHeightM: site.obsHeightM ?? 0 },
+    range: { start: secs(start), end: secs(end), stepMinutes: 60 },
+    options: { includeSeries: true, includeMask: true },
+  };
+}
+
+export function useAnalysis(site: SiteProp, range: RangeProp) {
+  const input = analysisInput(site, range);
+  const invalidRange = input === null;
+  const query = useQuery(AnalysisService.method.analyze, input ?? skipToken, {
+    staleTime: Infinity,
+    // Sin caché el motor encola el cálculo: se vuelve a preguntar hasta que haya resultado.
+    refetchInterval: (q) => (q.state.data?.outcome.case === "job" ? POLL_MS : false),
+  });
   const outcome = query.data?.outcome;
   return {
     result: outcome?.case === "result" ? outcome.value : undefined,

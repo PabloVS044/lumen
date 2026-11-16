@@ -19,6 +19,7 @@ import { formatLatLon, normalizeLon } from "@/lib/coords";
 import { cn } from "@/lib/utils";
 import { siteSearchParams } from "@/lib/url-state";
 
+import { ExportSection } from "./export-section";
 import { SiteCharts } from "./site-charts";
 
 // Tolerancia para reconocer un sitio del catálogo a partir de la URL (redondeo de decimales).
@@ -84,6 +85,7 @@ export function SiteView() {
         </>
       )}
       <SiteCharts />
+      {range && <ExportSection site={site} range={range} />}
     </div>
   );
 }

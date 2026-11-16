@@ -121,5 +121,6 @@ describe("/site period and summary", () => {
     expect(await screen.findByRole("group", { name: "Sun" })).toBeInTheDocument();
     expect(await screen.findByRole("region", { name: "Sunlight" })).toBeInTheDocument();
     expect(screen.getByTestId("site-charts")).toBeInTheDocument();
+    expect(screen.getByText("Export data and charts")).toBeInTheDocument();
   });
 });
