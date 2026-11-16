@@ -91,4 +91,5 @@ markers = [
     "network: test que necesita red (excluido en CI)",
     "slow: test lento (benchmarks, horizonte completo)",
     "requires_kernels: necesita los kernels SPICE (se salta en local si faltan; falla en CI)",
+    "requires_dem: necesita DEMs LOLA instalados (data/scripts/prepare_dem.py); se salta si faltan",
 ]
