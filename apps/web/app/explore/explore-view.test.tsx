@@ -11,12 +11,18 @@ import { useScenarioStore } from "@/stores/scenario-store";
 vi.mock("@/components/globe/globe-loader", () => ({
   GlobeLoader: ({
     selectedSiteId,
+    selectedStatus,
     onSelectSite,
   }: {
     selectedSiteId?: string;
+    selectedStatus?: { sun: boolean; earth: boolean };
     onSelectSite: (s: CatalogSite) => void;
   }) => (
-    <div data-testid="globe" data-selected={selectedSiteId}>
+    <div
+      data-testid="globe"
+      data-selected={selectedSiteId}
+      data-status={selectedStatus ? JSON.stringify(selectedStatus) : ""}
+    >
       <button onClick={() => onSelectSite(mockCatalog[1]!)}>pick on globe</button>
     </div>
   ),
@@ -27,6 +33,10 @@ vi.mock("@/components/time-controls/time-controls", () => ({
   ),
 }));
 vi.mock("@/components/site-picker/site-picker", () => ({ SitePicker: () => null }));
+const visibility = vi.hoisted(() => ({
+  value: undefined as { sun: boolean; earth: boolean } | undefined,
+}));
+vi.mock("./site-visibility", () => ({ useSiteVisibility: () => visibility.value }));
 vi.mock("./site-panel", () => ({
   SitePanel: ({ site, range }: { site: CatalogSite; range: { start: string; end: string } }) => (
     <div data-testid="panel" data-name={site.name} data-range={`${range.start}/${range.end}`} />
@@ -49,6 +59,7 @@ function setup(search = "?t=2027-01-15T06:00:00Z&start=2027-01-01&end=2027-03-01
 }
 
 beforeEach(() => {
+  visibility.value = undefined;
   useScenarioStore.setState({ sites: [], currentTime: null, playing: false });
 });
 
@@ -84,5 +95,15 @@ describe("ExploreView", () => {
     setup("");
     fireEvent.click(screen.getByText("pick on globe"));
     expect(screen.getByTestId("panel")).toHaveAttribute("data-range", "2027-01-15/2027-02-14");
+  });
+
+  it("hands the selected site's engine visibility to the globe marker", () => {
+    visibility.value = { sun: true, earth: false };
+    setup();
+    fireEvent.click(screen.getByText("pick on globe"));
+    expect(JSON.parse(screen.getByTestId("globe").dataset.status!)).toEqual({
+      sun: true,
+      earth: false,
+    });
   });
 });

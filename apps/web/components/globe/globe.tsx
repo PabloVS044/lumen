@@ -14,18 +14,21 @@ import { Cesium3DTileset, EllipsoidGraphics, Entity, Globe as CesiumGlobe, Viewe
 
 import { useScenarioStore } from "@/stores/scenario-store";
 
+import { CameraController } from "./camera-controller";
 import { createDayNightShader } from "./moon-shader";
-import { SiteMarkers } from "./site-markers";
+import { SiteMarkers, type SiteStatus } from "./site-markers";
 import { SkyOverlay } from "./sky-overlay";
 import { tokenColor } from "./token-color";
 import { useSunEarth } from "./use-sun-earth";
 
 interface GlobeProps {
   selectedSiteId?: string;
+  /** Sol y Tierra visibles desde el sitio seleccionado (horizonte real, del motor). */
+  selectedStatus?: SiteStatus;
   onSelectSite?: (site: CatalogSite) => void;
 }
 
-export function Globe({ selectedSiteId, onSelectSite }: GlobeProps = {}) {
+export function Globe({ selectedSiteId, selectedStatus, onSelectSite }: GlobeProps = {}) {
   const { data: catalog, error: catalogError } = useQuery(SiteService.method.listSites, {});
   const currentTime = useScenarioStore((s) => s.currentTime);
   const { sun, earth, error: stateError } = useSunEarth(currentTime);
@@ -61,6 +64,7 @@ export function Globe({ selectedSiteId, onSelectSite }: GlobeProps = {}) {
       >
         {/* Resium 1.28 exige scene.globe: se deja uno oculto y sin capas en vez de globe={false}. */}
         <CesiumGlobe show={false} />
+        <CameraController target={selectedSite} />
         {moonTiles ? (
           <Cesium3DTileset url={moonTiles} customShader={sun ? dayNight : undefined} />
         ) : (
@@ -76,6 +80,7 @@ export function Globe({ selectedSiteId, onSelectSite }: GlobeProps = {}) {
           <SiteMarkers
             sites={catalog.sites}
             selectedId={selectedSiteId}
+            selectedStatus={selectedStatus}
             onSelect={(site) => onSelectSite?.(site)}
           />
         )}
@@ -94,6 +99,12 @@ export function Globe({ selectedSiteId, onSelectSite }: GlobeProps = {}) {
           className="absolute bottom-14 left-3 max-w-sm rounded-md bg-panel px-3 py-2 text-sm text-bad"
         >
           Could not load the Sun and Earth positions. Lighting may be out of date.
+        </p>
+      )}
+      {moonTiles && sun && (
+        <p className="pointer-events-none absolute top-3 right-3 max-w-xs rounded-sm bg-panel/80 px-2 py-1 text-xs text-muted">
+          Globe shading is approximate and ignores terrain relief. Real visibility is in the side
+          panel.
         </p>
       )}
       {moonTiles && (

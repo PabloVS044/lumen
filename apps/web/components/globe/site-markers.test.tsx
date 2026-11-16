@@ -24,8 +24,8 @@ vi.mock("cesium", () => ({
 
 interface MockEntityProps {
   id: string;
-  point: { color: { css: string } };
-  label: { show: boolean; distanceDisplayCondition?: unknown };
+  point: { color: { css: string }; disableDepthTestDistance: number };
+  label: { show: boolean; text: string; distanceDisplayCondition?: unknown };
   onClick: () => void;
 }
 
@@ -35,6 +35,8 @@ vi.mock("resium", () => ({
       data-testid={`marker-${id}`}
       data-color={point.color.css}
       data-label={String(label.show)}
+      data-text={label.text}
+      data-depth={String(point.disableDepthTestDistance)}
       data-label-range={label.distanceDisplayCondition ? "near" : "always"}
       onClick={onClick}
     />
@@ -108,5 +110,44 @@ describe("SiteMarkers", () => {
     expect(selected).toHaveAttribute("data-label-range", "always");
     expect(selected).toHaveAttribute("data-label", "true");
     expect(selected).toHaveAttribute("data-color", "white");
+  });
+
+  it("states in text whether the Sun and the Earth are visible from the selected site", () => {
+    render(
+      <SiteMarkers
+        sites={mockCatalog}
+        selectedId={mockCatalog[0]!.id}
+        selectedStatus={{ sun: true, earth: false }}
+        onSelect={() => {}}
+      />,
+    );
+    const text = screen.getByTestId(`marker-${mockCatalog[0]!.id}`).getAttribute("data-text")!;
+    expect(text).toContain(mockCatalog[0]!.name);
+    expect(text).toContain("Sun visible");
+    expect(text).toContain("Earth not visible");
+  });
+
+  it("shows only the name while the status is unknown, and never labels other sites with a status", () => {
+    render(
+      <SiteMarkers
+        sites={mockCatalog}
+        selectedId={mockCatalog[0]!.id}
+        selectedStatus={{ sun: true, earth: true }}
+        onSelect={() => {}}
+      />,
+    );
+    expect(screen.getByTestId(`marker-${mockCatalog[1]!.id}`)).toHaveAttribute(
+      "data-text",
+      mockCatalog[1]!.name,
+    );
+  });
+
+  it("keeps markers visible over real relief when the camera is close, but hidden behind the limb from far away", () => {
+    render(<SiteMarkers sites={mockCatalog} onSelect={() => {}} />);
+    const depth = Number(
+      screen.getByTestId(`marker-${mockCatalog[0]!.id}`).getAttribute("data-depth"),
+    );
+    expect(depth).toBeGreaterThan(100_000);
+    expect(depth).toBeLessThan(3_000_000); // la vista inicial (3 500 km) sigue con prueba de profundidad
   });
 });

@@ -50,9 +50,28 @@ vi.mock("resium", () => ({
   ),
 }));
 
+vi.mock("./camera-controller", () => ({
+  CameraController: ({ target }: { target?: { lat: number; lon: number } }) => (
+    <div data-testid="camera" data-target={target ? `${target.lat},${target.lon}` : ""} />
+  ),
+}));
+
 vi.mock("./site-markers", () => ({
-  SiteMarkers: ({ sites, selectedId }: { sites: unknown[]; selectedId?: string }) => (
-    <div data-testid="markers" data-count={sites.length} data-selected={selectedId} />
+  SiteMarkers: ({
+    sites,
+    selectedId,
+    selectedStatus,
+  }: {
+    sites: unknown[];
+    selectedId?: string;
+    selectedStatus?: { sun: boolean; earth: boolean };
+  }) => (
+    <div
+      data-testid="markers"
+      data-count={sites.length}
+      data-selected={selectedId}
+      data-status={selectedStatus ? JSON.stringify(selectedStatus) : ""}
+    />
   ),
 }));
 
@@ -181,5 +200,36 @@ describe("Globe", () => {
     renderGlobe();
     expect(screen.getByTestId("tileset")).toHaveAttribute("data-shader", "off");
     await waitFor(() => expect(screen.getByTestId("tileset")).toHaveAttribute("data-shader", "on"));
+  });
+
+  it("sends the camera to the selected site", async () => {
+    renderGlobe({ selectedSiteId: mockCatalog[1]!.id });
+    await waitFor(() =>
+      expect(screen.getByTestId("camera")).toHaveAttribute(
+        "data-target",
+        `${mockCatalog[1]!.lat},${mockCatalog[1]!.lon}`,
+      ),
+    );
+  });
+
+  it("forwards the selected site's visibility status to its marker", async () => {
+    renderGlobe({
+      selectedSiteId: mockCatalog[0]!.id,
+      selectedStatus: { sun: true, earth: false },
+    });
+    const markers = await screen.findByTestId("markers");
+    expect(JSON.parse(markers.dataset.status!)).toEqual({ sun: true, earth: false });
+  });
+
+  it("warns that the globe shading is approximate once the tileset is shaded by the Sun", async () => {
+    vi.stubEnv("NEXT_PUBLIC_CESIUM_ION_TOKEN", "tok");
+    vi.stubEnv("NEXT_PUBLIC_CESIUM_MOON_ASSET_ID", "123");
+    renderGlobe();
+    expect(screen.queryByText(/shading is approximate/i)).not.toBeInTheDocument();
+    useScenarioStore.setState({ currentTime: "2027-01-15T06:30:00Z" });
+    expect(
+      await screen.findByText(/shading is approximate and ignores terrain relief/i),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/real visibility is in the side panel/i)).toBeInTheDocument();
   });
 });
