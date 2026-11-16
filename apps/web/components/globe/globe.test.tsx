@@ -27,22 +27,27 @@ vi.mock("resium", () => ({
     ...props
   }: {
     children?: React.ReactNode;
-    globe?: boolean;
+    baseLayer?: boolean;
     ellipsoid?: { name: string };
   }) => (
     <div
       data-testid="viewer"
       data-ellipsoid={props.ellipsoid?.name}
-      data-globe={String(props.globe)}
+      data-base-layer={String(props.baseLayer)}
     >
       {children}
     </div>
   ),
-  Cesium3DTileset: () => <div data-testid="tileset" />,
+  Cesium3DTileset: ({ customShader }: { customShader?: unknown }) => (
+    <div data-testid="tileset" data-shader={customShader ? "on" : "off"} />
+  ),
   Entity: ({ children }: { children?: React.ReactNode }) => (
     <div data-testid="fallback-sphere">{children}</div>
   ),
   EllipsoidGraphics: () => null,
+  Globe: ({ show }: { show?: boolean }) => (
+    <div data-testid="cesium-globe" data-show={String(show)} />
+  ),
 }));
 
 vi.mock("./site-markers", () => ({
@@ -50,6 +55,8 @@ vi.mock("./site-markers", () => ({
     <div data-testid="markers" data-count={sites.length} data-selected={selectedId} />
   ),
 }));
+
+vi.mock("./moon-shader", () => ({ createDayNightShader: () => ({ id: "day-night" }) }));
 
 vi.mock("./sky-overlay", () => ({
   SkyOverlay: ({ sun, site }: { sun?: unknown; site?: { id: string } }) => (
@@ -109,11 +116,24 @@ describe("Globe", () => {
     expect(screen.queryByTestId("fallback-sphere")).not.toBeInTheDocument();
   });
 
-  it("creates the viewer without the default globe, using the lunar ellipsoid", () => {
+  it("creates the viewer with the lunar ellipsoid, no imagery and the default globe hidden", () => {
     renderGlobe();
     const viewer = screen.getByTestId("viewer");
     expect(viewer).toHaveAttribute("data-ellipsoid", "moon");
-    expect(viewer).toHaveAttribute("data-globe", "false");
+    expect(viewer).toHaveAttribute("data-base-layer", "false");
+    // Resium 1.28 falla con globe={false}: se deja el globo de Cesium, oculto.
+    expect(screen.getByTestId("cesium-globe")).toHaveAttribute("data-show", "false");
+  });
+
+  it("shows the NASA and USGS attribution next to the real tileset, not next to the fallback", () => {
+    vi.stubEnv("NEXT_PUBLIC_CESIUM_ION_TOKEN", "tok");
+    vi.stubEnv("NEXT_PUBLIC_CESIUM_MOON_ASSET_ID", "123");
+    const { unmount } = renderGlobe();
+    expect(screen.getByText(/NASA and the USGS Astrogeology Science Center/)).toBeInTheDocument();
+    unmount();
+    vi.stubEnv("NEXT_PUBLIC_CESIUM_ION_TOKEN", "");
+    renderGlobe();
+    expect(screen.queryByText(/USGS Astrogeology/)).not.toBeInTheDocument();
   });
 
   it("shows a marker layer with the catalog once ListSites answers", async () => {
@@ -152,5 +172,14 @@ describe("Globe", () => {
     const alerts = await screen.findAllByRole("alert");
     expect(alerts.some((a) => /Sun and Earth/i.test(a.textContent ?? ""))).toBe(true);
     expect(screen.getByTestId("viewer")).toBeInTheDocument();
+  });
+
+  it("applies the day/night shader to the tileset only once the Sun is known", async () => {
+    vi.stubEnv("NEXT_PUBLIC_CESIUM_ION_TOKEN", "tok");
+    vi.stubEnv("NEXT_PUBLIC_CESIUM_MOON_ASSET_ID", "123");
+    useScenarioStore.setState({ currentTime: "2027-01-15T06:30:00Z" });
+    renderGlobe();
+    expect(screen.getByTestId("tileset")).toHaveAttribute("data-shader", "off");
+    await waitFor(() => expect(screen.getByTestId("tileset")).toHaveAttribute("data-shader", "on"));
   });
 });

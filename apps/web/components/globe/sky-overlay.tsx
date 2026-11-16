@@ -12,18 +12,22 @@ import {
   DirectionalLight,
   Ellipsoid,
   PolylineArrowMaterialProperty,
+  type CustomShader,
   type Scene,
 } from "cesium";
 import { useEffect, useMemo } from "react";
 import { Entity, useCesium } from "resium";
 
 import { subpoint, terminatorRing, type Vec3 } from "./lighting";
+import { setSunDirection } from "./moon-shader";
 import { tokenColor } from "./token-color";
 
 const TERMINATOR_ALT_M = 5_000;
 const ARROW_LENGTH_M = 300_000;
 
 interface Props {
+  /** Sombreado día/noche del tileset: se actualiza con el Sol. */
+  shader?: CustomShader;
   sun?: Vec3;
   earth?: Vec3;
   site?: CatalogSite;
@@ -35,12 +39,14 @@ function lightScene(scene: Scene, sun: Vec3) {
   scene.requestRender();
 }
 
-export function SkyOverlay({ sun, earth, site }: Props) {
+export function SkyOverlay({ shader, sun, earth, site }: Props) {
   const { scene } = useCesium();
 
   useEffect(() => {
-    if (scene && sun) lightScene(scene, sun);
-  }, [scene, sun]);
+    if (!scene || !sun) return;
+    lightScene(scene, sun);
+    if (shader) setSunDirection(shader, sun);
+  }, [scene, sun, shader]);
 
   const ring = useMemo(
     () =>
