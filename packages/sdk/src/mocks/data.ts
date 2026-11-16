@@ -4,6 +4,7 @@
  * Compartido: cada área amplía su generador aquí (nunca en apps/web).
  */
 import { create } from "@bufbuild/protobuf";
+import { Code, ConnectError } from "@connectrpc/connect";
 import { timestampDate, timestampFromDate } from "@bufbuild/protobuf/wkt";
 
 import {
@@ -14,7 +15,12 @@ import {
   type AnalysisResult,
   type AnalyzeRequest,
 } from "../gen/lumen/v1/analysis_pb";
-import { BodySeriesSchema, IntervalSchema, type Site } from "../gen/lumen/v1/common_pb";
+import {
+  BodySeriesSchema,
+  ErrorDetailSchema,
+  IntervalSchema,
+  type Site,
+} from "../gen/lumen/v1/common_pb";
 import {
   EventSchema,
   EventType,
@@ -27,9 +33,16 @@ import { CatalogSiteSchema, Region, SiteStatus, type CatalogSite } from "../gen/
 import { CoverageSchema } from "../gen/lumen/v1/terrain_pb";
 import {
   PanelOrientation,
+  SimulateRequestSchema,
   SimulateResponseSchema,
   type SimulateRequest,
 } from "../gen/lumen/v1/power_pb";
+import {
+  EvaluateResponseSchema,
+  WhatIfPointSchema,
+  type EvaluateRequest,
+} from "../gen/lumen/v1/whatif_pb";
+import type { Metrics } from "../gen/lumen/v1/analysis_pb";
 
 export const MOCK_VERSION = "mock";
 
@@ -307,5 +320,90 @@ export function mockSimulate(req: SimulateRequest) {
     firstBrownoutTime: brownout === undefined ? undefined : time[brownout],
     minSocPct: (100 * minEnergy) / capacity,
     energyMarginWh: unserved > 0 ? -unserved : minEnergy - reserve,
+  });
+}
+
+/** Métricas aceptadas por el what-if y si "más es mejor" (igual que metrics/score.py del motor). */
+export const WHATIF_METRICS: Record<string, boolean> = {
+  illumination_pct: true,
+  illumination_pct_weighted: true,
+  longest_dark_h: false,
+  earth_visible_pct: true,
+  earth_visible_h: true,
+  longest_comm_window_h: true,
+  longest_comm_blackout_h: false,
+  operable_pct: true,
+  longest_operable_window_h: true,
+  energy_kwh_per_m2: true,
+};
+export const WHATIF_DEFAULT_METRICS = ["illumination_pct", "longest_dark_h", "operable_pct"];
+
+const camel = (name: string) => name.replace(/_([a-z0-9])/g, (_, c: string) => c.toUpperCase());
+
+/**
+ * What-if sobre la serie sintética: una ventana de misión por retraso, batería opcional y
+ * retrasos recomendados a ≤ 0.1 del mejor score de pesos iguales (sección 9.9). Datos sintéticos.
+ */
+export function mockWhatIf(req: EvaluateRequest) {
+  const names = req.metrics.length ? [...req.metrics] : WHATIF_DEFAULT_METRICS;
+  const unknown = names.filter((n) => !(n in WHATIF_METRICS));
+  if (unknown.length) {
+    throw new ConnectError("Unknown metric for what-if.", Code.InvalidArgument, undefined, [
+      {
+        desc: ErrorDetailSchema,
+        value: create(ErrorDetailSchema, {
+          code: "UNKNOWN_METRIC",
+          context: { metrics: unknown.join(",") },
+        }),
+      },
+    ]);
+  }
+  const stepH = req.delayStepHours || 24;
+  const durationMs = req.missionDurationDays * 24 * HOUR_MS;
+  const nominal = timestampDate(req.nominalLanding!).getTime();
+  const points = [];
+  for (let k = 0; k * stepH <= req.maxDelayDays * 24; k++) {
+    const landing = nominal + k * stepH * HOUR_MS;
+    const range = {
+      start: timestampFromDate(new Date(landing)),
+      end: timestampFromDate(new Date(landing + durationMs)),
+      stepMinutes: 60,
+    };
+    const m = mockAnalysis(create(AnalyzeRequestSchema, { site: req.site, range })).metrics;
+    const survives = req.power
+      ? mockSimulate(
+          create(SimulateRequestSchema, { scenario: { site: req.site, range }, config: req.power }),
+        ).survives
+      : undefined;
+    points.push(
+      create(WhatIfPointSchema, {
+        delayHours: k * stepH,
+        landing: range.start,
+        metrics: Object.fromEntries(
+          names.map((n) => [
+            n,
+            Number((m as Metrics | undefined)?.[camel(n) as keyof Metrics] ?? 0),
+          ]),
+        ),
+        survives,
+      }),
+    );
+  }
+  const score = points.map(() => 0);
+  for (const n of names) {
+    const v = points.map((p) => p.metrics[n] ?? 0);
+    const lo = Math.min(...v);
+    const hi = Math.max(...v);
+    v.forEach((x, i) => {
+      const norm = hi === lo ? 1 : (x - lo) / (hi - lo);
+      score[i]! += WHATIF_METRICS[n] ? norm : 1 - norm;
+    });
+  }
+  const best = Math.max(...score.map((x) => x / names.length));
+  return create(EvaluateResponseSchema, {
+    points,
+    recommendedDelaysHours: points
+      .filter((p, i) => score[i]! / names.length >= best - 0.1 && p.survives !== false)
+      .map((p) => p.delayHours),
   });
 }

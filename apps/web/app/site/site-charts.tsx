@@ -11,6 +11,7 @@ import { HorizonPolar } from "@/components/horizon/horizon-polar";
 import { PowerSimulator } from "@/components/power/power-simulator";
 import { LocalTerrainSection } from "@/components/terrain/local-terrain-section";
 import { VisibilityHeatmap } from "@/components/timeline/visibility-heatmap";
+import { WhatIfChart } from "@/components/whatif/what-if-chart";
 import { siteSearchParams } from "@/lib/url-state";
 
 function Charts() {
@@ -31,6 +32,7 @@ function Charts() {
       <VisibilityHeatmap site={site} range={range} />
       <LocalTerrainSection site={site} range={range} />
       <PowerSimulator site={site} range={range} />
+      <WhatIfChart site={site} range={range} />
     </>
   );
 }
