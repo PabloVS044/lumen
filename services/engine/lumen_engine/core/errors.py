@@ -3,12 +3,18 @@ errores Connect con un `lumen.v1.ErrorDetail` adjunto (código estable para el f
 
 from connectrpc.code import Code
 
+# Códigos lanzados desde módulos de otros owners con el default INVALID_ARGUMENT, pero que no son
+# culpa de la entrada (la petición es válida; faltan datos): se sirven como FAILED_PRECONDITION.
+CODE_OVERRIDES: dict[str, Code] = {"INSUFFICIENT_DEM_RANGE": Code.FAILED_PRECONDITION}
+
 
 class EngineError(Exception):
     connect_code: Code = Code.INVALID_ARGUMENT
 
     def __init__(self, code: str, message: str, context: dict[str, str] | None = None) -> None:
         super().__init__(message)
+        if code in CODE_OVERRIDES:
+            self.connect_code = CODE_OVERRIDES[code]
         self.code = code
         self.message = message
         self.context = context or {}

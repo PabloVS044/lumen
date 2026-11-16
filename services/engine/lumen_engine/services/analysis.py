@@ -8,6 +8,7 @@ from lumen.v1 import analysis_pb2
 from lumen.v1.analysis_connect import AnalysisService
 
 from lumen_engine.analysis import pipeline
+from lumen_engine.core.errors import EngineError
 from lumen_engine.db.store import InMemoryStore, Store
 from lumen_engine.metrics.score import best_by_metric
 from lumen_engine.rpc.context import Ctx
@@ -34,11 +35,15 @@ class AnalysisServiceImpl(AnalysisService):
         """
         options = analysis_pb2.AnalyzeOptions(include_series=True, include_mask=True)
         results = []
-        for sc in request.scenarios:
+        for index, sc in enumerate(request.scenarios):
             req = analysis_pb2.AnalyzeRequest(
                 site=sc.site, range=sc.range, thresholds=request.thresholds, options=options
             )
-            res = await pipeline.analyze(req, self._store)
+            try:
+                res = await pipeline.analyze(req, self._store)
+            except EngineError as exc:
+                exc.context["scenario"] = str(index)  # qué escenario falló (base 0)
+                raise
             results.append(res.result)
         best = best_by_metric([r.metrics for r in results])
         return analysis_pb2.CompareResponse(results=results, best_by_metric=best)
