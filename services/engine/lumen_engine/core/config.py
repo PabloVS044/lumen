@@ -6,7 +6,8 @@ from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ENGINE_ROOT = Path(__file__).resolve().parents[2]
-REPO_ROOT = ENGINE_ROOT.parents[1]
+# En el contenedor el motor vive en /app (sin abuelo): las rutas se fijan por variables de entorno.
+REPO_ROOT = ENGINE_ROOT.parents[1] if len(ENGINE_ROOT.parents) > 1 else ENGINE_ROOT
 
 
 class Settings(BaseSettings):

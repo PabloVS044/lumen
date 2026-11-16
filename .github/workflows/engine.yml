@@ -61,4 +61,6 @@ jobs:
         working-directory: .
     steps:
       - uses: actions/checkout@v4
-      - run: docker build services/engine
+      - run: docker build -t lumen-engine:ci services/engine
+      # La imagen debe arrancar de verdad (una vez falló al importar la configuración en /app)
+      - run: docker run --rm lumen-engine:ci uv run --no-sync python -c "from lumen_engine.main import app"

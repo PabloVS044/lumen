@@ -1,0 +1,11 @@
+# Contexto de build desde la raíz del repo (despliegue en Fly: infra/fly/Dockerfile).
+# Lista blanca: solo lo que entra a la imagen del motor. (Los builds de services/engine usan su propio .dockerignore.)
+*
+!services/engine/pyproject.toml
+!services/engine/uv.lock
+!services/engine/.python-version
+!services/engine/README.md
+!services/engine/gen/**
+!services/engine/lumen_engine/**
+!data/catalog/sites.yaml
+**/__pycache__
