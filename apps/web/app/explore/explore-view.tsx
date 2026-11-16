@@ -32,7 +32,7 @@ export function ExploreView() {
   const range = start || anchor ? rangeOf(resolveWindow({ start, end, t: anchor }, 0)) : null;
 
   return (
-    <div className="flex flex-1 flex-col lg:flex-row">
+    <div className="flex flex-1 flex-col lg:h-[calc(100dvh-3.8rem)] lg:flex-none lg:flex-row">
       <h1 className="sr-only">Explore</h1>
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="relative min-h-[28rem] flex-1">
@@ -46,7 +46,7 @@ export function ExploreView() {
       </div>
       <aside
         aria-label="Site detail"
-        className="flex w-full shrink-0 flex-col gap-4 border-t border-surface bg-panel p-4 lg:w-96 lg:border-t-0 lg:border-l"
+        className="flex w-full shrink-0 flex-col gap-4 border-t border-surface bg-panel p-4 lg:w-96 lg:overflow-y-auto lg:border-t-0 lg:border-l"
       >
         <label className="flex flex-col gap-1 text-sm">
           <span className="text-muted">Site</span>
