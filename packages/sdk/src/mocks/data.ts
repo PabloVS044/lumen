@@ -43,6 +43,12 @@ import {
   type EvaluateRequest,
 } from "../gen/lumen/v1/whatif_pb";
 import type { Metrics } from "../gen/lumen/v1/analysis_pb";
+import { searchGridPoint } from "../search-grid";
+import {
+  GetBestSpotResultResponseSchema,
+  SpotCandidateSchema,
+  type FindBestSpotRequest,
+} from "../gen/lumen/v1/search_pb";
 
 export const MOCK_VERSION = "mock";
 
@@ -405,5 +411,52 @@ export function mockWhatIf(req: EvaluateRequest) {
     recommendedDelaysHours: points
       .filter((p, i) => score[i]! / names.length >= best - 0.1 && p.survives !== false)
       .map((p) => p.delayHours),
+  });
+}
+
+/**
+ * Búsqueda de mejor punto sintética (sección 9.10): grilla cuadrada en km alrededor del centro,
+ * con un valor suave que depende de la posición. No es ciencia: sirve para desarrollar la UI M12.
+ * Mismo formato que el motor: fila mayor, fila 0 = y mínima, NaN fuera del radio.
+ */
+export function mockBestSpot(req: FindBestSpotRequest) {
+  const radiusM = req.radiusKm * 1000;
+  const spacing = req.spacingM || 250;
+  const n = Math.ceil(radiusM / spacing);
+  const side = 2 * n + 1;
+  const lat0 = req.center!.lat;
+  const lon0 = req.center!.lon;
+  const values: number[] = [];
+  const candidates: { lat: number; lon: number; v: number }[] = [];
+  for (let row = 0; row < side; row++) {
+    for (let col = 0; col < side; col++) {
+      const x = (col - n) * spacing;
+      const y = (row - n) * spacing;
+      if (x * x + y * y > radiusM * radiusM) {
+        values.push(Number.NaN);
+        continue;
+      }
+      const v = 60 + 25 * Math.cos(x / 1500 + lat0) * Math.sin(y / 2100 + lon0 / 10);
+      values.push(v);
+      const { lat, lon } = searchGridPoint({ lat: lat0, lon: lon0 }, x / 1000, y / 1000);
+      candidates.push({ lat, lon, v });
+    }
+  }
+  const objective = req.objective || "illumination_pct";
+  const top = candidates
+    .sort((a, b) => b.v - a.v)
+    .slice(0, req.topK || 5)
+    .map((c) =>
+      create(SpotCandidateSchema, {
+        point: { lat: c.lat, lon: c.lon },
+        score: c.v / 100,
+        metrics: { [objective === "score" ? "illumination_pct" : objective]: c.v },
+      }),
+    );
+  return create(GetBestSpotResultResponseSchema, {
+    top,
+    gridCols: side,
+    gridRows: side,
+    gridValues: values,
   });
 }

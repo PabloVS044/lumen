@@ -163,3 +163,39 @@ describe("what-if mock", () => {
     );
   });
 });
+
+describe("best-spot search mock", () => {
+  const req = {
+    center: { lat: -89.45, lon: -137.31 },
+    radiusKm: 2,
+    spacingM: 500,
+    range: {
+      start: timestampFromDate(new Date("2027-01-01T00:00:00Z")),
+      end: timestampFromDate(new Date("2027-02-01T00:00:00Z")),
+    },
+    objective: "illumination_pct",
+    topK: 3,
+  };
+
+  it("behaves like an async job: not ready first, then the result", async () => {
+    const { job } = await client.search.findBestSpot(req);
+    await expect(client.search.getBestSpotResult({ jobId: job!.jobId })).rejects.toSatisfy(
+      (e) => engineErrorCode(e) === "JOB_NOT_READY",
+    );
+    const res = await client.search.getBestSpotResult({ jobId: job!.jobId });
+    expect(res.gridCols).toBe(9);
+    expect(res.gridRows).toBe(9);
+    expect(res.gridValues).toHaveLength(81);
+    expect(Number.isNaN(res.gridValues[0]!)).toBe(true); // esquina fuera del radio
+    expect(res.top).toHaveLength(3);
+    expect(res.top[0]!.metrics.illumination_pct).toBeGreaterThanOrEqual(
+      res.top[1]!.metrics.illumination_pct!,
+    );
+  });
+
+  it("reports unknown jobs", async () => {
+    await expect(client.search.getBestSpotResult({ jobId: "nope" })).rejects.toSatisfy(
+      (e) => engineErrorCode(e) === "JOB_NOT_FOUND",
+    );
+  });
+});
