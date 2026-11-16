@@ -12,8 +12,12 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file lumen/v1/jobs.proto.
  */
-export const file_lumen_v1_jobs: GenFile = /*@__PURE__*/
-  fileDesc("ChNsdW1lbi92MS9qb2JzLnByb3RvEghsdW1lbi52MSIoCg1HZXRKb2JSZXF1ZXN0EhcKBmpvYl9pZBgBIAEoCUIHukgEcgIQASKCAQoOR2V0Sm9iUmVzcG9uc2USDgoGam9iX2lkGAEgASgJEiEKBXN0YXRlGAIgASgOMhIubHVtZW4udjEuSm9iU3RhdGUSEAoIcHJvZ3Jlc3MYAyABKAESDQoFc3RhZ2UYBCABKAkSEgoFZXJyb3IYBSABKAlIAIgBAUIICgZfZXJyb3IqfAoISm9iU3RhdGUSGQoVSk9CX1NUQVRFX1VOU1BFQ0lGSUVEEAASFAoQSk9CX1NUQVRFX1FVRVVFRBABEhUKEUpPQl9TVEFURV9SVU5OSU5HEAISEgoOSk9CX1NUQVRFX0RPTkUQAxIUChBKT0JfU1RBVEVfRkFJTEVEEAQyTgoKSm9iU2VydmljZRJACgZHZXRKb2ISFy5sdW1lbi52MS5HZXRKb2JSZXF1ZXN0GhgubHVtZW4udjEuR2V0Sm9iUmVzcG9uc2UiA5ACAWIGcHJvdG8z", [file_buf_validate_validate]);
+export const file_lumen_v1_jobs: GenFile =
+  /*@__PURE__*/
+  fileDesc(
+    "ChNsdW1lbi92MS9qb2JzLnByb3RvEghsdW1lbi52MSIoCg1HZXRKb2JSZXF1ZXN0EhcKBmpvYl9pZBgBIAEoCUIHukgEcgIQASKCAQoOR2V0Sm9iUmVzcG9uc2USDgoGam9iX2lkGAEgASgJEiEKBXN0YXRlGAIgASgOMhIubHVtZW4udjEuSm9iU3RhdGUSEAoIcHJvZ3Jlc3MYAyABKAESDQoFc3RhZ2UYBCABKAkSEgoFZXJyb3IYBSABKAlIAIgBAUIICgZfZXJyb3IqfAoISm9iU3RhdGUSGQoVSk9CX1NUQVRFX1VOU1BFQ0lGSUVEEAASFAoQSk9CX1NUQVRFX1FVRVVFRBABEhUKEUpPQl9TVEFURV9SVU5OSU5HEAISEgoOSk9CX1NUQVRFX0RPTkUQAxIUChBKT0JfU1RBVEVfRkFJTEVEEAQyTgoKSm9iU2VydmljZRJACgZHZXRKb2ISFy5sdW1lbi52MS5HZXRKb2JSZXF1ZXN0GhgubHVtZW4udjEuR2V0Sm9iUmVzcG9uc2UiA5ACAWIGcHJvdG8z",
+    [file_buf_validate_validate],
+  );
 
 /**
  * @generated from message lumen.v1.GetJobRequest
@@ -29,7 +33,8 @@ export type GetJobRequest = Message<"lumen.v1.GetJobRequest"> & {
  * Describes the message lumen.v1.GetJobRequest.
  * Use `create(GetJobRequestSchema)` to create a new message.
  */
-export const GetJobRequestSchema: GenMessage<GetJobRequest> = /*@__PURE__*/
+export const GetJobRequestSchema: GenMessage<GetJobRequest> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_jobs, 0);
 
 /**
@@ -72,7 +77,8 @@ export type GetJobResponse = Message<"lumen.v1.GetJobResponse"> & {
  * Describes the message lumen.v1.GetJobResponse.
  * Use `create(GetJobResponseSchema)` to create a new message.
  */
-export const GetJobResponseSchema: GenMessage<GetJobResponse> = /*@__PURE__*/
+export const GetJobResponseSchema: GenMessage<GetJobResponse> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_jobs, 1);
 
 /**
@@ -108,8 +114,7 @@ export enum JobState {
 /**
  * Describes the enum lumen.v1.JobState.
  */
-export const JobStateSchema: GenEnum<JobState> = /*@__PURE__*/
-  enumDesc(file_lumen_v1_jobs, 0);
+export const JobStateSchema: GenEnum<JobState> = /*@__PURE__*/ enumDesc(file_lumen_v1_jobs, 0);
 
 /**
  * @generated from service lumen.v1.JobService
@@ -124,7 +129,5 @@ export const JobService: GenService<{
     methodKind: "unary";
     input: typeof GetJobRequestSchema;
     output: typeof GetJobResponseSchema;
-  },
-}> = /*@__PURE__*/
-  serviceDesc(file_lumen_v1_jobs, 0);
-
+  };
+}> = /*@__PURE__*/ serviceDesc(file_lumen_v1_jobs, 0);

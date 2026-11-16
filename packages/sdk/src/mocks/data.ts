@@ -25,6 +25,11 @@ import {
 import { HorizonMaskSchema, ObserverSchema, type HorizonMask } from "../gen/lumen/v1/horizon_pb";
 import { CatalogSiteSchema, Region, SiteStatus, type CatalogSite } from "../gen/lumen/v1/sites_pb";
 import { CoverageSchema } from "../gen/lumen/v1/terrain_pb";
+import {
+  PanelOrientation,
+  SimulateResponseSchema,
+  type SimulateRequest,
+} from "../gen/lumen/v1/power_pb";
 
 export const MOCK_VERSION = "mock";
 
@@ -228,4 +233,79 @@ export function mockSeries(req: GetSeriesRequest) {
     create(AnalyzeRequestSchema, { site: req.site, range: req.range }),
   );
   return { time: series?.time ?? [], sun: series?.sun, earth: series?.earth };
+}
+
+const AU_KM = 149_597_870.7;
+const SOLAR_CONSTANT_W_M2 = 1361;
+
+/**
+ * Simulación de batería sobre la serie sintética de `mockAnalysis`, con el modelo de la sección 9.8
+ * y los defaults del preset "lander pequeño". Sirve para desarrollar la UI sin motor; no es ciencia.
+ */
+export function mockSimulate(req: SimulateRequest) {
+  const scenario = req.scenario!;
+  const cfg = req.config;
+  const opt = (v: number | undefined, d: number) => (v === undefined ? d : v);
+  const area = opt(cfg?.panelAreaM2, 2);
+  const eff = opt(cfg?.efficiency, 0.28);
+  const capacity = opt(cfg?.batteryWh, 2000);
+  const soc0 = opt(cfg?.soc0Pct, 100);
+  const dod = opt(cfg?.maxDodPct, 80);
+  const loadDay = opt(cfg?.loadDayW, 150);
+  const loadNight = opt(cfg?.loadNightW, 60);
+  const etaB = opt(cfg?.batteryEfficiency, 0.95);
+  const orientation = cfg?.orientation || PanelOrientation.VERTICAL_TRACKING;
+  const panelAz = cfg?.panelAzimuthDeg ?? 0;
+
+  const { series } = mockAnalysis(
+    create(AnalyzeRequestSchema, { site: scenario.site, range: scenario.range }),
+  );
+  const time = series?.time ?? [];
+  const sun = series?.sun;
+  const rad = Math.PI / 180;
+  const pGen = time.map((_, i) => {
+    const el = (sun?.elDeg[i] ?? 0) * rad;
+    const az = (sun?.azDeg[i] ?? 0) * rad;
+    const g =
+      orientation === PanelOrientation.HORIZONTAL
+        ? Math.sin(Math.max(el, 0))
+        : orientation === PanelOrientation.VERTICAL_FIXED
+          ? Math.max(0, Math.cos(el) * Math.cos(az - panelAz * rad))
+          : Math.cos(el);
+    const s0 = SOLAR_CONSTANT_W_M2 * (AU_KM / (sun?.distKm[i] ?? AU_KM)) ** 2;
+    return eff * area * s0 * (sun?.fraction[i] ?? 0) * g;
+  });
+  const pLoad = time.map((_, i) => ((sun?.fraction[i] ?? 0) > 0 ? loadDay : loadNight));
+  const stepH =
+    time.length > 1
+      ? (timestampDate(time[1]!).getTime() - timestampDate(time[0]!).getTime()) / HOUR_MS
+      : 1;
+  const reserve = capacity * (1 - dod / 100);
+  let e = (capacity * soc0) / 100;
+  let unserved = 0;
+  let brownout: number | undefined;
+  const energy: number[] = [];
+  time.forEach((_, i) => {
+    energy.push(e);
+    if (i === time.length - 1) return;
+    const delta = (pGen[i]! - pLoad[i]!) * stepH;
+    e += delta > 0 ? delta * etaB : delta / etaB;
+    if (e < reserve) {
+      unserved += (reserve - e) * etaB;
+      e = reserve;
+      brownout ??= i + 1;
+    }
+    e = Math.min(e, capacity);
+  });
+  const minEnergy = Math.min(...energy);
+  return create(SimulateResponseSchema, {
+    time,
+    pGenW: pGen,
+    pLoadW: pLoad,
+    socPct: energy.map((x) => (100 * x) / capacity),
+    survives: brownout === undefined,
+    firstBrownoutTime: brownout === undefined ? undefined : time[brownout],
+    minSocPct: (100 * minEnergy) / capacity,
+    energyMarginWh: unserved > 0 ? -unserved : minEnergy - reserve,
+  });
 }

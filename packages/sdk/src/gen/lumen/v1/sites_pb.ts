@@ -12,8 +12,12 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file lumen/v1/sites.proto.
  */
-export const file_lumen_v1_sites: GenFile = /*@__PURE__*/
-  fileDesc("ChRsdW1lbi92MS9zaXRlcy5wcm90bxIIbHVtZW4udjEiqgIKC0NhdGFsb2dTaXRlEgoKAmlkGAEgASgJEgwKBG5hbWUYAiABKAkSCwoDbGF0GAMgASgBEgsKA2xvbhgEIAEoARIPCgdwcm9ncmFtGAUgASgJEg4KBmFnZW5jeRgGIAEoCRIPCgdjb3VudHJ5GAcgASgJEiQKBnN0YXR1cxgIIAEoDjIULmx1bWVuLnYxLlNpdGVTdGF0dXMSIAoGcmVnaW9uGAkgASgOMhAubHVtZW4udjEuUmVnaW9uEhcKD2Nvb3JkX3ByZWNpc2lvbhgKIAEoCRIQCgh2ZXJpZmllZBgLIAEoCBISCgpzb3VyY2VfdXJsGAwgASgJEhYKDmRlc2NyaXB0aW9uX2VzGA0gASgJEhYKDmRlc2NyaXB0aW9uX2VuGA4gASgJIpYBChBMaXN0U2l0ZXNSZXF1ZXN0EhQKB3Byb2dyYW0YASABKAlIAIgBARIUCgdjb3VudHJ5GAIgASgJSAGIAQESIAoGcmVnaW9uGAMgASgOMhAubHVtZW4udjEuUmVnaW9uEhIKBXF1ZXJ5GAQgASgJSAKIAQFCCgoIX3Byb2dyYW1CCgoIX2NvdW50cnlCCAoGX3F1ZXJ5IjkKEUxpc3RTaXRlc1Jlc3BvbnNlEiQKBXNpdGVzGAEgAygLMhUubHVtZW4udjEuQ2F0YWxvZ1NpdGUiJQoOR2V0U2l0ZVJlcXVlc3QSEwoCaWQYASABKAlCB7pIBHICEAEiNgoPR2V0U2l0ZVJlc3BvbnNlEiMKBHNpdGUYASABKAsyFS5sdW1lbi52MS5DYXRhbG9nU2l0ZSqPAQoKU2l0ZVN0YXR1cxIbChdTSVRFX1NUQVRVU19VTlNQRUNJRklFRBAAEhkKFVNJVEVfU1RBVFVTX0NBTkRJREFURRABEhYKElNJVEVfU1RBVFVTX0xBTkRFRBACEhcKE1NJVEVfU1RBVFVTX1BMQU5ORUQQAxIYChRTSVRFX1NUQVRVU19ISVNUT1JJQxAEKncKBlJlZ2lvbhIWChJSRUdJT05fVU5TUEVDSUZJRUQQABIVChFSRUdJT05fU09VVEhfUE9MRRABEhUKEVJFR0lPTl9OT1JUSF9QT0xFEAISEwoPUkVHSU9OX05FQVJTSURFEAMSEgoOUkVHSU9OX0ZBUlNJREUQBDKdAQoLU2l0ZVNlcnZpY2USSQoJTGlzdFNpdGVzEhoubHVtZW4udjEuTGlzdFNpdGVzUmVxdWVzdBobLmx1bWVuLnYxLkxpc3RTaXRlc1Jlc3BvbnNlIgOQAgESQwoHR2V0U2l0ZRIYLmx1bWVuLnYxLkdldFNpdGVSZXF1ZXN0GhkubHVtZW4udjEuR2V0U2l0ZVJlc3BvbnNlIgOQAgFiBnByb3RvMw", [file_buf_validate_validate]);
+export const file_lumen_v1_sites: GenFile =
+  /*@__PURE__*/
+  fileDesc(
+    "ChRsdW1lbi92MS9zaXRlcy5wcm90bxIIbHVtZW4udjEiqgIKC0NhdGFsb2dTaXRlEgoKAmlkGAEgASgJEgwKBG5hbWUYAiABKAkSCwoDbGF0GAMgASgBEgsKA2xvbhgEIAEoARIPCgdwcm9ncmFtGAUgASgJEg4KBmFnZW5jeRgGIAEoCRIPCgdjb3VudHJ5GAcgASgJEiQKBnN0YXR1cxgIIAEoDjIULmx1bWVuLnYxLlNpdGVTdGF0dXMSIAoGcmVnaW9uGAkgASgOMhAubHVtZW4udjEuUmVnaW9uEhcKD2Nvb3JkX3ByZWNpc2lvbhgKIAEoCRIQCgh2ZXJpZmllZBgLIAEoCBISCgpzb3VyY2VfdXJsGAwgASgJEhYKDmRlc2NyaXB0aW9uX2VzGA0gASgJEhYKDmRlc2NyaXB0aW9uX2VuGA4gASgJIpYBChBMaXN0U2l0ZXNSZXF1ZXN0EhQKB3Byb2dyYW0YASABKAlIAIgBARIUCgdjb3VudHJ5GAIgASgJSAGIAQESIAoGcmVnaW9uGAMgASgOMhAubHVtZW4udjEuUmVnaW9uEhIKBXF1ZXJ5GAQgASgJSAKIAQFCCgoIX3Byb2dyYW1CCgoIX2NvdW50cnlCCAoGX3F1ZXJ5IjkKEUxpc3RTaXRlc1Jlc3BvbnNlEiQKBXNpdGVzGAEgAygLMhUubHVtZW4udjEuQ2F0YWxvZ1NpdGUiJQoOR2V0U2l0ZVJlcXVlc3QSEwoCaWQYASABKAlCB7pIBHICEAEiNgoPR2V0U2l0ZVJlc3BvbnNlEiMKBHNpdGUYASABKAsyFS5sdW1lbi52MS5DYXRhbG9nU2l0ZSqPAQoKU2l0ZVN0YXR1cxIbChdTSVRFX1NUQVRVU19VTlNQRUNJRklFRBAAEhkKFVNJVEVfU1RBVFVTX0NBTkRJREFURRABEhYKElNJVEVfU1RBVFVTX0xBTkRFRBACEhcKE1NJVEVfU1RBVFVTX1BMQU5ORUQQAxIYChRTSVRFX1NUQVRVU19ISVNUT1JJQxAEKncKBlJlZ2lvbhIWChJSRUdJT05fVU5TUEVDSUZJRUQQABIVChFSRUdJT05fU09VVEhfUE9MRRABEhUKEVJFR0lPTl9OT1JUSF9QT0xFEAISEwoPUkVHSU9OX05FQVJTSURFEAMSEgoOUkVHSU9OX0ZBUlNJREUQBDKdAQoLU2l0ZVNlcnZpY2USSQoJTGlzdFNpdGVzEhoubHVtZW4udjEuTGlzdFNpdGVzUmVxdWVzdBobLmx1bWVuLnYxLkxpc3RTaXRlc1Jlc3BvbnNlIgOQAgESQwoHR2V0U2l0ZRIYLmx1bWVuLnYxLkdldFNpdGVSZXF1ZXN0GhkubHVtZW4udjEuR2V0U2l0ZVJlc3BvbnNlIgOQAgFiBnByb3RvMw",
+    [file_buf_validate_validate],
+  );
 
 /**
  * @generated from message lumen.v1.CatalogSite
@@ -98,7 +102,8 @@ export type CatalogSite = Message<"lumen.v1.CatalogSite"> & {
  * Describes the message lumen.v1.CatalogSite.
  * Use `create(CatalogSiteSchema)` to create a new message.
  */
-export const CatalogSiteSchema: GenMessage<CatalogSite> = /*@__PURE__*/
+export const CatalogSiteSchema: GenMessage<CatalogSite> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_sites, 0);
 
 /**
@@ -132,7 +137,8 @@ export type ListSitesRequest = Message<"lumen.v1.ListSitesRequest"> & {
  * Describes the message lumen.v1.ListSitesRequest.
  * Use `create(ListSitesRequestSchema)` to create a new message.
  */
-export const ListSitesRequestSchema: GenMessage<ListSitesRequest> = /*@__PURE__*/
+export const ListSitesRequestSchema: GenMessage<ListSitesRequest> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_sites, 1);
 
 /**
@@ -149,7 +155,8 @@ export type ListSitesResponse = Message<"lumen.v1.ListSitesResponse"> & {
  * Describes the message lumen.v1.ListSitesResponse.
  * Use `create(ListSitesResponseSchema)` to create a new message.
  */
-export const ListSitesResponseSchema: GenMessage<ListSitesResponse> = /*@__PURE__*/
+export const ListSitesResponseSchema: GenMessage<ListSitesResponse> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_sites, 2);
 
 /**
@@ -166,7 +173,8 @@ export type GetSiteRequest = Message<"lumen.v1.GetSiteRequest"> & {
  * Describes the message lumen.v1.GetSiteRequest.
  * Use `create(GetSiteRequestSchema)` to create a new message.
  */
-export const GetSiteRequestSchema: GenMessage<GetSiteRequest> = /*@__PURE__*/
+export const GetSiteRequestSchema: GenMessage<GetSiteRequest> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_sites, 3);
 
 /**
@@ -183,7 +191,8 @@ export type GetSiteResponse = Message<"lumen.v1.GetSiteResponse"> & {
  * Describes the message lumen.v1.GetSiteResponse.
  * Use `create(GetSiteResponseSchema)` to create a new message.
  */
-export const GetSiteResponseSchema: GenMessage<GetSiteResponse> = /*@__PURE__*/
+export const GetSiteResponseSchema: GenMessage<GetSiteResponse> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_sites, 4);
 
 /**
@@ -219,8 +228,7 @@ export enum SiteStatus {
 /**
  * Describes the enum lumen.v1.SiteStatus.
  */
-export const SiteStatusSchema: GenEnum<SiteStatus> = /*@__PURE__*/
-  enumDesc(file_lumen_v1_sites, 0);
+export const SiteStatusSchema: GenEnum<SiteStatus> = /*@__PURE__*/ enumDesc(file_lumen_v1_sites, 0);
 
 /**
  * @generated from enum lumen.v1.Region
@@ -255,8 +263,7 @@ export enum Region {
 /**
  * Describes the enum lumen.v1.Region.
  */
-export const RegionSchema: GenEnum<Region> = /*@__PURE__*/
-  enumDesc(file_lumen_v1_sites, 1);
+export const RegionSchema: GenEnum<Region> = /*@__PURE__*/ enumDesc(file_lumen_v1_sites, 1);
 
 /**
  * @generated from service lumen.v1.SiteService
@@ -269,7 +276,7 @@ export const SiteService: GenService<{
     methodKind: "unary";
     input: typeof ListSitesRequestSchema;
     output: typeof ListSitesResponseSchema;
-  },
+  };
   /**
    * @generated from rpc lumen.v1.SiteService.GetSite
    */
@@ -277,7 +284,5 @@ export const SiteService: GenService<{
     methodKind: "unary";
     input: typeof GetSiteRequestSchema;
     output: typeof GetSiteResponseSchema;
-  },
-}> = /*@__PURE__*/
-  serviceDesc(file_lumen_v1_sites, 0);
-
+  };
+}> = /*@__PURE__*/ serviceDesc(file_lumen_v1_sites, 0);

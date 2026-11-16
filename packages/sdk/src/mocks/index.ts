@@ -6,4 +6,5 @@ export {
   mockEvents,
   mockHorizon,
   mockSeries,
+  mockSimulate,
 } from "./data";

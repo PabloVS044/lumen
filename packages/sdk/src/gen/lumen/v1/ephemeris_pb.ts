@@ -16,8 +16,12 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file lumen/v1/ephemeris.proto.
  */
-export const file_lumen_v1_ephemeris: GenFile = /*@__PURE__*/
-  fileDesc("ChhsdW1lbi92MS9lcGhlbWVyaXMucHJvdG8SCGx1bWVuLnYxIlQKBUV2ZW50EiEKBHR5cGUYASABKA4yEy5sdW1lbi52MS5FdmVudFR5cGUSKAoEdGltZRgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAiKgoHVmVjdG9yMxIJCgF4GAEgASgBEgkKAXkYAiABKAESCQoBehgDIAEoASJkChBHZXRTZXJpZXNSZXF1ZXN0EiQKBHNpdGUYASABKAsyDi5sdW1lbi52MS5TaXRlQga6SAPIAQESKgoFcmFuZ2UYAiABKAsyEy5sdW1lbi52MS5UaW1lUmFuZ2VCBrpIA8gBASKFAQoRR2V0U2VyaWVzUmVzcG9uc2USKAoEdGltZRgBIAMoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASIQoDc3VuGAIgASgLMhQubHVtZW4udjEuQm9keVNlcmllcxIjCgVlYXJ0aBgDIAEoCzIULmx1bWVuLnYxLkJvZHlTZXJpZXMiQwoPR2V0U3RhdGVSZXF1ZXN0EjAKBHRpbWUYASABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQga6SAPIAQEihgEKEEdldFN0YXRlUmVzcG9uc2USKAoEdGltZRgBIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASIgoHc3VuX2RpchgCIAEoCzIRLmx1bWVuLnYxLlZlY3RvcjMSJAoJZWFydGhfZGlyGAMgASgLMhEubHVtZW4udjEuVmVjdG9yMyKvAQoRTGlzdEV2ZW50c1JlcXVlc3QSJAoEc2l0ZRgBIAEoCzIOLmx1bWVuLnYxLlNpdGVCBrpIA8gBARIwCgRmcm9tGAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEIGukgDyAEBEiIKBXR5cGVzGAMgAygOMhMubHVtZW4udjEuRXZlbnRUeXBlEh4KDGhvcml6b25fZGF5cxgEIAEoDUIIukgFKgMY2gUiNQoSTGlzdEV2ZW50c1Jlc3BvbnNlEh8KBmV2ZW50cxgBIAMoCzIPLmx1bWVuLnYxLkV2ZW50KsMBCglFdmVudFR5cGUSGgoWRVZFTlRfVFlQRV9VTlNQRUNJRklFRBAAEhYKEkVWRU5UX1RZUEVfU1VOUklTRRABEhUKEUVWRU5UX1RZUEVfU1VOU0VUEAISGAoURVZFTlRfVFlQRV9FQVJUSFJJU0UQAxIXChNFVkVOVF9UWVBFX0VBUlRIU0VUEAQSHAoYRVZFTlRfVFlQRV9FQ0xJUFNFX1NUQVJUEAUSGgoWRVZFTlRfVFlQRV9FQ0xJUFNFX0VORBAGMvMBChBFcGhlbWVyaXNTZXJ2aWNlEkkKCUdldFNlcmllcxIaLmx1bWVuLnYxLkdldFNlcmllc1JlcXVlc3QaGy5sdW1lbi52MS5HZXRTZXJpZXNSZXNwb25zZSIDkAIBEkYKCEdldFN0YXRlEhkubHVtZW4udjEuR2V0U3RhdGVSZXF1ZXN0GhoubHVtZW4udjEuR2V0U3RhdGVSZXNwb25zZSIDkAIBEkwKCkxpc3RFdmVudHMSGy5sdW1lbi52MS5MaXN0RXZlbnRzUmVxdWVzdBocLmx1bWVuLnYxLkxpc3RFdmVudHNSZXNwb25zZSIDkAIBYgZwcm90bzM", [file_buf_validate_validate, file_google_protobuf_timestamp, file_lumen_v1_common]);
+export const file_lumen_v1_ephemeris: GenFile =
+  /*@__PURE__*/
+  fileDesc(
+    "ChhsdW1lbi92MS9lcGhlbWVyaXMucHJvdG8SCGx1bWVuLnYxIlQKBUV2ZW50EiEKBHR5cGUYASABKA4yEy5sdW1lbi52MS5FdmVudFR5cGUSKAoEdGltZRgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAiKgoHVmVjdG9yMxIJCgF4GAEgASgBEgkKAXkYAiABKAESCQoBehgDIAEoASJkChBHZXRTZXJpZXNSZXF1ZXN0EiQKBHNpdGUYASABKAsyDi5sdW1lbi52MS5TaXRlQga6SAPIAQESKgoFcmFuZ2UYAiABKAsyEy5sdW1lbi52MS5UaW1lUmFuZ2VCBrpIA8gBASKFAQoRR2V0U2VyaWVzUmVzcG9uc2USKAoEdGltZRgBIAMoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASIQoDc3VuGAIgASgLMhQubHVtZW4udjEuQm9keVNlcmllcxIjCgVlYXJ0aBgDIAEoCzIULmx1bWVuLnYxLkJvZHlTZXJpZXMiQwoPR2V0U3RhdGVSZXF1ZXN0EjAKBHRpbWUYASABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQga6SAPIAQEihgEKEEdldFN0YXRlUmVzcG9uc2USKAoEdGltZRgBIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASIgoHc3VuX2RpchgCIAEoCzIRLmx1bWVuLnYxLlZlY3RvcjMSJAoJZWFydGhfZGlyGAMgASgLMhEubHVtZW4udjEuVmVjdG9yMyKvAQoRTGlzdEV2ZW50c1JlcXVlc3QSJAoEc2l0ZRgBIAEoCzIOLmx1bWVuLnYxLlNpdGVCBrpIA8gBARIwCgRmcm9tGAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEIGukgDyAEBEiIKBXR5cGVzGAMgAygOMhMubHVtZW4udjEuRXZlbnRUeXBlEh4KDGhvcml6b25fZGF5cxgEIAEoDUIIukgFKgMY2gUiNQoSTGlzdEV2ZW50c1Jlc3BvbnNlEh8KBmV2ZW50cxgBIAMoCzIPLmx1bWVuLnYxLkV2ZW50KsMBCglFdmVudFR5cGUSGgoWRVZFTlRfVFlQRV9VTlNQRUNJRklFRBAAEhYKEkVWRU5UX1RZUEVfU1VOUklTRRABEhUKEUVWRU5UX1RZUEVfU1VOU0VUEAISGAoURVZFTlRfVFlQRV9FQVJUSFJJU0UQAxIXChNFVkVOVF9UWVBFX0VBUlRIU0VUEAQSHAoYRVZFTlRfVFlQRV9FQ0xJUFNFX1NUQVJUEAUSGgoWRVZFTlRfVFlQRV9FQ0xJUFNFX0VORBAGMvMBChBFcGhlbWVyaXNTZXJ2aWNlEkkKCUdldFNlcmllcxIaLmx1bWVuLnYxLkdldFNlcmllc1JlcXVlc3QaGy5sdW1lbi52MS5HZXRTZXJpZXNSZXNwb25zZSIDkAIBEkYKCEdldFN0YXRlEhkubHVtZW4udjEuR2V0U3RhdGVSZXF1ZXN0GhoubHVtZW4udjEuR2V0U3RhdGVSZXNwb25zZSIDkAIBEkwKCkxpc3RFdmVudHMSGy5sdW1lbi52MS5MaXN0RXZlbnRzUmVxdWVzdBocLmx1bWVuLnYxLkxpc3RFdmVudHNSZXNwb25zZSIDkAIBYgZwcm90bzM",
+    [file_buf_validate_validate, file_google_protobuf_timestamp, file_lumen_v1_common],
+  );
 
 /**
  * @generated from message lumen.v1.Event
@@ -38,8 +42,7 @@ export type Event = Message<"lumen.v1.Event"> & {
  * Describes the message lumen.v1.Event.
  * Use `create(EventSchema)` to create a new message.
  */
-export const EventSchema: GenMessage<Event> = /*@__PURE__*/
-  messageDesc(file_lumen_v1_ephemeris, 0);
+export const EventSchema: GenMessage<Event> = /*@__PURE__*/ messageDesc(file_lumen_v1_ephemeris, 0);
 
 /**
  * @generated from message lumen.v1.Vector3
@@ -65,7 +68,8 @@ export type Vector3 = Message<"lumen.v1.Vector3"> & {
  * Describes the message lumen.v1.Vector3.
  * Use `create(Vector3Schema)` to create a new message.
  */
-export const Vector3Schema: GenMessage<Vector3> = /*@__PURE__*/
+export const Vector3Schema: GenMessage<Vector3> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_ephemeris, 1);
 
 /**
@@ -87,7 +91,8 @@ export type GetSeriesRequest = Message<"lumen.v1.GetSeriesRequest"> & {
  * Describes the message lumen.v1.GetSeriesRequest.
  * Use `create(GetSeriesRequestSchema)` to create a new message.
  */
-export const GetSeriesRequestSchema: GenMessage<GetSeriesRequest> = /*@__PURE__*/
+export const GetSeriesRequestSchema: GenMessage<GetSeriesRequest> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_ephemeris, 2);
 
 /**
@@ -114,7 +119,8 @@ export type GetSeriesResponse = Message<"lumen.v1.GetSeriesResponse"> & {
  * Describes the message lumen.v1.GetSeriesResponse.
  * Use `create(GetSeriesResponseSchema)` to create a new message.
  */
-export const GetSeriesResponseSchema: GenMessage<GetSeriesResponse> = /*@__PURE__*/
+export const GetSeriesResponseSchema: GenMessage<GetSeriesResponse> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_ephemeris, 3);
 
 /**
@@ -131,7 +137,8 @@ export type GetStateRequest = Message<"lumen.v1.GetStateRequest"> & {
  * Describes the message lumen.v1.GetStateRequest.
  * Use `create(GetStateRequestSchema)` to create a new message.
  */
-export const GetStateRequestSchema: GenMessage<GetStateRequest> = /*@__PURE__*/
+export const GetStateRequestSchema: GenMessage<GetStateRequest> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_ephemeris, 4);
 
 /**
@@ -160,7 +167,8 @@ export type GetStateResponse = Message<"lumen.v1.GetStateResponse"> & {
  * Describes the message lumen.v1.GetStateResponse.
  * Use `create(GetStateResponseSchema)` to create a new message.
  */
-export const GetStateResponseSchema: GenMessage<GetStateResponse> = /*@__PURE__*/
+export const GetStateResponseSchema: GenMessage<GetStateResponse> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_ephemeris, 5);
 
 /**
@@ -196,7 +204,8 @@ export type ListEventsRequest = Message<"lumen.v1.ListEventsRequest"> & {
  * Describes the message lumen.v1.ListEventsRequest.
  * Use `create(ListEventsRequestSchema)` to create a new message.
  */
-export const ListEventsRequestSchema: GenMessage<ListEventsRequest> = /*@__PURE__*/
+export const ListEventsRequestSchema: GenMessage<ListEventsRequest> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_ephemeris, 6);
 
 /**
@@ -213,7 +222,8 @@ export type ListEventsResponse = Message<"lumen.v1.ListEventsResponse"> & {
  * Describes the message lumen.v1.ListEventsResponse.
  * Use `create(ListEventsResponseSchema)` to create a new message.
  */
-export const ListEventsResponseSchema: GenMessage<ListEventsResponse> = /*@__PURE__*/
+export const ListEventsResponseSchema: GenMessage<ListEventsResponse> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_ephemeris, 7);
 
 /**
@@ -259,7 +269,8 @@ export enum EventType {
 /**
  * Describes the enum lumen.v1.EventType.
  */
-export const EventTypeSchema: GenEnum<EventType> = /*@__PURE__*/
+export const EventTypeSchema: GenEnum<EventType> =
+  /*@__PURE__*/
   enumDesc(file_lumen_v1_ephemeris, 0);
 
 /**
@@ -273,7 +284,7 @@ export const EphemerisService: GenService<{
     methodKind: "unary";
     input: typeof GetSeriesRequestSchema;
     output: typeof GetSeriesResponseSchema;
-  },
+  };
   /**
    * Direcciones Sol/Tierra en MOON_ME para iluminar el globo 3D.
    *
@@ -283,7 +294,7 @@ export const EphemerisService: GenService<{
     methodKind: "unary";
     input: typeof GetStateRequestSchema;
     output: typeof GetStateResponseSchema;
-  },
+  };
   /**
    * Próximos sunrise/sunset/earthrise/earthset desde un instante (HU-06).
    *
@@ -293,7 +304,5 @@ export const EphemerisService: GenService<{
     methodKind: "unary";
     input: typeof ListEventsRequestSchema;
     output: typeof ListEventsResponseSchema;
-  },
-}> = /*@__PURE__*/
-  serviceDesc(file_lumen_v1_ephemeris, 0);
-
+  };
+}> = /*@__PURE__*/ serviceDesc(file_lumen_v1_ephemeris, 0);

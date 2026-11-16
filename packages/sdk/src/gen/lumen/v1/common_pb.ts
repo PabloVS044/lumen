@@ -16,8 +16,12 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file lumen/v1/common.proto.
  */
-export const file_lumen_v1_common: GenFile = /*@__PURE__*/
-  fileDesc("ChVsdW1lbi92MS9jb21tb24ucHJvdG8SCGx1bWVuLnYxIsUBCgRTaXRlEiQKA2xhdBgBIAEoAUIXukgUEhIZAAAAAACAVkApAAAAAACAVsASJAoDbG9uGAIgASgBQhe6SBQSEhEAAAAAAIB2QCkAAAAAAIBmwBItCgxvYnNfaGVpZ2h0X20YAyABKAFCF7pIFBISGQAAAAAAAFlAKQAAAAAAAAAAEhEKBG5hbWUYBCABKAlIAIgBARIXCgpjYXRhbG9nX2lkGAUgASgJSAGIAQFCBwoFX25hbWVCDQoLX2NhdGFsb2dfaWQiVAoGTGF0TG9uEiQKA2xhdBgBIAEoAUIXukgUEhIZAAAAAACAVkApAAAAAACAVsASJAoDbG9uGAIgASgBQhe6SBQSEhEAAAAAAIB2QCkAAAAAAIBmwCLYAQoJVGltZVJhbmdlEjEKBXN0YXJ0GAEgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEIGukgDyAEBEi8KA2VuZBgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBCBrpIA8gBARIeCgxzdGVwX21pbnV0ZXMYAyABKA1CCLpIBSoDGOgCOke6SEQaQgoQdGltZV9yYW5nZS5vcmRlchIXZW5kIG11c3QgYmUgYWZ0ZXIgc3RhcnQaFXRoaXMuZW5kID4gdGhpcy5zdGFydCKmAQoKVGhyZXNob2xkcxI2ChBzdW5fbWluX2ZyYWN0aW9uGAEgASgBQhe6SBQSEhkAAAAAAADwPykAAAAAAAAAAEgAiAEBEjYKEGVhcnRoX21hcmdpbl9kZWcYAiABKAFCF7pIFBISGQAAAAAAABRAKQAAAAAAAAAASAGIAQFCEwoRX3N1bl9taW5fZnJhY3Rpb25CEwoRX2VhcnRoX21hcmdpbl9kZWciTwoKQm9keVNlcmllcxIOCgZhel9kZWcYASADKAESDgoGZWxfZGVnGAIgAygBEhAKCGZyYWN0aW9uGAMgAygBEg8KB2Rpc3Rfa20YBCADKAEicQoISW50ZXJ2YWwSKQoFc3RhcnQYASABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEicKA2VuZBgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASEQoJdHJ1bmNhdGVkGAMgASgIIhgKBkpvYlJlZhIOCgZqb2JfaWQYASABKAkigAEKC0Vycm9yRGV0YWlsEgwKBGNvZGUYASABKAkSMwoHY29udGV4dBgCIAMoCzIiLmx1bWVuLnYxLkVycm9yRGV0YWlsLkNvbnRleHRFbnRyeRouCgxDb250ZXh0RW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4AWIGcHJvdG8z", [file_buf_validate_validate, file_google_protobuf_timestamp]);
+export const file_lumen_v1_common: GenFile =
+  /*@__PURE__*/
+  fileDesc(
+    "ChVsdW1lbi92MS9jb21tb24ucHJvdG8SCGx1bWVuLnYxIsUBCgRTaXRlEiQKA2xhdBgBIAEoAUIXukgUEhIZAAAAAACAVkApAAAAAACAVsASJAoDbG9uGAIgASgBQhe6SBQSEhEAAAAAAIB2QCkAAAAAAIBmwBItCgxvYnNfaGVpZ2h0X20YAyABKAFCF7pIFBISGQAAAAAAAFlAKQAAAAAAAAAAEhEKBG5hbWUYBCABKAlIAIgBARIXCgpjYXRhbG9nX2lkGAUgASgJSAGIAQFCBwoFX25hbWVCDQoLX2NhdGFsb2dfaWQiVAoGTGF0TG9uEiQKA2xhdBgBIAEoAUIXukgUEhIZAAAAAACAVkApAAAAAACAVsASJAoDbG9uGAIgASgBQhe6SBQSEhEAAAAAAIB2QCkAAAAAAIBmwCLYAQoJVGltZVJhbmdlEjEKBXN0YXJ0GAEgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEIGukgDyAEBEi8KA2VuZBgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBCBrpIA8gBARIeCgxzdGVwX21pbnV0ZXMYAyABKA1CCLpIBSoDGOgCOke6SEQaQgoQdGltZV9yYW5nZS5vcmRlchIXZW5kIG11c3QgYmUgYWZ0ZXIgc3RhcnQaFXRoaXMuZW5kID4gdGhpcy5zdGFydCKmAQoKVGhyZXNob2xkcxI2ChBzdW5fbWluX2ZyYWN0aW9uGAEgASgBQhe6SBQSEhkAAAAAAADwPykAAAAAAAAAAEgAiAEBEjYKEGVhcnRoX21hcmdpbl9kZWcYAiABKAFCF7pIFBISGQAAAAAAABRAKQAAAAAAAAAASAGIAQFCEwoRX3N1bl9taW5fZnJhY3Rpb25CEwoRX2VhcnRoX21hcmdpbl9kZWciTwoKQm9keVNlcmllcxIOCgZhel9kZWcYASADKAESDgoGZWxfZGVnGAIgAygBEhAKCGZyYWN0aW9uGAMgAygBEg8KB2Rpc3Rfa20YBCADKAEicQoISW50ZXJ2YWwSKQoFc3RhcnQYASABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEicKA2VuZBgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASEQoJdHJ1bmNhdGVkGAMgASgIIhgKBkpvYlJlZhIOCgZqb2JfaWQYASABKAkigAEKC0Vycm9yRGV0YWlsEgwKBGNvZGUYASABKAkSMwoHY29udGV4dBgCIAMoCzIiLmx1bWVuLnYxLkVycm9yRGV0YWlsLkNvbnRleHRFbnRyeRouCgxDb250ZXh0RW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4AWIGcHJvdG8z",
+    [file_buf_validate_validate, file_google_protobuf_timestamp],
+  );
 
 /**
  * Punto de observación sobre la superficie lunar.
@@ -61,8 +65,7 @@ export type Site = Message<"lumen.v1.Site"> & {
  * Describes the message lumen.v1.Site.
  * Use `create(SiteSchema)` to create a new message.
  */
-export const SiteSchema: GenMessage<Site> = /*@__PURE__*/
-  messageDesc(file_lumen_v1_common, 0);
+export const SiteSchema: GenMessage<Site> = /*@__PURE__*/ messageDesc(file_lumen_v1_common, 0);
 
 /**
  * @generated from message lumen.v1.LatLon
@@ -83,8 +86,7 @@ export type LatLon = Message<"lumen.v1.LatLon"> & {
  * Describes the message lumen.v1.LatLon.
  * Use `create(LatLonSchema)` to create a new message.
  */
-export const LatLonSchema: GenMessage<LatLon> = /*@__PURE__*/
-  messageDesc(file_lumen_v1_common, 1);
+export const LatLonSchema: GenMessage<LatLon> = /*@__PURE__*/ messageDesc(file_lumen_v1_common, 1);
 
 /**
  * Rango temporal UTC. Límite: end - start <= MAX_RANGE_DAYS (validado en el motor).
@@ -114,7 +116,8 @@ export type TimeRange = Message<"lumen.v1.TimeRange"> & {
  * Describes the message lumen.v1.TimeRange.
  * Use `create(TimeRangeSchema)` to create a new message.
  */
-export const TimeRangeSchema: GenMessage<TimeRange> = /*@__PURE__*/
+export const TimeRangeSchema: GenMessage<TimeRange> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_common, 2);
 
 /**
@@ -142,7 +145,8 @@ export type Thresholds = Message<"lumen.v1.Thresholds"> & {
  * Describes the message lumen.v1.Thresholds.
  * Use `create(ThresholdsSchema)` to create a new message.
  */
-export const ThresholdsSchema: GenMessage<Thresholds> = /*@__PURE__*/
+export const ThresholdsSchema: GenMessage<Thresholds> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_common, 3);
 
 /**
@@ -178,7 +182,8 @@ export type BodySeries = Message<"lumen.v1.BodySeries"> & {
  * Describes the message lumen.v1.BodySeries.
  * Use `create(BodySeriesSchema)` to create a new message.
  */
-export const BodySeriesSchema: GenMessage<BodySeries> = /*@__PURE__*/
+export const BodySeriesSchema: GenMessage<BodySeries> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_common, 4);
 
 /**
@@ -207,7 +212,8 @@ export type Interval = Message<"lumen.v1.Interval"> & {
  * Describes the message lumen.v1.Interval.
  * Use `create(IntervalSchema)` to create a new message.
  */
-export const IntervalSchema: GenMessage<Interval> = /*@__PURE__*/
+export const IntervalSchema: GenMessage<Interval> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_common, 5);
 
 /**
@@ -226,8 +232,7 @@ export type JobRef = Message<"lumen.v1.JobRef"> & {
  * Describes the message lumen.v1.JobRef.
  * Use `create(JobRefSchema)` to create a new message.
  */
-export const JobRefSchema: GenMessage<JobRef> = /*@__PURE__*/
-  messageDesc(file_lumen_v1_common, 6);
+export const JobRefSchema: GenMessage<JobRef> = /*@__PURE__*/ messageDesc(file_lumen_v1_common, 6);
 
 /**
  * Detalle de error adjunto a los errores Connect. `code` es estable (NO_COVERAGE, ...).
@@ -250,6 +255,6 @@ export type ErrorDetail = Message<"lumen.v1.ErrorDetail"> & {
  * Describes the message lumen.v1.ErrorDetail.
  * Use `create(ErrorDetailSchema)` to create a new message.
  */
-export const ErrorDetailSchema: GenMessage<ErrorDetail> = /*@__PURE__*/
+export const ErrorDetailSchema: GenMessage<ErrorDetail> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_common, 7);
-

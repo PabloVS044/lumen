@@ -11,20 +11,23 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file lumen/v1/validation.proto.
  */
-export const file_lumen_v1_validation: GenFile = /*@__PURE__*/
-  fileDesc("ChlsdW1lbi92MS92YWxpZGF0aW9uLnByb3RvEghsdW1lbi52MSISChBHZXRSZXBvcnRSZXF1ZXN0IncKD1ZhbGlkYXRpb25DaGVjaxIKCgJpZBgBIAEoCRITCgtkZXNjcmlwdGlvbhgCIAEoCRIRCgl0b2xlcmFuY2UYAyABKAESEQoJbWF4X2Vycm9yGAQgASgBEg4KBnBhc3NlZBgFIAEoCBINCgVub3RlcxgGIAEoCSI+ChFHZXRSZXBvcnRSZXNwb25zZRIpCgZjaGVja3MYASADKAsyGS5sdW1lbi52MS5WYWxpZGF0aW9uQ2hlY2syXgoRVmFsaWRhdGlvblNlcnZpY2USSQoJR2V0UmVwb3J0EhoubHVtZW4udjEuR2V0UmVwb3J0UmVxdWVzdBobLmx1bWVuLnYxLkdldFJlcG9ydFJlc3BvbnNlIgOQAgFiBnByb3RvMw");
+export const file_lumen_v1_validation: GenFile =
+  /*@__PURE__*/
+  fileDesc(
+    "ChlsdW1lbi92MS92YWxpZGF0aW9uLnByb3RvEghsdW1lbi52MSISChBHZXRSZXBvcnRSZXF1ZXN0IncKD1ZhbGlkYXRpb25DaGVjaxIKCgJpZBgBIAEoCRITCgtkZXNjcmlwdGlvbhgCIAEoCRIRCgl0b2xlcmFuY2UYAyABKAESEQoJbWF4X2Vycm9yGAQgASgBEg4KBnBhc3NlZBgFIAEoCBINCgVub3RlcxgGIAEoCSI+ChFHZXRSZXBvcnRSZXNwb25zZRIpCgZjaGVja3MYASADKAsyGS5sdW1lbi52MS5WYWxpZGF0aW9uQ2hlY2syXgoRVmFsaWRhdGlvblNlcnZpY2USSQoJR2V0UmVwb3J0EhoubHVtZW4udjEuR2V0UmVwb3J0UmVxdWVzdBobLmx1bWVuLnYxLkdldFJlcG9ydFJlc3BvbnNlIgOQAgFiBnByb3RvMw",
+  );
 
 /**
  * @generated from message lumen.v1.GetReportRequest
  */
-export type GetReportRequest = Message<"lumen.v1.GetReportRequest"> & {
-};
+export type GetReportRequest = Message<"lumen.v1.GetReportRequest"> & {};
 
 /**
  * Describes the message lumen.v1.GetReportRequest.
  * Use `create(GetReportRequestSchema)` to create a new message.
  */
-export const GetReportRequestSchema: GenMessage<GetReportRequest> = /*@__PURE__*/
+export const GetReportRequestSchema: GenMessage<GetReportRequest> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_validation, 0);
 
 /**
@@ -68,7 +71,8 @@ export type ValidationCheck = Message<"lumen.v1.ValidationCheck"> & {
  * Describes the message lumen.v1.ValidationCheck.
  * Use `create(ValidationCheckSchema)` to create a new message.
  */
-export const ValidationCheckSchema: GenMessage<ValidationCheck> = /*@__PURE__*/
+export const ValidationCheckSchema: GenMessage<ValidationCheck> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_validation, 1);
 
 /**
@@ -85,7 +89,8 @@ export type GetReportResponse = Message<"lumen.v1.GetReportResponse"> & {
  * Describes the message lumen.v1.GetReportResponse.
  * Use `create(GetReportResponseSchema)` to create a new message.
  */
-export const GetReportResponseSchema: GenMessage<GetReportResponse> = /*@__PURE__*/
+export const GetReportResponseSchema: GenMessage<GetReportResponse> =
+  /*@__PURE__*/
   messageDesc(file_lumen_v1_validation, 2);
 
 /**
@@ -99,7 +104,5 @@ export const ValidationService: GenService<{
     methodKind: "unary";
     input: typeof GetReportRequestSchema;
     output: typeof GetReportResponseSchema;
-  },
-}> = /*@__PURE__*/
-  serviceDesc(file_lumen_v1_validation, 0);
-
+  };
+}> = /*@__PURE__*/ serviceDesc(file_lumen_v1_validation, 0);
