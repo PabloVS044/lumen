@@ -7,14 +7,16 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 import { PageShell } from "@/components/layout/page-shell";
+import { pageMetadata } from "@/lib/seo";
 
 import { ValidationReport } from "./validation-report";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Validation",
   description:
     "How LUMEN's Sun and Earth positions and eclipse times compare with JPL Horizons and NAIF SPICE.",
-};
+  path: "/validation",
+});
 
 const METHOD = [
   {

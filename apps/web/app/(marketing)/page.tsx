@@ -18,7 +18,9 @@ import {
 } from "lucide-react";
 
 import { HorizonScene } from "@/components/learn/horizon-scene";
+import { JsonLd } from "@/components/seo/json-ld";
 import { ButtonLink } from "@/components/ui/button-link";
+import { webApplicationJsonLd } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -164,6 +166,7 @@ function Section({
 export default function Home() {
   return (
     <>
+      <JsonLd data={webApplicationJsonLd()} />
       <section
         aria-labelledby="hero-title"
         className="mx-auto flex min-h-[calc(100svh-4rem)] w-full max-w-6xl flex-col justify-center gap-10 px-6 py-16"

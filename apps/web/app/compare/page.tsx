@@ -3,13 +3,16 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 
 import { PageShell } from "@/components/layout/page-shell";
+import { pageMetadata } from "@/lib/seo";
 
 import { CompareView } from "./compare-view";
 
-export const metadata: Metadata = {
+// Canonical sin parámetros (sitios/fechas): todas las variantes son la misma página.
+export const metadata: Metadata = pageMetadata({
   title: "Compare",
   description: "Compare sunlight and Earth contact for up to four sites or landing dates.",
-};
+  path: "/compare",
+});
 
 export default function Page() {
   return (
