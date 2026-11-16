@@ -4,7 +4,9 @@ from tests.conftest import ConnectJSON
 def test_health(rpc: ConnectJSON) -> None:
     r = rpc.call("HealthService", "Check")
     assert r.status_code == 200
-    assert r.json()["status"] == "STATUS_OK"
+    # OK vs DEGRADED depends on kernels/DEM present on the machine; test_health_rpc.py pins both.
+    assert r.json()["status"] in {"STATUS_OK", "STATUS_DEGRADED"}
+    assert r.json()["version"]
 
 
 def test_list_sites_filters_by_region(rpc: ConnectJSON) -> None:
