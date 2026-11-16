@@ -16,12 +16,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file lumen/v1/power.proto.
  */
-export const file_lumen_v1_power: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "ChRsdW1lbi92MS9wb3dlci5wcm90bxIIbHVtZW4udjEiiQUKC1Bvd2VyQ29uZmlnEioKDXBhbmVsX2FyZWFfbTIYASABKAFCDrpICxIJIQAAAAAAAAAASACIAQESMAoKZWZmaWNpZW5jeRgCIAEoAUIXukgUEhIZAAAAAAAA8D8hAAAAAAAAAABIAYgBARIvCgtvcmllbnRhdGlvbhgDIAEoDjIaLmx1bWVuLnYxLlBhbmVsT3JpZW50YXRpb24SNwoRcGFuZWxfYXppbXV0aF9kZWcYBCABKAFCF7pIFBISEQAAAAAAgHZAKQAAAAAAAAAASAKIAQESJwoKYmF0dGVyeV93aBgFIAEoAUIOukgLEgkhAAAAAAAAAABIA4gBARIuCghzb2MwX3BjdBgGIAEoAUIXukgUEhIZAAAAAAAAWUApAAAAAAAAAABIBIgBARIxCgttYXhfZG9kX3BjdBgHIAEoAUIXukgUEhIZAAAAAAAAWUAhAAAAAAAAAABIBYgBARInCgpsb2FkX2RheV93GAggASgBQg66SAsSCSkAAAAAAAAAAEgGiAEBEikKDGxvYWRfbmlnaHRfdxgJIAEoAUIOukgLEgkpAAAAAAAAAABIB4gBARI4ChJiYXR0ZXJ5X2VmZmljaWVuY3kYCiABKAFCF7pIFBISGQAAAAAAAPA/IQAAAAAAAAAASAiIAQFCEAoOX3BhbmVsX2FyZWFfbTJCDQoLX2VmZmljaWVuY3lCFAoSX3BhbmVsX2F6aW11dGhfZGVnQg0KC19iYXR0ZXJ5X3doQgsKCV9zb2MwX3BjdEIOCgxfbWF4X2RvZF9wY3RCDQoLX2xvYWRfZGF5X3dCDwoNX2xvYWRfbmlnaHRfd0IVChNfYmF0dGVyeV9lZmZpY2llbmN5ImYKD1NpbXVsYXRlUmVxdWVzdBIsCghzY2VuYXJpbxgBIAEoCzISLmx1bWVuLnYxLlNjZW5hcmlvQga6SAPIAQESJQoGY29uZmlnGAIgASgLMhUubHVtZW4udjEuUG93ZXJDb25maWci6gEKEFNpbXVsYXRlUmVzcG9uc2USKAoEdGltZRgBIAMoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASDwoHcF9nZW5fdxgCIAMoARIQCghwX2xvYWRfdxgDIAMoARIPCgdzb2NfcGN0GAQgAygBEhAKCHN1cnZpdmVzGAUgASgIEjcKE2ZpcnN0X2Jyb3dub3V0X3RpbWUYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhMKC21pbl9zb2NfcGN0GAcgASgBEhgKEGVuZXJneV9tYXJnaW5fd2gYCCABKAEqpgEKEFBhbmVsT3JpZW50YXRpb24SIQodUEFORUxfT1JJRU5UQVRJT05fVU5TUEVDSUZJRUQQABInCiNQQU5FTF9PUklFTlRBVElPTl9WRVJUSUNBTF9UUkFDS0lORxABEiAKHFBBTkVMX09SSUVOVEFUSU9OX0hPUklaT05UQUwQAhIkCiBQQU5FTF9PUklFTlRBVElPTl9WRVJUSUNBTF9GSVhFRBADMlYKDFBvd2VyU2VydmljZRJGCghTaW11bGF0ZRIZLmx1bWVuLnYxLlNpbXVsYXRlUmVxdWVzdBoaLmx1bWVuLnYxLlNpbXVsYXRlUmVzcG9uc2UiA5ACAWIGcHJvdG8z",
-    [file_buf_validate_validate, file_google_protobuf_timestamp, file_lumen_v1_analysis],
-  );
+export const file_lumen_v1_power: GenFile = /*@__PURE__*/
+  fileDesc("ChRsdW1lbi92MS9wb3dlci5wcm90bxIIbHVtZW4udjEiiQUKC1Bvd2VyQ29uZmlnEioKDXBhbmVsX2FyZWFfbTIYASABKAFCDrpICxIJIQAAAAAAAAAASACIAQESMAoKZWZmaWNpZW5jeRgCIAEoAUIXukgUEhIZAAAAAAAA8D8hAAAAAAAAAABIAYgBARIvCgtvcmllbnRhdGlvbhgDIAEoDjIaLmx1bWVuLnYxLlBhbmVsT3JpZW50YXRpb24SNwoRcGFuZWxfYXppbXV0aF9kZWcYBCABKAFCF7pIFBISEQAAAAAAgHZAKQAAAAAAAAAASAKIAQESJwoKYmF0dGVyeV93aBgFIAEoAUIOukgLEgkhAAAAAAAAAABIA4gBARIuCghzb2MwX3BjdBgGIAEoAUIXukgUEhIZAAAAAAAAWUApAAAAAAAAAABIBIgBARIxCgttYXhfZG9kX3BjdBgHIAEoAUIXukgUEhIZAAAAAAAAWUAhAAAAAAAAAABIBYgBARInCgpsb2FkX2RheV93GAggASgBQg66SAsSCSkAAAAAAAAAAEgGiAEBEikKDGxvYWRfbmlnaHRfdxgJIAEoAUIOukgLEgkpAAAAAAAAAABIB4gBARI4ChJiYXR0ZXJ5X2VmZmljaWVuY3kYCiABKAFCF7pIFBISGQAAAAAAAPA/IQAAAAAAAAAASAiIAQFCEAoOX3BhbmVsX2FyZWFfbTJCDQoLX2VmZmljaWVuY3lCFAoSX3BhbmVsX2F6aW11dGhfZGVnQg0KC19iYXR0ZXJ5X3doQgsKCV9zb2MwX3BjdEIOCgxfbWF4X2RvZF9wY3RCDQoLX2xvYWRfZGF5X3dCDwoNX2xvYWRfbmlnaHRfd0IVChNfYmF0dGVyeV9lZmZpY2llbmN5ImYKD1NpbXVsYXRlUmVxdWVzdBIsCghzY2VuYXJpbxgBIAEoCzISLmx1bWVuLnYxLlNjZW5hcmlvQga6SAPIAQESJQoGY29uZmlnGAIgASgLMhUubHVtZW4udjEuUG93ZXJDb25maWci6gEKEFNpbXVsYXRlUmVzcG9uc2USKAoEdGltZRgBIAMoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASDwoHcF9nZW5fdxgCIAMoARIQCghwX2xvYWRfdxgDIAMoARIPCgdzb2NfcGN0GAQgAygBEhAKCHN1cnZpdmVzGAUgASgIEjcKE2ZpcnN0X2Jyb3dub3V0X3RpbWUYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhMKC21pbl9zb2NfcGN0GAcgASgBEhgKEGVuZXJneV9tYXJnaW5fd2gYCCABKAEqpgEKEFBhbmVsT3JpZW50YXRpb24SIQodUEFORUxfT1JJRU5UQVRJT05fVU5TUEVDSUZJRUQQABInCiNQQU5FTF9PUklFTlRBVElPTl9WRVJUSUNBTF9UUkFDS0lORxABEiAKHFBBTkVMX09SSUVOVEFUSU9OX0hPUklaT05UQUwQAhIkCiBQQU5FTF9PUklFTlRBVElPTl9WRVJUSUNBTF9GSVhFRBADMlYKDFBvd2VyU2VydmljZRJGCghTaW11bGF0ZRIZLmx1bWVuLnYxLlNpbXVsYXRlUmVxdWVzdBoaLmx1bWVuLnYxLlNpbXVsYXRlUmVzcG9uc2UiA5ACAWIGcHJvdG8z", [file_buf_validate_validate, file_google_protobuf_timestamp, file_lumen_v1_analysis]);
 
 /**
  * Defaults (preset "lander pequeño") cuando el campo no viene: ver sección 9.8.
@@ -86,8 +82,7 @@ export type PowerConfig = Message<"lumen.v1.PowerConfig"> & {
  * Describes the message lumen.v1.PowerConfig.
  * Use `create(PowerConfigSchema)` to create a new message.
  */
-export const PowerConfigSchema: GenMessage<PowerConfig> =
-  /*@__PURE__*/
+export const PowerConfigSchema: GenMessage<PowerConfig> = /*@__PURE__*/
   messageDesc(file_lumen_v1_power, 0);
 
 /**
@@ -109,8 +104,7 @@ export type SimulateRequest = Message<"lumen.v1.SimulateRequest"> & {
  * Describes the message lumen.v1.SimulateRequest.
  * Use `create(SimulateRequestSchema)` to create a new message.
  */
-export const SimulateRequestSchema: GenMessage<SimulateRequest> =
-  /*@__PURE__*/
+export const SimulateRequestSchema: GenMessage<SimulateRequest> = /*@__PURE__*/
   messageDesc(file_lumen_v1_power, 1);
 
 /**
@@ -162,8 +156,7 @@ export type SimulateResponse = Message<"lumen.v1.SimulateResponse"> & {
  * Describes the message lumen.v1.SimulateResponse.
  * Use `create(SimulateResponseSchema)` to create a new message.
  */
-export const SimulateResponseSchema: GenMessage<SimulateResponse> =
-  /*@__PURE__*/
+export const SimulateResponseSchema: GenMessage<SimulateResponse> = /*@__PURE__*/
   messageDesc(file_lumen_v1_power, 2);
 
 /**
@@ -194,8 +187,7 @@ export enum PanelOrientation {
 /**
  * Describes the enum lumen.v1.PanelOrientation.
  */
-export const PanelOrientationSchema: GenEnum<PanelOrientation> =
-  /*@__PURE__*/
+export const PanelOrientationSchema: GenEnum<PanelOrientation> = /*@__PURE__*/
   enumDesc(file_lumen_v1_power, 0);
 
 /**
@@ -209,5 +201,7 @@ export const PowerService: GenService<{
     methodKind: "unary";
     input: typeof SimulateRequestSchema;
     output: typeof SimulateResponseSchema;
-  };
-}> = /*@__PURE__*/ serviceDesc(file_lumen_v1_power, 0);
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_lumen_v1_power, 0);
+

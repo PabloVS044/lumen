@@ -23,19 +23,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file lumen/v1/analysis.proto.
  */
-export const file_lumen_v1_analysis: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "ChdsdW1lbi92MS9hbmFseXNpcy5wcm90bxIIbHVtZW4udjEiaQoOQW5hbHl6ZU9wdGlvbnMSKQoHaG9yaXpvbhgBIAEoCzIYLmx1bWVuLnYxLkhvcml6b25PcHRpb25zEhYKDmluY2x1ZGVfc2VyaWVzGAIgASgIEhQKDGluY2x1ZGVfbWFzaxgDIAEoCCK3AQoOQW5hbHl6ZVJlcXVlc3QSJAoEc2l0ZRgBIAEoCzIOLmx1bWVuLnYxLlNpdGVCBrpIA8gBARIqCgVyYW5nZRgCIAEoCzITLmx1bWVuLnYxLlRpbWVSYW5nZUIGukgDyAEBEigKCnRocmVzaG9sZHMYAyABKAsyFC5sdW1lbi52MS5UaHJlc2hvbGRzEikKB29wdGlvbnMYBCABKAsyGC5sdW1lbi52MS5BbmFseXplT3B0aW9ucyKMAgoGU2VyaWVzEigKBHRpbWUYASADKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEiEKA3N1bhgCIAEoCzIULmx1bWVuLnYxLkJvZHlTZXJpZXMSIwoFZWFydGgYAyABKAsyFC5sdW1lbi52MS5Cb2R5U2VyaWVzEhoKEmhvcml6b25fYXRfc3VuX2RlZxgEIAMoARIcChRob3Jpem9uX2F0X2VhcnRoX2RlZxgFIAMoARIYChBlY2xpcHNlX2ZyYWN0aW9uGAYgAygBEhMKC3N1bl92aXNpYmxlGAcgAygIEhUKDWVhcnRoX3Zpc2libGUYCCADKAgSEAoIb3BlcmFibGUYCSADKAgiwAYKB01ldHJpY3MSGAoQaWxsdW1pbmF0aW9uX3BjdBgBIAEoARIhChlpbGx1bWluYXRpb25fcGN0X3dlaWdodGVkGAIgASgBEhYKDmxvbmdlc3RfZGFya19oGAMgASgBEjEKFWxvbmdlc3RfZGFya19pbnRlcnZhbBgEIAEoCzISLmx1bWVuLnYxLkludGVydmFsEhoKEmRhcmtfcGVyaW9kc19jb3VudBgFIAEoDRIZChFlYXJ0aF92aXNpYmxlX3BjdBgGIAEoARIXCg9lYXJ0aF92aXNpYmxlX2gYByABKAESHQoVbG9uZ2VzdF9jb21tX3dpbmRvd19oGAggASgBEh8KF2xvbmdlc3RfY29tbV9ibGFja291dF9oGAkgASgBEhQKDG9wZXJhYmxlX3BjdBgKIAEoARIhChlsb25nZXN0X29wZXJhYmxlX3dpbmRvd19oGAsgASgBEiYKGXN1bl9lbGV2X21lYW5fdmlzaWJsZV9kZWcYDCABKAFIAIgBARIdChBzdW5fZWxldl9tYXhfZGVnGA0gASgBSAGIAQESHQoQc3VuX2VsZXZfbWluX2RlZxgOIAEoAUgCiAEBEiAKE2VhcnRoX2VsZXZfbWVhbl9kZWcYDyABKAFIA4gBARIfChJlYXJ0aF9lbGV2X21heF9kZWcYECABKAFIBIgBARIfChJlYXJ0aF9lbGV2X21pbl9kZWcYESABKAFIBYgBARIVCg1lY2xpcHNlX2hvdXJzGBIgASgBEj8KG2ZpcnN0X3N1bnJpc2VfYWZ0ZXJfbGFuZGluZxgTIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASHgoRZW5lcmd5X2t3aF9wZXJfbTIYFCABKAFIBogBAUIcChpfc3VuX2VsZXZfbWVhbl92aXNpYmxlX2RlZ0ITChFfc3VuX2VsZXZfbWF4X2RlZ0ITChFfc3VuX2VsZXZfbWluX2RlZ0IWChRfZWFydGhfZWxldl9tZWFuX2RlZ0IVChNfZWFydGhfZWxldl9tYXhfZGVnQhUKE19lYXJ0aF9lbGV2X21pbl9kZWdCFAoSX2VuZXJneV9rd2hfcGVyX20yIocBCgRNZXRhEhYKDmVuZ2luZV92ZXJzaW9uGAEgASgJEg8KB2tlcm5lbHMYAiADKAkSLwoLY29tcHV0ZWRfYXQYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhEKCWNhY2hlX2hpdBgEIAEoCBISCgplbGFwc2VkX21zGAUgASgNIoUCCg5BbmFseXNpc1Jlc3VsdBIgCgRzaXRlGAEgASgLMhIubHVtZW4udjEuT2JzZXJ2ZXISJAoIY292ZXJhZ2UYAiABKAsyEi5sdW1lbi52MS5Db3ZlcmFnZRImCgdob3Jpem9uGAMgASgLMhUubHVtZW4udjEuSG9yaXpvbk1hc2sSIAoGc2VyaWVzGAQgASgLMhAubHVtZW4udjEuU2VyaWVzEiIKB21ldHJpY3MYBSABKAsyES5sdW1lbi52MS5NZXRyaWNzEh8KBmV2ZW50cxgGIAMoCzIPLmx1bWVuLnYxLkV2ZW50EhwKBG1ldGEYByABKAsyDi5sdW1lbi52MS5NZXRhImkKD0FuYWx5emVSZXNwb25zZRIqCgZyZXN1bHQYASABKAsyGC5sdW1lbi52MS5BbmFseXNpc1Jlc3VsdEgAEh8KA2pvYhgCIAEoCzIQLmx1bWVuLnYxLkpvYlJlZkgAQgkKB291dGNvbWUiXAoIU2NlbmFyaW8SJAoEc2l0ZRgBIAEoCzIOLmx1bWVuLnYxLlNpdGVCBrpIA8gBARIqCgVyYW5nZRgCIAEoCzITLmx1bWVuLnYxLlRpbWVSYW5nZUIGukgDyAEBIm0KDkNvbXBhcmVSZXF1ZXN0EjEKCXNjZW5hcmlvcxgBIAMoCzISLmx1bWVuLnYxLlNjZW5hcmlvQgq6SAeSAQQIAhAEEigKCnRocmVzaG9sZHMYAiABKAsyFC5sdW1lbi52MS5UaHJlc2hvbGRzIrYBCg9Db21wYXJlUmVzcG9uc2USKQoHcmVzdWx0cxgBIAMoCzIYLmx1bWVuLnYxLkFuYWx5c2lzUmVzdWx0EkMKDmJlc3RfYnlfbWV0cmljGAIgAygLMisubHVtZW4udjEuQ29tcGFyZVJlc3BvbnNlLkJlc3RCeU1ldHJpY0VudHJ5GjMKEUJlc3RCeU1ldHJpY0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoDToCOAEymwEKD0FuYWx5c2lzU2VydmljZRJDCgdBbmFseXplEhgubHVtZW4udjEuQW5hbHl6ZVJlcXVlc3QaGS5sdW1lbi52MS5BbmFseXplUmVzcG9uc2UiA5ACARJDCgdDb21wYXJlEhgubHVtZW4udjEuQ29tcGFyZVJlcXVlc3QaGS5sdW1lbi52MS5Db21wYXJlUmVzcG9uc2UiA5ACAWIGcHJvdG8z",
-    [
-      file_buf_validate_validate,
-      file_google_protobuf_timestamp,
-      file_lumen_v1_common,
-      file_lumen_v1_ephemeris,
-      file_lumen_v1_horizon,
-      file_lumen_v1_terrain,
-    ],
-  );
+export const file_lumen_v1_analysis: GenFile = /*@__PURE__*/
+  fileDesc("ChdsdW1lbi92MS9hbmFseXNpcy5wcm90bxIIbHVtZW4udjEiaQoOQW5hbHl6ZU9wdGlvbnMSKQoHaG9yaXpvbhgBIAEoCzIYLmx1bWVuLnYxLkhvcml6b25PcHRpb25zEhYKDmluY2x1ZGVfc2VyaWVzGAIgASgIEhQKDGluY2x1ZGVfbWFzaxgDIAEoCCK3AQoOQW5hbHl6ZVJlcXVlc3QSJAoEc2l0ZRgBIAEoCzIOLmx1bWVuLnYxLlNpdGVCBrpIA8gBARIqCgVyYW5nZRgCIAEoCzITLmx1bWVuLnYxLlRpbWVSYW5nZUIGukgDyAEBEigKCnRocmVzaG9sZHMYAyABKAsyFC5sdW1lbi52MS5UaHJlc2hvbGRzEikKB29wdGlvbnMYBCABKAsyGC5sdW1lbi52MS5BbmFseXplT3B0aW9ucyKMAgoGU2VyaWVzEigKBHRpbWUYASADKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEiEKA3N1bhgCIAEoCzIULmx1bWVuLnYxLkJvZHlTZXJpZXMSIwoFZWFydGgYAyABKAsyFC5sdW1lbi52MS5Cb2R5U2VyaWVzEhoKEmhvcml6b25fYXRfc3VuX2RlZxgEIAMoARIcChRob3Jpem9uX2F0X2VhcnRoX2RlZxgFIAMoARIYChBlY2xpcHNlX2ZyYWN0aW9uGAYgAygBEhMKC3N1bl92aXNpYmxlGAcgAygIEhUKDWVhcnRoX3Zpc2libGUYCCADKAgSEAoIb3BlcmFibGUYCSADKAgiwAYKB01ldHJpY3MSGAoQaWxsdW1pbmF0aW9uX3BjdBgBIAEoARIhChlpbGx1bWluYXRpb25fcGN0X3dlaWdodGVkGAIgASgBEhYKDmxvbmdlc3RfZGFya19oGAMgASgBEjEKFWxvbmdlc3RfZGFya19pbnRlcnZhbBgEIAEoCzISLmx1bWVuLnYxLkludGVydmFsEhoKEmRhcmtfcGVyaW9kc19jb3VudBgFIAEoDRIZChFlYXJ0aF92aXNpYmxlX3BjdBgGIAEoARIXCg9lYXJ0aF92aXNpYmxlX2gYByABKAESHQoVbG9uZ2VzdF9jb21tX3dpbmRvd19oGAggASgBEh8KF2xvbmdlc3RfY29tbV9ibGFja291dF9oGAkgASgBEhQKDG9wZXJhYmxlX3BjdBgKIAEoARIhChlsb25nZXN0X29wZXJhYmxlX3dpbmRvd19oGAsgASgBEiYKGXN1bl9lbGV2X21lYW5fdmlzaWJsZV9kZWcYDCABKAFIAIgBARIdChBzdW5fZWxldl9tYXhfZGVnGA0gASgBSAGIAQESHQoQc3VuX2VsZXZfbWluX2RlZxgOIAEoAUgCiAEBEiAKE2VhcnRoX2VsZXZfbWVhbl9kZWcYDyABKAFIA4gBARIfChJlYXJ0aF9lbGV2X21heF9kZWcYECABKAFIBIgBARIfChJlYXJ0aF9lbGV2X21pbl9kZWcYESABKAFIBYgBARIVCg1lY2xpcHNlX2hvdXJzGBIgASgBEj8KG2ZpcnN0X3N1bnJpc2VfYWZ0ZXJfbGFuZGluZxgTIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASHgoRZW5lcmd5X2t3aF9wZXJfbTIYFCABKAFIBogBAUIcChpfc3VuX2VsZXZfbWVhbl92aXNpYmxlX2RlZ0ITChFfc3VuX2VsZXZfbWF4X2RlZ0ITChFfc3VuX2VsZXZfbWluX2RlZ0IWChRfZWFydGhfZWxldl9tZWFuX2RlZ0IVChNfZWFydGhfZWxldl9tYXhfZGVnQhUKE19lYXJ0aF9lbGV2X21pbl9kZWdCFAoSX2VuZXJneV9rd2hfcGVyX20yIocBCgRNZXRhEhYKDmVuZ2luZV92ZXJzaW9uGAEgASgJEg8KB2tlcm5lbHMYAiADKAkSLwoLY29tcHV0ZWRfYXQYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhEKCWNhY2hlX2hpdBgEIAEoCBISCgplbGFwc2VkX21zGAUgASgNIoUCCg5BbmFseXNpc1Jlc3VsdBIgCgRzaXRlGAEgASgLMhIubHVtZW4udjEuT2JzZXJ2ZXISJAoIY292ZXJhZ2UYAiABKAsyEi5sdW1lbi52MS5Db3ZlcmFnZRImCgdob3Jpem9uGAMgASgLMhUubHVtZW4udjEuSG9yaXpvbk1hc2sSIAoGc2VyaWVzGAQgASgLMhAubHVtZW4udjEuU2VyaWVzEiIKB21ldHJpY3MYBSABKAsyES5sdW1lbi52MS5NZXRyaWNzEh8KBmV2ZW50cxgGIAMoCzIPLmx1bWVuLnYxLkV2ZW50EhwKBG1ldGEYByABKAsyDi5sdW1lbi52MS5NZXRhImkKD0FuYWx5emVSZXNwb25zZRIqCgZyZXN1bHQYASABKAsyGC5sdW1lbi52MS5BbmFseXNpc1Jlc3VsdEgAEh8KA2pvYhgCIAEoCzIQLmx1bWVuLnYxLkpvYlJlZkgAQgkKB291dGNvbWUiXAoIU2NlbmFyaW8SJAoEc2l0ZRgBIAEoCzIOLmx1bWVuLnYxLlNpdGVCBrpIA8gBARIqCgVyYW5nZRgCIAEoCzITLmx1bWVuLnYxLlRpbWVSYW5nZUIGukgDyAEBIm0KDkNvbXBhcmVSZXF1ZXN0EjEKCXNjZW5hcmlvcxgBIAMoCzISLmx1bWVuLnYxLlNjZW5hcmlvQgq6SAeSAQQIAhAEEigKCnRocmVzaG9sZHMYAiABKAsyFC5sdW1lbi52MS5UaHJlc2hvbGRzIrYBCg9Db21wYXJlUmVzcG9uc2USKQoHcmVzdWx0cxgBIAMoCzIYLmx1bWVuLnYxLkFuYWx5c2lzUmVzdWx0EkMKDmJlc3RfYnlfbWV0cmljGAIgAygLMisubHVtZW4udjEuQ29tcGFyZVJlc3BvbnNlLkJlc3RCeU1ldHJpY0VudHJ5GjMKEUJlc3RCeU1ldHJpY0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoDToCOAEymwEKD0FuYWx5c2lzU2VydmljZRJDCgdBbmFseXplEhgubHVtZW4udjEuQW5hbHl6ZVJlcXVlc3QaGS5sdW1lbi52MS5BbmFseXplUmVzcG9uc2UiA5ACARJDCgdDb21wYXJlEhgubHVtZW4udjEuQ29tcGFyZVJlcXVlc3QaGS5sdW1lbi52MS5Db21wYXJlUmVzcG9uc2UiA5ACAWIGcHJvdG8z", [file_buf_validate_validate, file_google_protobuf_timestamp, file_lumen_v1_common, file_lumen_v1_ephemeris, file_lumen_v1_horizon, file_lumen_v1_terrain]);
 
 /**
  * @generated from message lumen.v1.AnalyzeOptions
@@ -63,8 +52,7 @@ export type AnalyzeOptions = Message<"lumen.v1.AnalyzeOptions"> & {
  * Describes the message lumen.v1.AnalyzeOptions.
  * Use `create(AnalyzeOptionsSchema)` to create a new message.
  */
-export const AnalyzeOptionsSchema: GenMessage<AnalyzeOptions> =
-  /*@__PURE__*/
+export const AnalyzeOptionsSchema: GenMessage<AnalyzeOptions> = /*@__PURE__*/
   messageDesc(file_lumen_v1_analysis, 0);
 
 /**
@@ -96,8 +84,7 @@ export type AnalyzeRequest = Message<"lumen.v1.AnalyzeRequest"> & {
  * Describes the message lumen.v1.AnalyzeRequest.
  * Use `create(AnalyzeRequestSchema)` to create a new message.
  */
-export const AnalyzeRequestSchema: GenMessage<AnalyzeRequest> =
-  /*@__PURE__*/
+export const AnalyzeRequestSchema: GenMessage<AnalyzeRequest> = /*@__PURE__*/
   messageDesc(file_lumen_v1_analysis, 1);
 
 /**
@@ -154,8 +141,7 @@ export type Series = Message<"lumen.v1.Series"> & {
  * Describes the message lumen.v1.Series.
  * Use `create(SeriesSchema)` to create a new message.
  */
-export const SeriesSchema: GenMessage<Series> =
-  /*@__PURE__*/
+export const SeriesSchema: GenMessage<Series> = /*@__PURE__*/
   messageDesc(file_lumen_v1_analysis, 2);
 
 /**
@@ -269,8 +255,7 @@ export type Metrics = Message<"lumen.v1.Metrics"> & {
  * Describes the message lumen.v1.Metrics.
  * Use `create(MetricsSchema)` to create a new message.
  */
-export const MetricsSchema: GenMessage<Metrics> =
-  /*@__PURE__*/
+export const MetricsSchema: GenMessage<Metrics> = /*@__PURE__*/
   messageDesc(file_lumen_v1_analysis, 3);
 
 /**
@@ -307,7 +292,8 @@ export type Meta = Message<"lumen.v1.Meta"> & {
  * Describes the message lumen.v1.Meta.
  * Use `create(MetaSchema)` to create a new message.
  */
-export const MetaSchema: GenMessage<Meta> = /*@__PURE__*/ messageDesc(file_lumen_v1_analysis, 4);
+export const MetaSchema: GenMessage<Meta> = /*@__PURE__*/
+  messageDesc(file_lumen_v1_analysis, 4);
 
 /**
  * @generated from message lumen.v1.AnalysisResult
@@ -353,8 +339,7 @@ export type AnalysisResult = Message<"lumen.v1.AnalysisResult"> & {
  * Describes the message lumen.v1.AnalysisResult.
  * Use `create(AnalysisResultSchema)` to create a new message.
  */
-export const AnalysisResultSchema: GenMessage<AnalysisResult> =
-  /*@__PURE__*/
+export const AnalysisResultSchema: GenMessage<AnalysisResult> = /*@__PURE__*/
   messageDesc(file_lumen_v1_analysis, 5);
 
 /**
@@ -364,32 +349,28 @@ export type AnalyzeResponse = Message<"lumen.v1.AnalyzeResponse"> & {
   /**
    * @generated from oneof lumen.v1.AnalyzeResponse.outcome
    */
-  outcome:
-    | {
-        /**
-         * @generated from field: lumen.v1.AnalysisResult result = 1;
-         */
-        value: AnalysisResult;
-        case: "result";
-      }
-    | {
-        /**
-         * Sin caché: análisis encolado (ADR-06). Consultar JobService.
-         *
-         * @generated from field: lumen.v1.JobRef job = 2;
-         */
-        value: JobRef;
-        case: "job";
-      }
-    | { case: undefined; value?: undefined };
+  outcome: {
+    /**
+     * @generated from field: lumen.v1.AnalysisResult result = 1;
+     */
+    value: AnalysisResult;
+    case: "result";
+  } | {
+    /**
+     * Sin caché: análisis encolado (ADR-06). Consultar JobService.
+     *
+     * @generated from field: lumen.v1.JobRef job = 2;
+     */
+    value: JobRef;
+    case: "job";
+  } | { case: undefined; value?: undefined };
 };
 
 /**
  * Describes the message lumen.v1.AnalyzeResponse.
  * Use `create(AnalyzeResponseSchema)` to create a new message.
  */
-export const AnalyzeResponseSchema: GenMessage<AnalyzeResponse> =
-  /*@__PURE__*/
+export const AnalyzeResponseSchema: GenMessage<AnalyzeResponse> = /*@__PURE__*/
   messageDesc(file_lumen_v1_analysis, 6);
 
 /**
@@ -411,8 +392,7 @@ export type Scenario = Message<"lumen.v1.Scenario"> & {
  * Describes the message lumen.v1.Scenario.
  * Use `create(ScenarioSchema)` to create a new message.
  */
-export const ScenarioSchema: GenMessage<Scenario> =
-  /*@__PURE__*/
+export const ScenarioSchema: GenMessage<Scenario> = /*@__PURE__*/
   messageDesc(file_lumen_v1_analysis, 7);
 
 /**
@@ -434,8 +414,7 @@ export type CompareRequest = Message<"lumen.v1.CompareRequest"> & {
  * Describes the message lumen.v1.CompareRequest.
  * Use `create(CompareRequestSchema)` to create a new message.
  */
-export const CompareRequestSchema: GenMessage<CompareRequest> =
-  /*@__PURE__*/
+export const CompareRequestSchema: GenMessage<CompareRequest> = /*@__PURE__*/
   messageDesc(file_lumen_v1_analysis, 8);
 
 /**
@@ -459,8 +438,7 @@ export type CompareResponse = Message<"lumen.v1.CompareResponse"> & {
  * Describes the message lumen.v1.CompareResponse.
  * Use `create(CompareResponseSchema)` to create a new message.
  */
-export const CompareResponseSchema: GenMessage<CompareResponse> =
-  /*@__PURE__*/
+export const CompareResponseSchema: GenMessage<CompareResponse> = /*@__PURE__*/
   messageDesc(file_lumen_v1_analysis, 9);
 
 /**
@@ -474,7 +452,7 @@ export const AnalysisService: GenService<{
     methodKind: "unary";
     input: typeof AnalyzeRequestSchema;
     output: typeof AnalyzeResponseSchema;
-  };
+  },
   /**
    * 2–4 escenarios (sitio + rango): comparar sitios (M5) o fechas (M6).
    *
@@ -484,5 +462,7 @@ export const AnalysisService: GenService<{
     methodKind: "unary";
     input: typeof CompareRequestSchema;
     output: typeof CompareResponseSchema;
-  };
-}> = /*@__PURE__*/ serviceDesc(file_lumen_v1_analysis, 0);
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_lumen_v1_analysis, 0);
+
