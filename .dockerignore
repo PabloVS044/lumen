@@ -1,11 +1,40 @@
-# Contexto de build desde la raíz del repo (despliegue en Fly: infra/fly/Dockerfile).
-# Lista blanca: solo lo que entra a la imagen del motor. (Los builds de services/engine usan su propio .dockerignore.)
-*
-!services/engine/pyproject.toml
-!services/engine/uv.lock
-!services/engine/.python-version
-!services/engine/README.md
-!services/engine/gen/**
-!services/engine/lumen_engine/**
-!data/catalog/sites.yaml
+# Contexto de build desde la raíz del repo; sirve a infra/fly/Dockerfile (motor) e infra/fly/Dockerfile.web (web).
+# Lista negra: fuera VCS, dependencias instaladas, salidas de build, datos pesados y secretos.
+.git
+.github
+.claude
+.vscode
+.idea
+.DS_Store
+**/.env
+**/.env.*
+!**/.env.example
+**/node_modules
+**/.next
+**/out
+**/coverage
+**/*.tsbuildinfo
+apps/web/public/cesium
 **/__pycache__
+**/*.py[cod]
+**/.venv
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache
+**/.coverage
+**/htmlcov
+data/local
+data/raw
+services/engine/kernels
+**/*.bsp
+**/*.bpc
+**/*.tls
+**/*.tf
+**/*.tpc
+**/*.tif
+**/*.tiff
+**/*.img
+**/*.vrt
+docs
+**/*.md
+!services/engine/README.md
