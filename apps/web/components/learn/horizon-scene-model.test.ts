@@ -1,12 +1,15 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  CRATER_LIFT_DEG,
   EARTH_RADIUS_DEG,
   LUNAR_DAY_D,
+  RIDGE_LIFT_DEG,
   SCENE,
   SUN_RADIUS_DEG,
   azToX,
   earthAt,
+  earthTrackPath,
   elToY,
   sunAt,
   terrainElevation,
@@ -77,5 +80,32 @@ describe("illustration over one lunar day", () => {
       const { az } = earthAt(d);
       expect(Math.min(az, 360 - az)).toBeLessThan(10);
     }
+  });
+});
+
+describe("terrain lift (tours: ridge versus crater floor)", () => {
+  const samples = Array.from({ length: 2000 }, (_, i) => (i / 2000) * LUNAR_DAY_D);
+  const litShare = (lift: number) =>
+    samples.filter((d) => visibleFraction(sunAt(d), SUN_RADIUS_DEG, lift) >= 0.5).length /
+    samples.length;
+
+  it("moves the whole relief up or down", () => {
+    expect(terrainElevation(37, 2)).toBeCloseTo(terrainElevation(37) + 2);
+  });
+
+  it("lights a ridge for most of the lunar day and a crater floor never", () => {
+    expect(litShare(RIDGE_LIFT_DEG)).toBeGreaterThan(0.9);
+    expect(litShare(RIDGE_LIFT_DEG)).toBeGreaterThan(litShare(0));
+    expect(litShare(CRATER_LIFT_DEG)).toBe(0);
+  });
+});
+
+describe("earthTrackPath", () => {
+  it("draws Earth's libration loop as one path close to north", () => {
+    const d = earthTrackPath();
+    expect(d.startsWith("M")).toBe(true);
+    const xs = [...d.matchAll(/[ML](-?[\d.]+),/g)].map((m) => Number(m[1]));
+    expect(xs.length).toBeGreaterThan(50);
+    for (const x of xs) expect(Math.abs(x - SCENE.width / 2)).toBeLessThan(25);
   });
 });
