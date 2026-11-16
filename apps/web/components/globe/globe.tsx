@@ -5,12 +5,23 @@
  * Especificación: sección 12.2 del documento técnico.
  * Sin token de ion o sin asset ID de Cesium Moon: esfera simple y aviso.
  */
+import { useQuery } from "@connectrpc/connect-query";
+import { SiteService, type CatalogSite } from "@lumen/sdk";
 import "cesium/Build/Cesium/Widgets/widgets.css";
-import { Cartesian3, Color, Ellipsoid, IonResource } from "cesium";
+import { Cartesian3, Ellipsoid, IonResource } from "cesium";
 import { useMemo } from "react";
 import { Cesium3DTileset, EllipsoidGraphics, Entity, Globe as CesiumGlobe, Viewer } from "resium";
 
-export function Globe() {
+import { SiteMarkers } from "./site-markers";
+import { tokenColor } from "./token-color";
+
+interface GlobeProps {
+  selectedSiteId?: string;
+  onSelectSite?: (site: CatalogSite) => void;
+}
+
+export function Globe({ selectedSiteId, onSelectSite }: GlobeProps = {}) {
+  const { data: catalog, error: catalogError } = useQuery(SiteService.method.listSites, {});
   const ionToken = process.env.NEXT_PUBLIC_CESIUM_ION_TOKEN;
   const assetId = Number.parseInt(process.env.NEXT_PUBLIC_CESIUM_MOON_ASSET_ID ?? "", 10);
   const missing = !ionToken
@@ -46,15 +57,26 @@ export function Globe() {
           <Entity position={Cartesian3.ZERO}>
             <EllipsoidGraphics
               radii={Ellipsoid.MOON.radii}
-              material={Color.fromCssColorString(
-                getComputedStyle(document.documentElement)
-                  .getPropertyValue("--color-surface")
-                  .trim(),
-              )}
+              material={tokenColor("--color-surface")}
             />
           </Entity>
         )}
+        {catalog && (
+          <SiteMarkers
+            sites={catalog.sites}
+            selectedId={selectedSiteId}
+            onSelect={(site) => onSelectSite?.(site)}
+          />
+        )}
       </Viewer>
+      {catalogError && (
+        <p
+          role="alert"
+          className="absolute bottom-3 left-3 max-w-sm rounded-md bg-panel px-3 py-2 text-sm text-bad"
+        >
+          Could not load the site catalog. Markers are hidden.
+        </p>
+      )}
       {moonTiles && (
         <p className="pointer-events-none absolute right-3 bottom-2 rounded-sm bg-panel/80 px-2 py-1 text-xs text-muted">
           Moon terrain and imagery: NASA and the USGS Astrogeology Science Center, via Cesium ion.
