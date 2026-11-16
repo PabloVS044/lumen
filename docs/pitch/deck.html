@@ -1,0 +1,270 @@
+<!doctype html>
+<!--
+  Demo de Space Apps 2026 (máx. 7 diapositivas, en inglés). Owner: R7.
+  Cifras: motor LUMEN y docs/validation.md. Imágenes: capturas propias de LUMEN.
+  PDF: node docs/pitch/render.mjs (ver docs/pitch/README.md).
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>LUMEN · DevsLunares · Space Apps 2026</title>
+    <style>
+      :root {
+        --space: #0b0e14;
+        --panel: #131823;
+        --surface: #2a2f3a;
+        --muted: #9aa3b2;
+        --text: #e8ebf1;
+        --sun: #f5b700;
+        --earth: #3fa7ff;
+        --good: #2bd576;
+      }
+      @page {
+        size: 1280px 720px;
+        margin: 0;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+      body {
+        background: var(--space);
+        color: var(--text);
+        font-family: "Segoe UI", system-ui, sans-serif;
+      }
+      .slide {
+        width: 1280px;
+        height: 720px;
+        padding: 64px 80px;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+        page-break-after: always;
+        overflow: hidden;
+        position: relative;
+      }
+      .eyebrow {
+        font-family: Consolas, "Cascadia Mono", monospace;
+        color: var(--muted);
+        font-size: 18px;
+        letter-spacing: 0.02em;
+      }
+      h1 {
+        font-size: 64px;
+        line-height: 1.05;
+        font-weight: 700;
+      }
+      h2 {
+        font-size: 44px;
+        line-height: 1.1;
+        font-weight: 700;
+      }
+      p,
+      li {
+        font-size: 24px;
+        line-height: 1.45;
+        color: var(--muted);
+      }
+      strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+      .sun {
+        color: var(--sun);
+      }
+      .earth {
+        color: var(--earth);
+      }
+      ul {
+        padding-left: 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      img {
+        display: block;
+        border-radius: 12px;
+        border: 1px solid var(--surface);
+      }
+      .row {
+        display: flex;
+        gap: 40px;
+        align-items: flex-start;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+      .stat {
+        border: 1px solid var(--surface);
+        border-radius: 12px;
+        padding: 24px;
+        background: var(--panel);
+      }
+      .stat b {
+        display: block;
+        font-family: Consolas, monospace;
+        font-size: 52px;
+        line-height: 1.1;
+      }
+      .stat span {
+        font-size: 20px;
+        color: var(--muted);
+      }
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
+      }
+      .step {
+        border: 1px solid var(--surface);
+        border-radius: 12px;
+        padding: 20px;
+        background: var(--panel);
+      }
+      .step i {
+        font-style: normal;
+        font-family: Consolas, monospace;
+        color: var(--earth);
+        font-size: 18px;
+      }
+      .step h3 {
+        font-size: 22px;
+        margin: 6px 0 8px;
+      }
+      .step p {
+        font-size: 17px;
+        line-height: 1.4;
+      }
+      .foot {
+        position: absolute;
+        left: 80px;
+        right: 80px;
+        bottom: 32px;
+        display: flex;
+        justify-content: space-between;
+        font-family: Consolas, monospace;
+        font-size: 15px;
+        color: var(--muted);
+      }
+      .mark {
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        font-weight: 700;
+        font-size: 28px;
+        letter-spacing: 0.04em;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 1 · Título e intro -->
+    <section class="slide">
+      <span class="mark">
+        <svg width="44" height="44" viewBox="0 0 32 32" aria-hidden="true">
+          <circle cx="14" cy="18" r="11.5" fill="#2a2f3a" stroke="#9aa3b2" stroke-width="1" />
+          <path d="M14 6.5A11.5 11.5 0 0 0 14 29.5A5.5 11.5 0 0 1 14 6.5Z" fill="#f5b700" />
+          <circle cx="25.5" cy="6.5" r="3.5" fill="#3fa7ff" />
+        </svg>
+        LUMEN
+      </span>
+      <h1>
+        <span class="sun">Sunlight</span> and <span class="earth">Earth-contact</span> planner for
+        lunar landing sites
+      </h1>
+      <p style="font-size: 30px; color: var(--text)">See the light. Keep the link.</p>
+      <div style="margin-top: auto; display: flex; flex-direction: column; gap: 8px">
+        <p><strong>Team DevsLunares</strong></p>
+        <p>
+          Carlos Altán · Pablo Vásquez · Jonathan Tubac · Ángel Sanabria · Joao Castillo · Juan
+          Montenegro
+        </p>
+        <p class="eyebrow">NASA Space Apps Challenge 2026 · Challenge: Lunar Landing Site Navigator</p>
+      </div>
+    </section>
+
+    <!-- 2 · El problema -->
+    <section class="slide">
+      <span class="eyebrow">The challenge</span>
+      <h2>At the lunar south pole, light and contact hang on a few hundred metres</h2>
+      <img src="img/horizon.png" width="1120" alt="" />
+      <ul>
+        <li>The Sun never climbs more than about <strong>1.5°</strong>: a ridge tens of km away decides if a lander has power.</li>
+        <li>Earth bobs near the northern horizon, so the <strong>direct link comes and goes</strong>.</li>
+      </ul>
+      <div class="foot"><span>Illustration drawn in code, not engine data</span><span>2 / 7</span></div>
+    </section>
+
+    <!-- 3 · Qué hace -->
+    <section class="slide">
+      <span class="eyebrow">What LUMEN does</span>
+      <h2>Pick any point and dates. See when the Sun and Earth clear the real horizon.</h2>
+      <ul>
+        <li><strong>Horizon chart, hour-by-day heatmap and metrics:</strong> % of time lit, in contact and both, longest dark spell, countdowns.</li>
+        <li><strong>3D Moon globe</strong> lit by the computed Sun, to pick and compare sites.</li>
+        <li><strong>Compare</strong> up to four sites or launch dates side by side.</li>
+        <li><strong>Battery simulator</strong>, <strong>launch-delay what-if</strong> and <strong>best spot within a radius</strong>.</li>
+        <li><strong>Share</strong> any scenario as a link; <strong>export</strong> CSV, JSON or PDF.</li>
+      </ul>
+      <div class="foot"><span>For mission planners, educators and the public</span><span>3 / 7</span></div>
+    </section>
+
+    <!-- 4 · Cómo funciona con datos de NASA -->
+    <section class="slide">
+      <span class="eyebrow">How NASA data makes it possible</span>
+      <h2>From NASA terrain and ephemerides to hour-by-hour answers</h2>
+      <div class="steps">
+        <div class="step"><i>01</i><h3>Terrain</h3><p>LRO LOLA elevation models: 5 m/pixel south pole sites (NASA Goddard PGDA), polar and global maps (PDS).</p></div>
+        <div class="step"><i>02</i><h3>Horizon</h3><p>Rays across the terrain for every azimuth, with the Moon's curvature: about 2.9 km of drop at 100 km.</p></div>
+        <div class="step"><i>03</i><h3>Sun and Earth</h3><p>NAIF SPICE kernels (NASA JPL): DE440 ephemeris in the MOON_ME frame.</p></div>
+        <div class="step"><i>04</i><h3>Visibility</h3><p>Visible fraction of the Sun's 0.53° disc and Earth's 1.9° disc, minus eclipses.</p></div>
+        <div class="step"><i>05</i><h3>Answers</h3><p>Metrics, events, power and delays, served to the web app.</p></div>
+      </div>
+      <p>Checked against <strong>JPL Horizons</strong> and <strong>NASA PGDA</strong>. Candidate sites from NASA's Artemis III landing regions.</p>
+      <div class="foot"><span>Python engine · Next.js web app · one Protocol Buffers contract</span><span>4 / 7</span></div>
+    </section>
+
+    <!-- 5 · Resultado en terreno real -->
+    <section class="slide">
+      <span class="eyebrow">Result on real LOLA terrain · Connecting ridge · 2027</span>
+      <h2>Moving 300 m raises sunlight from 53 % to 85 %</h2>
+      <div class="stats">
+        <div class="stat"><b>52.8 %</b><span>sunlight on a 9° slope near the catalog point</span></div>
+        <div class="stat"><b class="sun">85.3 %</b><span>sunlight on the crest 300 m away</span></div>
+        <div class="stat"><b class="earth">51.1 %</b><span>Earth in view from the crest, against 37.5 % on the slope</span></div>
+      </div>
+      <p>Same terrain, same year: the right spot nearly doubles the hours of power and adds contact. LUMEN finds it in seconds.</p>
+      <div class="foot"><span>LUMEN engine, LOLA 5 m terrain, 2 m observer, hourly steps</span><span>5 / 7</span></div>
+    </section>
+
+    <!-- 6 · Validación -->
+    <section class="slide">
+      <span class="eyebrow">Validation</span>
+      <h2>Every number is checked against independent references</h2>
+      <div class="row">
+        <img src="img/validation.png" width="700" alt="" />
+        <ul style="font-size: 22px">
+          <li>Sun and Earth positions match <strong>JPL Horizons</strong> to 5.4 × 10⁻⁷°, 18 000× under the limit.</li>
+          <li>Eclipse times match <strong>CSPICE</strong> within 1 minute.</li>
+          <li>All 7 <strong>NASA PGDA</strong> regions: 74–85 % lit, above the published 70 %.</li>
+        </ul>
+      </div>
+      <div class="foot"><span>Live on the Validation page, read from the engine</span><span>6 / 7</span></div>
+    </section>
+
+    <!-- 7 · Explorar y visión -->
+    <section class="slide">
+      <span class="eyebrow">Explore mode and what comes next</span>
+      <div class="row">
+        <img src="img/tour.png" width="620" alt="" />
+        <div style="display: flex; flex-direction: column; gap: 18px">
+          <p><strong>Guided tours</strong> explain peaks of near-constant sunlight, why Earth rises and sets, and a lunar day in 30 seconds.</p>
+          <p><strong>Next:</strong> compare sunlight with published tables value by value, add 5 m terrain for more sites, verify every catalog site.</p>
+          <p style="color: var(--text)">Plan where the light stays and the link holds.</p>
+        </div>
+      </div>
+      <div class="foot"><span>github.com/PabloVS044/lumen</span><span>7 / 7</span></div>
+    </section>
+  </body>
+</html>

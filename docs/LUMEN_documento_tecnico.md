@@ -159,32 +159,58 @@ El reto también indica que la solución puede ser web app, app móvil, visualiz
 
 ## 3. Evaluación y entrega en Space Apps
 
-### 3.1 Criterios de evaluación (⚠️ VERIFICAR en la Participant Guide 2026)
+✅ Verificado el 2026-11-15 en la [Project Submission Guide](https://www.spaceappschallenge.org/resources/project-submission-guide/)
+y la [Judging & Awards Guide](https://www.spaceappschallenge.org/resources/judging-awards-guide/) (páginas del 2026-11-13).
+Texto listo para el formulario: `docs/submission.md`. Demo: `docs/pitch/`.
 
-En ediciones anteriores, Space Apps evaluó con cinco criterios de peso similar. Diseñamos LUMEN para maximizar cada uno:
+### 3.1 Criterios de evaluación
 
-| Criterio | Qué buscan | Cómo lo ataca LUMEN |
+Cada criterio se puntúa de 1 a 5 en todas las fases; la guía no da pesos.
+
+| Criterio | Qué buscan (guía 2026) | Cómo lo ataca LUMEN |
 |---|---|---|
-| **Influence / Impact** | Potencial de impacto real | Resolver el caso de "la misión se retrasó, ¿y ahora?"; utilidad para CLPS/Artemis; valor educativo |
-| **Creativity** | Originalidad | Simulador de batería, fracción de disco visible, buscador de mejor punto, "what-if" de retrasos, modo Explorar |
-| **Validity** | Rigor científico / técnico | Horizonte real desde LOLA, SPICE DE440, página de validación contra Horizons y mapas publicados |
-| **Relevance** | Responde al reto | Cubre explícitamente O1–O7 y todas las consideraciones (tabla 2.4/2.5) |
-| **Presentation** | Calidad de la presentación | Demo pulida, video claro, narrativa, identidad visual fuerte |
+| **Impact** | Impacto según el problema que resuelve y el alcance de su efecto | Resolver el caso de "la misión se retrasó, ¿y ahora?"; utilidad para CLPS/Artemis; valor educativo |
+| **Creativity** | Originalidad e innovación | Simulador de batería, fracción de disco visible, buscador de mejor punto, "what-if" de retrasos, modo Explorar |
+| **Validity** | Solución basada en principios científicos y factible técnicamente; incluye usabilidad | Horizonte real desde LOLA, SPICE DE440, página de validación contra Horizons, CSPICE y PGDA |
+| **Relevance** | Responde por completo al reto y usa datos de NASA como componente central | Cubre O1–O7 (tabla 2.4/2.5); LOLA y SPICE son el núcleo del cálculo |
+| **Presentation** | Comunica el reto, la solución y su importancia; se evalúa la demo y el proyecto completo | Demo de 7 diapositivas, narrativa, identidad visual |
 
-### 3.2 Requisitos de entrega (⚠️ VERIFICAR formato exacto 2026)
+Fases: evento local (nominados globales, 2026-12-03), Global Judging (finalistas, 2026-12-17) y
+Executive Judging (ganadores, 2027-01-26). Premios globales: Best Use of Science, Best Use of Data,
+Best Use of Technology, Galactic Impact, Best Mission Concept, Most Inspirational, Best Storytelling,
+Global Connection, Art & Technology y Local Impact.
 
-Típicamente la página del proyecto en Space Apps incluye:
-- Título y resumen de alto nivel del proyecto.
-- **Demo del proyecto**: video corto (históricamente ≤ 30 s) **o** presentación (históricamente ≤ 7 diapositivas). ⚠️ VERIFICAR
-- **Enlace final del proyecto** (repositorio público y/o demo en vivo).
-- Descripción detallada: qué hace, cómo funciona, beneficios, herramientas/lenguajes usados.
-- **Uso de datos de NASA** (explícito: Horizons, LOLA, LRO/QuickMap, Moon Trek).
-- **Uso de datos de agencias socias** (CSA).
-- Referencias.
-- **Declaración de uso de IA** (en ediciones recientes se exigió declarar el uso de herramientas de IA y no usar IA para generar imágenes/marcas de NASA). ⚠️ VERIFICAR
+### 3.2 Requisitos de entrega
+
+- **Cierre:** domingo 15 de noviembre a las 23:59, hora del evento local. Hay que pulsar **Submit for Judging**;
+  solo se evalúa la última versión guardada.
+- **Campos del formulario, en orden:**
+  1. Project Name.
+  2. High-Level Project Summary.
+  3. Link to Project Demo.
+  4. Link to Final Project.
+  5. Detailed Project Description.
+  6. Use of Super Intelligence (SI).
+  7. NASA Data.
+  8. Space Agency Partner Data and Other References.
+- **Demo obligatoria:** video de 30 s o menos, **o** hasta 7 diapositivas contando título e intro. Si se pasa
+  del límite, el proyecto queda fuera de Global Judging.
+  - Se aloja fuera (GitHub, YouTube, Drive…) con enlace público, sin contraseña, permisos ni registro.
+  - Las diapositivas llevan nombre del equipo, miembros y reto.
+- **Idioma:** inglés en la página y en todo lo enlazado. Un video en otro idioma necesita subtítulos en inglés.
+- **Datos:** al menos un dato o recurso de NASA para optar a premio global. Las agencias socias (CSA, ESA,
+  JAXA…) se recomiendan. Hay que listar en References todo el código, texto e imágenes externos,
+  aunque sean abiertos.
+- **SI (IA):**
+  - Se permite como herramienta, pero no para idear la solución del reto.
+  - El contenido generado no puede usar ni modificar marcas de NASA (logos, banderas, identificadores de misión).
+  - Imágenes y video generados llevan marca de agua visible; audio, código y datos generados se reconocen
+    en texto descriptivo y metadatos.
+  - La respuesta del formulario no la ven los jueces.
+- **Equipo:** de 1 a 6 personas, todas inscritas en el mismo evento local y listadas en la pestaña Members.
+  No se pueden añadir miembros tras el cierre.
+- **Prohibido:** imágenes, video, audio o semejanza de menores de 18 años, y material con copyright sin permiso.
 - No usar el logo/insignia de NASA en la marca del proyecto.
-
-**Acción:** una persona del equipo lee la Participant Guide y FAQs (https://www.spaceappschallenge.org/resources/) y actualiza esta sección en el día 1.
 
 ---
 
