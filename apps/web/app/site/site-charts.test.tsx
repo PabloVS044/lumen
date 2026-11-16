@@ -11,6 +11,9 @@ vi.mock("@/components/horizon/horizon-polar", () => ({
 vi.mock("@/components/timeline/visibility-heatmap", () => ({
   VisibilityHeatmap: () => <div data-testid="heatmap" />,
 }));
+vi.mock("@/components/power/power-simulator", () => ({
+  PowerSimulator: (p: object) => <div data-testid="power" data-props={JSON.stringify(p)} />,
+}));
 
 import { SiteCharts } from "./site-charts";
 
@@ -29,6 +32,10 @@ describe("SiteCharts", () => {
       range: { start: "2027-01-01", end: "2027-03-01" },
     });
     expect(screen.getByTestId("heatmap")).toBeInTheDocument();
+    expect(JSON.parse(screen.getByTestId("power").dataset.props!)).toEqual({
+      site: { lat: -89.45, lon: -137.31, obsHeightM: 3 },
+      range: { start: "2027-01-01", end: "2027-03-01" },
+    });
   });
 
   it("asks for a site and range when the URL has none", () => {
