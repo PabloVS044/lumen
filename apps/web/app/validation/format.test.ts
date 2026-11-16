@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   type CheckFields,
+  checkCells,
   describeCheck,
   formatMagnitude,
   formatMargin,
@@ -67,6 +68,36 @@ describe("describeCheck", () => {
       label: "Flat DEM",
     });
     expect(describeCheck(check({ id: "horizon_flat_dem" })).label).toBe("horizon_flat_dem");
+  });
+
+  it("knows the PGDA illumination check is a minimum, in percent", () => {
+    expect(describeCheck(check({ id: "illumination_site01_rois_vs_pgda" }))).toMatchObject({
+      label: "Sunlight at Connecting ridge",
+      unit: "pct",
+      kind: "minimum",
+    });
+  });
+});
+
+describe("checkCells", () => {
+  it("shows limit, worst error and margin for error checks", () => {
+    const earth = check({ id: "ephemeris_earth_vs_horizons", tolerance: 0.01, maxError: 5.428e-7 });
+    expect(checkCells(earth)).toEqual({
+      limit: "0.01°",
+      worst: `5.4${NBSP}×${NBSP}10⁻⁷°`,
+      margin: `18${NBSP}000×`,
+    });
+    expect(checkCells(check({ id: "eclipse_vs_spice_occult", tolerance: 3 })).margin).toBe("exact");
+  });
+
+  it("shows a minimum as a threshold and the error as the shortfall below it", () => {
+    // max_error de esta prueba = déficit bajo el 70 % (notes del informe).
+    const pgda = check({ id: "illumination_site01_rois_vs_pgda", tolerance: 70, maxError: 0 });
+    expect(checkCells(pgda)).toEqual({
+      limit: `>${NBSP}70${NBSP}%`,
+      worst: `0${NBSP}%${NBSP}short`,
+      margin: "n/a",
+    });
   });
 });
 

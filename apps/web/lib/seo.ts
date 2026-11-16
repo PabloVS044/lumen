@@ -33,13 +33,14 @@ export const BRAND = {
   earth: "#3fa7ff",
 } as const;
 
-/** Rutas públicas indexables (sin parámetros de consulta). /learn se excluye mientras sea un placeholder. */
+/** Rutas públicas indexables (sin parámetros de consulta). */
 export const PUBLIC_ROUTES = [
   { path: "/", priority: 1, changeFrequency: "weekly" },
   { path: "/explore", priority: 0.9, changeFrequency: "weekly" },
   { path: "/compare", priority: 0.7, changeFrequency: "monthly" },
   { path: "/search", priority: 0.7, changeFrequency: "monthly" },
   { path: "/site", priority: 0.6, changeFrequency: "monthly" },
+  { path: "/learn", priority: 0.6, changeFrequency: "monthly" },
   { path: "/validation", priority: 0.5, changeFrequency: "monthly" },
   { path: "/about", priority: 0.5, changeFrequency: "monthly" },
 ] as const;

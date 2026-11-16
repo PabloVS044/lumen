@@ -19,6 +19,13 @@ export const DRACONIC_MONTH_D = 27.21;
 /** Mes anomalístico: ciclo de la libración en longitud. */
 export const ANOMALISTIC_MONTH_D = 27.55;
 
+/**
+ * Desplazamientos del relieve para los tours de /learn. En una cresta el observador queda por encima
+ * del entorno (relieve más bajo); en el fondo de un cráter, las paredes quedan más altas que el Sol.
+ */
+export const RIDGE_LIFT_DEG = -1.2;
+export const CRATER_LIFT_DEG = 4;
+
 export interface SkyPosition {
   /** Azimut desde el norte, sentido horario, en [0, 360). */
   az: number;
@@ -38,10 +45,11 @@ export function elToY(elDeg: number): number {
   return SCENE.horizonY - elDeg * SCENE.pxPerDeg;
 }
 
-/** Perfil de relieve ilustrativo (grados), periódico en azimut. */
-export function terrainElevation(azDeg: number): number {
+/** Perfil de relieve ilustrativo (grados), periódico en azimut; `lift` lo sube o baja entero. */
+export function terrainElevation(azDeg: number, lift = 0): number {
   const a = rad(azDeg);
   return (
+    lift +
     0.25 +
     0.95 * Math.sin(2 * a - 0.6) +
     0.7 * Math.sin(5 * a + 4.2) +
@@ -70,28 +78,38 @@ export function earthAt(days: number): SkyPosition {
  * Fracción del disco por encima del relieve en su azimut (segmento circular; relieve plano a lo
  * ancho del disco). Misma idea que la sección 9.5, simplificada para la ilustración.
  */
-export function visibleFraction(body: SkyPosition, radiusDeg: number): number {
-  const u = (terrainElevation(body.az) - body.el) / radiusDeg;
+export function visibleFraction(body: SkyPosition, radiusDeg: number, lift = 0): number {
+  const u = (terrainElevation(body.az, lift) - body.el) / radiusDeg;
   if (u <= -1) return 1;
   if (u >= 1) return 0;
   return (Math.acos(u) - u * Math.sqrt(1 - u * u)) / Math.PI;
 }
 
-function ridgePoints(step: number): string {
+function ridgePoints(step: number, lift: number): string {
   const points: string[] = [];
   for (let x = 0; x <= SCENE.width; x += step) {
     const az = 180 + (x / SCENE.width) * 360;
-    points.push(`${x},${elToY(terrainElevation(az)).toFixed(1)}`);
+    points.push(`${x},${elToY(terrainElevation(az, lift)).toFixed(1)}`);
   }
   return points.join(" L");
 }
 
 /** Path SVG de la línea de cresta, de borde a borde. */
-export function ridgePath(step = 2): string {
-  return `M${ridgePoints(step)}`;
+export function ridgePath(step = 2, lift = 0): string {
+  return `M${ridgePoints(step, lift)}`;
 }
 
 /** Path SVG del relieve, relleno hasta el borde inferior de la escena. */
-export function terrainPath(step = 2): string {
-  return `M0,${SCENE.height} L${ridgePoints(step)} L${SCENE.width},${SCENE.height} Z`;
+export function terrainPath(step = 2, lift = 0): string {
+  return `M0,${SCENE.height} L${ridgePoints(step, lift)} L${SCENE.width},${SCENE.height} Z`;
+}
+
+/** Path SVG del bucle que la libración dibuja con la Tierra en un mes anomalístico. */
+export function earthTrackPath(samples = 160): string {
+  const points: string[] = [];
+  for (let i = 0; i <= samples; i++) {
+    const { az, el } = earthAt((i / samples) * ANOMALISTIC_MONTH_D);
+    points.push(`${azToX(az).toFixed(1)},${elToY(el).toFixed(1)}`);
+  }
+  return `M${points.join(" L")}`;
 }
