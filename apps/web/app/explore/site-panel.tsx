@@ -9,7 +9,9 @@ import { EphemerisService, type CatalogSite } from "@lumen/sdk";
 import { keepPreviousData, skipToken } from "@tanstack/react-query";
 import Link from "next/link";
 
+import { HorizonPolar } from "@/components/horizon/horizon-polar";
 import { HOUR_MS, parseUtc } from "@/components/time-controls/time-math";
+import { VisibilityHeatmap } from "@/components/timeline/visibility-heatmap";
 import { MAX_SITES, useScenarioStore } from "@/stores/scenario-store";
 
 import { compareHref, nextFreeColor, siteHref, type DateRange } from "./explore-links";
@@ -41,6 +43,7 @@ export function SitePanel({ site, range }: { site: CatalogSite; range: DateRange
   );
   const sample = series.data && currentMs !== null ? sampleAt(series.data, currentMs) : undefined;
 
+  const chartSite = { lat: site.lat, lon: site.lon, obsHeightM: OBS_HEIGHT_M };
   const index = active.findIndex((s) => s.id === site.id);
   const color = nextFreeColor(active);
   const summary = sample
@@ -74,6 +77,9 @@ export function SitePanel({ site, range }: { site: CatalogSite; range: DateRange
       <p className="sr-only" aria-live="polite">
         {playing ? "" : summary}
       </p>
+
+      <HorizonPolar site={chartSite} range={range} />
+      <VisibilityHeatmap site={chartSite} range={range} />
 
       {index >= 0 ? (
         <button type="button" className={link} onClick={() => removeSite(index)}>
