@@ -10,6 +10,7 @@ import { keepPreviousData, skipToken } from "@tanstack/react-query";
 import Link from "next/link";
 
 import { HorizonPolar } from "@/components/horizon/horizon-polar";
+import { LocalTerrainSection } from "@/components/terrain/local-terrain-section";
 import { HOUR_MS, parseUtc } from "@/components/time-controls/time-math";
 import { VisibilityHeatmap } from "@/components/timeline/visibility-heatmap";
 import { MAX_SITES, useScenarioStore } from "@/stores/scenario-store";
@@ -80,6 +81,7 @@ export function SitePanel({ site, range }: { site: CatalogSite; range: DateRange
 
       <HorizonPolar site={chartSite} range={range} />
       <VisibilityHeatmap site={chartSite} range={range} />
+      <LocalTerrainSection site={chartSite} range={range} />
 
       {index >= 0 ? (
         <button type="button" className={link} onClick={() => removeSite(index)}>

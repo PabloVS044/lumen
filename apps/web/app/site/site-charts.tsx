@@ -8,6 +8,7 @@ import { useQueryStates } from "nuqs";
 import { Suspense } from "react";
 
 import { HorizonPolar } from "@/components/horizon/horizon-polar";
+import { LocalTerrainSection } from "@/components/terrain/local-terrain-section";
 import { VisibilityHeatmap } from "@/components/timeline/visibility-heatmap";
 import { siteSearchParams } from "@/lib/url-state";
 
@@ -27,6 +28,7 @@ function Charts() {
     <>
       <HorizonPolar site={site} range={range} />
       <VisibilityHeatmap site={site} range={range} />
+      <LocalTerrainSection site={site} range={range} />
     </>
   );
 }
