@@ -126,3 +126,40 @@ describe("power simulation mock", () => {
     expect(res.energyMarginWh).toBeLessThan(0);
   });
 });
+
+describe("what-if mock", () => {
+  const base = {
+    site: { lat: -89.45, lon: -137.31 },
+    nominalLanding: timestampFromDate(new Date("2027-01-01T00:00:00Z")),
+    maxDelayDays: 10,
+    missionDurationDays: 7,
+  };
+
+  it("evaluates one point per delay with the default metrics", async () => {
+    const res = await client.whatIf.evaluate(base);
+    expect(res.points.map((p) => p.delayHours)).toEqual(
+      Array.from({ length: 11 }, (_, k) => k * 24),
+    );
+    expect(Object.keys(res.points[0]!.metrics).sort()).toEqual([
+      "illumination_pct",
+      "longest_dark_h",
+      "operable_pct",
+    ]);
+    expect(res.points.every((p) => p.survives === undefined)).toBe(true);
+    expect(res.recommendedDelaysHours.length).toBeGreaterThan(0);
+  });
+
+  it("marks survival per delay when power is requested", async () => {
+    const res = await client.whatIf.evaluate({ ...base, power: { batteryWh: 50 } });
+    expect(res.points.every((p) => typeof p.survives === "boolean")).toBe(true);
+    for (const d of res.recommendedDelaysHours) {
+      expect(res.points.find((p) => p.delayHours === d)!.survives).toBe(true);
+    }
+  });
+
+  it("rejects unknown metrics like the engine", async () => {
+    await expect(client.whatIf.evaluate({ ...base, metrics: ["nope"] })).rejects.toSatisfy(
+      (e) => engineErrorCode(e) === "UNKNOWN_METRIC",
+    );
+  });
+});

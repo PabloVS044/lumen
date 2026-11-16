@@ -7,4 +7,5 @@ export {
   mockHorizon,
   mockSeries,
   mockSimulate,
+  mockWhatIf,
 } from "./data";

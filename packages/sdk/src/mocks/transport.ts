@@ -12,6 +12,7 @@ import { EphemerisService } from "../gen/lumen/v1/ephemeris_pb";
 import { CheckResponse_Status, HealthService } from "../gen/lumen/v1/health_pb";
 import { HorizonService } from "../gen/lumen/v1/horizon_pb";
 import { PowerService } from "../gen/lumen/v1/power_pb";
+import { WhatIfService } from "../gen/lumen/v1/whatif_pb";
 import { Region, SiteService } from "../gen/lumen/v1/sites_pb";
 import { TerrainService } from "../gen/lumen/v1/terrain_pb";
 
@@ -23,6 +24,7 @@ import {
   mockHorizon,
   mockSeries,
   mockSimulate,
+  mockWhatIf,
 } from "./data";
 
 export function createMockTransport(): Transport {
@@ -82,6 +84,10 @@ export function createMockTransport(): Transport {
 
     service(PowerService, {
       simulate: (req) => mockSimulate(req),
+    });
+
+    service(WhatIfService, {
+      evaluate: (req) => mockWhatIf(req),
     });
 
     service(AnalysisService, {
