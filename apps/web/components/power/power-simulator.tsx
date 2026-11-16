@@ -3,13 +3,16 @@
 /**
  * PowerSimulator — M8 Simulador de batería (HU-07). Owner: Frontend Analysis (issue #38).
  * Especificación: secciones 9.8 y 12.2. Datos solo del motor (PowerService.Simulate) o del mock
- * del SDK; el preset sale del documento técnico.
+ * del SDK; el preset sale del documento técnico. Compartible (M13): `?pw=` guarda la configuración
+ * y, si está presente al abrir el enlace, la simulación se recalcula sola.
  */
 import { useMutation } from "@connectrpc/connect-query";
 import { engineErrorCode, isUnimplemented, PanelOrientation, PowerService } from "@lumen/sdk";
-import { useId, useMemo, useState, type FormEvent } from "react";
+import { useQueryState } from "nuqs";
+import { useEffect, useId, useMemo, useRef, useState, type FormEvent } from "react";
 
 import { parseUtc, type RangeProp, type SiteProp } from "@/components/horizon/use-analysis";
+import { powerParser, replaceUrl } from "@/lib/url-state";
 
 import { PowerChart } from "./power-chart";
 import {
@@ -61,7 +64,8 @@ function errorMessage(err: unknown): string {
 
 export function PowerSimulator({ site, range }: Props) {
   const id = useId();
-  const [form, setForm] = useState<PowerForm>(PRESETS.small.values);
+  const [shared, setShared] = useQueryState("pw", powerParser.withOptions(replaceUrl));
+  const [form, setForm] = useState<PowerForm>(() => shared ?? PRESETS.small.values);
   const [submitted, setSubmitted] = useState(false);
   const errors = validateForm(form);
   const sim = useMutation(PowerService.method.simulate);
@@ -70,17 +74,32 @@ export function PowerSimulator({ site, range }: Props) {
   const end = parseUtc(range.end);
   const invalidRange = start === null || end === null || end <= start;
 
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-    if (invalidRange || Object.keys(errors).length) return;
+  const run = (values: PowerForm) => {
+    if (start === null || end === null) return;
     sim.mutate({
       scenario: {
         site: { lat: site.lat, lon: site.lon, obsHeightM: site.obsHeightM ?? 0 },
         range: { start: secs(start), end: secs(end), stepMinutes: STEP_MINUTES },
       },
-      config: toPowerConfig(form),
+      config: toPowerConfig(values),
     });
+  };
+
+  // Enlace compartido: reproduce la simulación una vez al abrirlo (si los valores son válidos).
+  const opened = useRef(false);
+  useEffect(() => {
+    if (opened.current) return;
+    opened.current = true;
+    if (shared && !invalidRange && Object.keys(validateForm(shared)).length === 0) run(shared);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- solo al montar
+  }, []);
+
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    if (invalidRange || Object.keys(errors).length) return;
+    void setShared(form);
+    run(form);
   };
 
   const setNumber = (key: NumericField, raw: string) =>

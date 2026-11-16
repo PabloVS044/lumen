@@ -3,13 +3,16 @@
 /**
  * WhatIfChart — M9 What-if de retraso (HU-08). Owner: Frontend Analysis (issue #39).
  * Especificación: secciones 9.9 y 12.2. Datos solo del motor (WhatIfService.Evaluate) o del mock
- * del SDK. Un panel por métrica: mezclar % y horas en un mismo eje confunde.
+ * del SDK. Un panel por métrica: mezclar % y horas en un mismo eje confunde. Compartible (M13):
+ * `?wi=` guarda el formulario y, si está presente al abrir el enlace, se reevalúa solo.
  */
 import { useMutation } from "@connectrpc/connect-query";
 import { engineErrorCode, isUnimplemented, WhatIfService } from "@lumen/sdk";
-import { useId, useMemo, useState, type FormEvent, type ReactNode } from "react";
+import { useQueryState } from "nuqs";
+import { useEffect, useId, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
 
 import type { RangeProp, SiteProp } from "@/components/horizon/use-analysis";
+import { replaceUrl, whatIfParser } from "@/lib/url-state";
 
 import { WhatIfLineChart } from "./whatif-chart";
 import {
@@ -54,15 +57,30 @@ const NUMBER_FIELDS = [
 
 export function WhatIfChart({ site, range }: Props) {
   const id = useId();
-  const [form, setForm] = useState<WhatIfForm>({ ...DEFAULT_FORM, nominal: range.start });
+  const [shared, setShared] = useQueryState("wi", whatIfParser.withOptions(replaceUrl));
+  const [form, setForm] = useState<WhatIfForm>(
+    () => shared ?? { ...DEFAULT_FORM, nominal: range.start },
+  );
   const [submitted, setSubmitted] = useState(false);
   const errors = validateForm(site, form);
   const evaluate = useMutation(WhatIfService.method.evaluate);
+
+  // Enlace compartido: reproduce la evaluación una vez al abrirlo (si los valores son válidos).
+  const opened = useRef(false);
+  useEffect(() => {
+    if (opened.current) return;
+    opened.current = true;
+    if (shared && Object.keys(validateForm(site, shared)).length === 0) {
+      evaluate.mutate(toEvaluateRequest(site, shared));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- solo al montar
+  }, []);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
     if (Object.keys(errors).length) return;
+    void setShared(form);
     evaluate.mutate(toEvaluateRequest(site, form));
   };
 
