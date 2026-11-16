@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=REPO_ROOT / ".env", extra="ignore")
 
     database_url: str = "postgresql://lumen:lumen@localhost:5432/lumen"
+    # "memory" (por proceso) o "postgres" (caché persistente, sección 11). Sin Redis: atajo.
+    store: str = "memory"
     redis_url: str = "redis://localhost:6379/0"
     dem_base_url: str = str(REPO_ROOT / "data" / "local" / "dem")
     dem_index_url: str = str(REPO_ROOT / "data" / "local" / "dem" / "index.json")

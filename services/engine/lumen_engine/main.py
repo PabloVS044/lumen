@@ -27,6 +27,7 @@ from starlette.routing import Mount, Route
 
 from lumen_engine import __version__
 from lumen_engine.core.config import get_settings
+from lumen_engine.db.store import InMemoryStore, Store
 from lumen_engine.rpc.interceptors import INTERCEPTORS
 from lumen_engine.services.analysis import AnalysisServiceImpl
 from lumen_engine.services.ephemeris import EphemerisServiceImpl
@@ -43,6 +44,16 @@ from lumen_engine.services.terrain import TerrainServiceImpl
 from lumen_engine.services.validation import ValidationServiceImpl
 from lumen_engine.services.whatif import WhatIfServiceImpl
 
+
+def build_store() -> Store:
+    settings = get_settings()
+    if settings.store == "postgres":
+        from lumen_engine.db.postgres import PostgresStore
+
+        return PostgresStore(settings.database_url)
+    return InMemoryStore()
+
+
 CONNECT_HEADERS = ["Connect-Protocol-Version", "Connect-Timeout-Ms", "Content-Type"]
 
 
@@ -58,7 +69,9 @@ def create_app() -> Starlette:
         TerrainServiceASGIApplication(TerrainServiceImpl(), interceptors=INTERCEPTORS),
         HorizonServiceASGIApplication(HorizonServiceImpl(), interceptors=INTERCEPTORS),
         EphemerisServiceASGIApplication(EphemerisServiceImpl(), interceptors=INTERCEPTORS),
-        AnalysisServiceASGIApplication(AnalysisServiceImpl(), interceptors=INTERCEPTORS),
+        AnalysisServiceASGIApplication(
+            AnalysisServiceImpl(store=build_store()), interceptors=INTERCEPTORS
+        ),
         JobServiceASGIApplication(JobServiceImpl(), interceptors=INTERCEPTORS),
         PowerServiceASGIApplication(PowerServiceImpl(), interceptors=INTERCEPTORS),
         WhatIfServiceASGIApplication(WhatIfServiceImpl(), interceptors=INTERCEPTORS),
