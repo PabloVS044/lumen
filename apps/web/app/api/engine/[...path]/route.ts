@@ -2,6 +2,7 @@
  * BFF: proxy Connect /api/engine/<lumen.v1.Service>/<Method> -> ENGINE_URL (sección 7.1, ADR-0012).
  * Owner: R1. Aquí va el rate limiting (sección 10.3) y se oculta la URL interna del motor.
  */
+import { buildUpstreamHeaders } from "../upstream-headers";
 import {
   EXPENSIVE_METHODS,
   clientIp,
@@ -11,12 +12,6 @@ import {
 } from "../rate-limit";
 
 const ENGINE_URL = process.env.ENGINE_URL ?? "http://localhost:8000";
-const FORWARD_HEADERS = [
-  "content-type",
-  "connect-protocol-version",
-  "connect-timeout-ms",
-  "accept-encoding",
-];
 const limiter = createRateLimiter({
   limit: parseRateLimitPerMin(process.env.RATE_LIMIT_PER_MIN),
   windowMs: RATE_LIMIT_WINDOW_MS,
@@ -43,11 +38,7 @@ async function proxy(req: Request, ctx: RouteContext<"/api/engine/[...path]">) {
     }
   }
   const url = new URL(req.url);
-  const headers = new Headers();
-  for (const name of FORWARD_HEADERS) {
-    const value = req.headers.get(name);
-    if (value) headers.set(name, value);
-  }
+  const headers = buildUpstreamHeaders(req.headers, process.env.ENGINE_SHARED_SECRET);
   try {
     const res = await fetch(`${ENGINE_URL}/${path.join("/")}${url.search}`, {
       method: req.method,
