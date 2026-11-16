@@ -41,7 +41,7 @@ ridge regions published by NASA's PGDA stays above 70 %, as published.
 
 <!-- Permalink al PDF del deck en GitHub (commit fijo). Ver docs/pitch/README.md. -->
 
-https://github.com/PabloVS044/lumen/blob/COMMIT/docs/pitch/lumen-demo.pdf
+https://github.com/PabloVS044/lumen/blob/203fcb0d85cb901ba0414715b21eb7103eb4c6d9/docs/pitch/lumen-demo.pdf
 
 ## Link to Final Project
 
