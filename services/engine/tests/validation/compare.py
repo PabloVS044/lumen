@@ -96,3 +96,53 @@ def eclipse_vs_spice_minutes() -> float:
         for a, b in zip(ours, ref, strict=True):
             worst = max(worst, abs((a - b).total_seconds()) / 60.0)
     return worst
+
+
+PGDA_ROIS = Path(__file__).resolve().parent / "fixtures" / "pgda_site01_rois.json"
+PGDA_MIN_ILLUMINATION_PCT = 70.0
+
+
+@dataclass(frozen=True)
+class RoiIllumination:
+    roi: int
+    lat: float
+    lon: float
+    illumination_pct: float  # media de la fracción de disco solar visible (ponderada)
+
+
+def pgda_site01_illumination() -> list[RoiIllumination]:
+    """Iluminación media 2024-01-01 → 2026-01-01 a 1 m en las RoIs de PGDA Site01 (requiere DEM).
+
+    El rango tiene 731 días (2024 es bisiesto) y el límite del motor es 730: se calcula por años.
+    """
+    from datetime import UTC, datetime
+
+    from google.protobuf.timestamp_pb2 import Timestamp
+    from lumen.v1 import common_pb2
+    from pyproj import CRS, Transformer
+
+    from lumen_engine.core.constants import SOUTH_POLAR_STEREO_PROJ4
+    from lumen_engine.visibility.site import site_visibility
+
+    to_geo = Transformer.from_crs(
+        CRS.from_proj4(SOUTH_POLAR_STEREO_PROJ4),
+        CRS.from_proj4("+proj=longlat +R=1737400 +no_defs"),
+        always_xy=True,
+    )
+
+    def year(y: int) -> common_pb2.TimeRange:
+        s, e = Timestamp(), Timestamp()
+        s.FromDatetime(datetime(y, 1, 1, tzinfo=UTC))
+        e.FromDatetime(datetime(y + 1, 1, 1, tzinfo=UTC))
+        return common_pb2.TimeRange(start=s, end=e, step_minutes=30)
+
+    rois = json.loads(PGDA_ROIS.read_text(encoding="utf-8"))["rois"]
+    out = []
+    for roi in rois:
+        lon, lat = to_geo.transform(roi["x_m"], roi["y_m"])
+        site = common_pb2.Site(lat=lat, lon=lon, obs_height_m=1.0)
+        f2024 = site_visibility(site, year(2024)).visibility.sun_fraction[:-1]  # sin duplicar 2025
+        f2025 = site_visibility(site, year(2025)).visibility.sun_fraction
+        mean = float(np.concatenate([f2024, f2025]).mean())
+        out.append(RoiIllumination(roi["roi"], float(lat), float(lon), 100.0 * mean))
+    return out

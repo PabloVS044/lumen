@@ -4,14 +4,15 @@ Owner: R3 Efemérides/Ciencia. Resultados de la sección 14 que alimentan `/vali
 El motor los sirve en `ValidationService.GetReport` (generado con
 `uv run python -m tests.validation.tools.build_report`; un test exige que esté al día).
 
-| Prueba                                                    | Tolerancia              | Estado                                                                                                                                 |
-| --------------------------------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| Sol/Tierra az/el vs JPL Horizons, 5 sitios × 20 instantes | ≤ 0.01°                 | ✅ máx. 5.4e-7° (ver abajo)                                                                                                            |
-| Ventanas del eclipse 2026-03-03 vs CSPICE `occult()`      | ≤ 3 min                 | ✅ máx. 1 min (ver abajo)                                                                                                              |
-| Horizonte DEM sintético plano                             | 1e-4°                   | ✅ test sintético en 8 azimuts; incluye curvatura y dip                                                                                |
-| Horizonte montaña sintética a 2 km                        | 0.2° por píxel/muestreo | ✅ el rumbo este detecta la cresta y su distancia                                                                                      |
-| Convergencia paso radial / alcance, Site01                | reportar Δ máximo       | ✅ 0.0409° con paso radial/2; 0° de 200 a 250 km (ver abajo)                                                                           |
-| % iluminación vs Mazarico 2011 / Barker 2021              | documentar diferencias  | 🟡 orden de magnitud OK en Site01 (85 % en la cresta); falta comparación formal ([#10](https://github.com/PabloVS044/lumen/issues/10)) |
+| Prueba                                                    | Tolerancia              | Estado                                                                                |
+| --------------------------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------- |
+| Sol/Tierra az/el vs JPL Horizons, 5 sitios × 20 instantes | ≤ 0.01°                 | ✅ máx. 5.4e-7° (ver abajo)                                                           |
+| Ventanas del eclipse 2026-03-03 vs CSPICE `occult()`      | ≤ 3 min                 | ✅ máx. 1 min (ver abajo)                                                             |
+| Horizonte DEM sintético plano                             | 1e-4°                   | ✅ test sintético en 8 azimuts; incluye curvatura y dip                               |
+| Horizonte montaña sintética a 2 km                        | 0.2° por píxel/muestreo | ✅ el rumbo este detecta la cresta y su distancia                                     |
+| Convergencia paso radial / alcance, Site01                | reportar Δ máximo       | ✅ 0.0409° con paso radial/2; 0° de 200 a 250 km (ver abajo)                          |
+| % iluminación en las RoIs de PGDA Site01 (Barker 2021)    | > 70 % en cada RoI      | ✅ 74.4–84.7 % en las 7 RoIs (ver abajo)                                              |
+| % iluminación vs tablas de Mazarico 2011 / Barker 2021    | documentar diferencias  | 🟡 artículos bajo muro de pago ([#10](https://github.com/PabloVS044/lumen/issues/10)) |
 
 ## Horizonte LOLA (secciones 9.3 y 14.2)
 
@@ -139,3 +140,43 @@ Iluminación en 2027 (paso de 1 h, observador a 2 m, Sol visible con el centro d
 - **La coordenada del catálogo es aproximada** (`verified: false`) y cae en una ladera de 9°. Ahí el suelo contiguo tapa el horizonte, que queda en torno a 0° con el obstáculo a pocos metros. Hay que verificarla antes de usarla como sitio de referencia (R7).
 - Es exactamente el efecto que motiva el proyecto (secciones 2.3 y 18.3): **moverse 300 m cambia la iluminación de 53 % a 85 %**. Lo cubre `test_ridge_crest_is_far_better_lit_than_nearby_slope`.
 - La "cresta" es el punto más alto del DEM de 5 m en un radio de 2 km (búsqueda simple en anillos de 100 m), no un sitio oficial.
+
+## Iluminación vs PGDA Site01 (sección 14.3)
+
+**Referencia (fuente primaria):** NASA PGDA, producto 78 (Barker et al. 2021, https://pgda.gsfc.nasa.gov/products/78).
+
+- PGDA publica las **regiones de interés (RoIs) de Site01** (Connecting ridge) como shapefile: `Site01_ROIs.tgz`, derivado de `…_regionProps_avgillGT070`.
+- Son las regiones con **iluminación media > 70 % a 1 m sobre la superficie entre el 2024-01-01 y el 2026-01-01**.
+- La página dice además que las RoIs 4–6 _"generally have the most favorable illumination conditions"_.
+
+**Método:**
+
+- Mismo periodo, misma altura (1 m) y mismos puntos: el punto etiqueta de cada RoI, convertido desde la estereográfica polar.
+- Horizonte propio del motor: DEM de 5 m más el polar de 80 m, alcance de 200 km.
+- Se mide la fracción media del disco solar visible.
+- 2024 es bisiesto y el rango tiene 731 días (el límite del motor es 730), así que se calcula por años y se combina.
+
+| RoI | Lat       | Lon       | Altura   | Pendiente | Iluminación media |
+| --- | --------- | --------- | -------- | --------- | ----------------- |
+| 1   | −89.43893 | −137.0960 | 1958.3 m | 3.2°      | 80.7 %            |
+| 2   | −89.43875 | −137.5480 | 1958.1 m | 1.8°      | 79.5 %            |
+| 3   | −89.44309 | −137.7600 | 1956.4 m | 2.0°      | 74.4 %            |
+| 4   | −89.45267 | −137.1487 | 1956.4 m | 1.2°      | 82.3 %            |
+| 5   | −89.46226 | −137.0875 | 1950.9 m | 2.9°      | 78.1 %            |
+| 6   | −89.47394 | −137.3754 | 1948.4 m | 0.9°      | 84.7 %            |
+| 7   | −89.49118 | −138.4813 | 1928.7 m | 0.8°      | 76.1 %            |
+
+**Resultado:** las 7 RoIs superan el 70 % (mínimo 74.4 %), en acuerdo con la definición de PGDA. Las RoIs 4 y 6 están entre las mejores (82.3 % y 84.7 %), coherente con _"generally… most favorable"_. La RoI 5 (78.1 %) queda en la media y la RoI 1 también es alta (80.7 %).
+
+**Reproducir:**
+
+- Fixture con SHA-256 y procedencia: `tests/validation/fixtures/pgda_site01_rois.json`.
+- Regenerarlo: `uv run --with pyshp python -m tests.validation.tools.fetch_pgda_rois`.
+- Test: `tests/validation/test_illumination_pgda.py`. Requiere DEM y se salta en CI.
+- El check `illumination_site01_rois_vs_pgda` se publica en `ValidationService.GetReport`.
+
+**Limitaciones y pendientes:**
+
+- La referencia es un umbral (> 70 %), no un valor por RoI: PGDA no publica en texto la cifra exacta de cada región.
+- Las tablas numéricas de Mazarico et al. (2011) y Barker et al. (2021) están bajo muro de pago (Elsevier) y no se pudieron leer. La comparación valor a valor sigue pendiente en [#10](https://github.com/PabloVS044/lumen/issues/10).
+- Solo Site01. Las RoIs de Site04, 06, 07 y 11 también están publicadas, pero sus DEM de 5 m no se descargan hoy (`prepare_dem.py` de R2 solo baja Site01).
