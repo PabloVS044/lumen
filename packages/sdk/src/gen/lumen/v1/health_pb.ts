@@ -11,23 +11,20 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file lumen/v1/health.proto.
  */
-export const file_lumen_v1_health: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "ChVsdW1lbi92MS9oZWFsdGgucHJvdG8SCGx1bWVuLnYxIg4KDENoZWNrUmVxdWVzdCLCAQoNQ2hlY2tSZXNwb25zZRIuCgZzdGF0dXMYASABKA4yHi5sdW1lbi52MS5DaGVja1Jlc3BvbnNlLlN0YXR1cxIPCgd2ZXJzaW9uGAIgASgJEhYKDmtlcm5lbHNfbG9hZGVkGAMgAygJEhIKCmRlbV9sYXllcnMYBCADKAkiRAoGU3RhdHVzEhYKElNUQVRVU19VTlNQRUNJRklFRBAAEg0KCVNUQVRVU19PSxABEhMKD1NUQVRVU19ERUdSQURFRBACMk4KDUhlYWx0aFNlcnZpY2USPQoFQ2hlY2sSFi5sdW1lbi52MS5DaGVja1JlcXVlc3QaFy5sdW1lbi52MS5DaGVja1Jlc3BvbnNlIgOQAgFiBnByb3RvMw",
-  );
+export const file_lumen_v1_health: GenFile = /*@__PURE__*/
+  fileDesc("ChVsdW1lbi92MS9oZWFsdGgucHJvdG8SCGx1bWVuLnYxIg4KDENoZWNrUmVxdWVzdCLCAQoNQ2hlY2tSZXNwb25zZRIuCgZzdGF0dXMYASABKA4yHi5sdW1lbi52MS5DaGVja1Jlc3BvbnNlLlN0YXR1cxIPCgd2ZXJzaW9uGAIgASgJEhYKDmtlcm5lbHNfbG9hZGVkGAMgAygJEhIKCmRlbV9sYXllcnMYBCADKAkiRAoGU3RhdHVzEhYKElNUQVRVU19VTlNQRUNJRklFRBAAEg0KCVNUQVRVU19PSxABEhMKD1NUQVRVU19ERUdSQURFRBACMk4KDUhlYWx0aFNlcnZpY2USPQoFQ2hlY2sSFi5sdW1lbi52MS5DaGVja1JlcXVlc3QaFy5sdW1lbi52MS5DaGVja1Jlc3BvbnNlIgOQAgFiBnByb3RvMw");
 
 /**
  * @generated from message lumen.v1.CheckRequest
  */
-export type CheckRequest = Message<"lumen.v1.CheckRequest"> & {};
+export type CheckRequest = Message<"lumen.v1.CheckRequest"> & {
+};
 
 /**
  * Describes the message lumen.v1.CheckRequest.
  * Use `create(CheckRequestSchema)` to create a new message.
  */
-export const CheckRequestSchema: GenMessage<CheckRequest> =
-  /*@__PURE__*/
+export const CheckRequestSchema: GenMessage<CheckRequest> = /*@__PURE__*/
   messageDesc(file_lumen_v1_health, 0);
 
 /**
@@ -59,8 +56,7 @@ export type CheckResponse = Message<"lumen.v1.CheckResponse"> & {
  * Describes the message lumen.v1.CheckResponse.
  * Use `create(CheckResponseSchema)` to create a new message.
  */
-export const CheckResponseSchema: GenMessage<CheckResponse> =
-  /*@__PURE__*/
+export const CheckResponseSchema: GenMessage<CheckResponse> = /*@__PURE__*/
   messageDesc(file_lumen_v1_health, 1);
 
 /**
@@ -86,8 +82,7 @@ export enum CheckResponse_Status {
 /**
  * Describes the enum lumen.v1.CheckResponse.Status.
  */
-export const CheckResponse_StatusSchema: GenEnum<CheckResponse_Status> =
-  /*@__PURE__*/
+export const CheckResponse_StatusSchema: GenEnum<CheckResponse_Status> = /*@__PURE__*/
   enumDesc(file_lumen_v1_health, 1, 0);
 
 /**
@@ -101,5 +96,7 @@ export const HealthService: GenService<{
     methodKind: "unary";
     input: typeof CheckRequestSchema;
     output: typeof CheckResponseSchema;
-  };
-}> = /*@__PURE__*/ serviceDesc(file_lumen_v1_health, 0);
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_lumen_v1_health, 0);
+
