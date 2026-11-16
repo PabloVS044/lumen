@@ -5,7 +5,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 UV_COMPILE_BYTECODE=1 UV_LINK_M
 COPY --from=ghcr.io/astral-sh/uv:0.5.11 /uv /usr/local/bin/uv
 
 WORKDIR /app
-COPY pyproject.toml uv.lock* .python-version ./
+COPY pyproject.toml uv.lock* .python-version README.md ./
 RUN uv sync --all-extras --no-dev --no-install-project
 
 COPY gen ./gen
