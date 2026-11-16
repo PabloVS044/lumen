@@ -18,6 +18,8 @@ vi.mock("@/components/whatif/what-if-chart", () => ({
   WhatIfChart: (p: object) => <div data-testid="whatif" data-props={JSON.stringify(p)} />,
 }));
 
+import { useScenarioStore } from "@/stores/scenario-store";
+
 import { SiteCharts } from "./site-charts";
 
 const setup = (search: string) =>
@@ -35,12 +37,19 @@ describe("SiteCharts", () => {
       range: { start: "2027-01-01", end: "2027-03-01" },
     });
     expect(screen.getByTestId("heatmap")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /copy link/i })).toBeInTheDocument();
     for (const id of ["power", "whatif"]) {
       expect(JSON.parse(screen.getByTestId(id).dataset.props!)).toEqual({
         site: { lat: -89.45, lon: -137.31, obsHeightM: 3 },
         range: { start: "2027-01-01", end: "2027-03-01" },
       });
     }
+  });
+
+  it("applies the shared instant from ?t=", () => {
+    useScenarioStore.setState({ currentTime: null });
+    setup("?lat=-89.45&lon=-137.31&start=2027-01-01&end=2027-03-01&t=2027-01-15T06:00:00.000Z");
+    expect(useScenarioStore.getState().currentTime).toBe("2027-01-15T06:00:00.000Z");
   });
 
   it("asks for a site and range when the URL has none", () => {
