@@ -14,6 +14,9 @@ vi.mock("./site-visibility", () => ({ useSiteVisibility: () => visibility.value 
 vi.mock("@/components/horizon/horizon-polar", () => ({
   HorizonPolar: (p: unknown) => <div data-testid="polar" data-props={JSON.stringify(p)} />,
 }));
+vi.mock("@/components/terrain/local-terrain-section", () => ({
+  LocalTerrainSection: (p: unknown) => <div data-testid="local" data-props={JSON.stringify(p)} />,
+}));
 vi.mock("@/components/timeline/visibility-heatmap", () => ({
   VisibilityHeatmap: (p: unknown) => <div data-testid="heatmap" data-props={JSON.stringify(p)} />,
 }));
@@ -127,6 +130,7 @@ describe("SitePanel", () => {
     };
     expect(JSON.parse(screen.getByTestId("polar").dataset.props!)).toEqual(expected);
     expect(JSON.parse(screen.getByTestId("heatmap").dataset.props!)).toEqual(expected);
+    expect(JSON.parse(screen.getByTestId("local").dataset.props!)).toEqual(expected);
   });
 
   it("states in text whether the Sun and the Earth are visible above the terrain horizon now", () => {

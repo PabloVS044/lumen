@@ -1,0 +1,48 @@
+{
+ "meta": {
+  "source": "NASA PGDA product 78 (Barker et al. 2021), Site01_ROIs.tgz",
+  "url": "https://pgda.gsfc.nasa.gov/data/LOLA_5mpp/Site01/Site01_ROIs.tgz",
+  "sha256": "40b961417a344ce0274aecbab522e171a22f658507d82e8fb4d7bc97526ffc4f",
+  "fetched_at": "2026-11-16T00:53:17Z",
+  "definition": "avg illumination > 70% at 1 m, 2024-01-01 to 2026-01-01",
+  "projection": "south polar stereographic, R=1737400 m, MOON_ME (DE421)",
+  "point": "label point of each region (pixel center inside it)"
+ },
+ "rois": [
+  {
+   "roi": 1,
+   "x_m": -11582.5,
+   "y_m": -12462.5
+  },
+  {
+   "roi": 2,
+   "x_m": -11487.5,
+   "y_m": -12557.5
+  },
+  {
+   "roi": 3,
+   "x_m": -11352.5,
+   "y_m": -12502.5
+  },
+  {
+   "roi": 4,
+   "x_m": -11287.5,
+   "y_m": -12167.5
+  },
+  {
+   "roi": 5,
+   "x_m": -11102.5,
+   "y_m": -11942.5
+  },
+  {
+   "roi": 6,
+   "x_m": -10802.5,
+   "y_m": -11737.5
+  },
+  {
+   "roi": 7,
+   "x_m": -10227.5,
+   "y_m": -11552.5
+  }
+ ]
+}
