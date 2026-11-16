@@ -1,5 +1,6 @@
 """EphemerisService. Owner: R3 Efemérides/Ciencia."""
 
+import asyncio
 from datetime import UTC, datetime
 
 from google.protobuf.timestamp_pb2 import Timestamp
@@ -9,6 +10,7 @@ from lumen.v1.ephemeris_connect import EphemerisService
 from lumen_engine.ephem import spice
 from lumen_engine.ephem.geometry import FloatArray
 from lumen_engine.ephem.kernels import run_spice
+from lumen_engine.ephem.terrain import site_terrain_height_m
 from lumen_engine.metrics.upcoming import upcoming_events
 from lumen_engine.rpc.context import Ctx
 
@@ -33,8 +35,10 @@ class EphemerisServiceImpl(EphemerisService):
     async def get_series(
         self, request: ephemeris_pb2.GetSeriesRequest, ctx: Ctx
     ) -> ephemeris_pb2.GetSeriesResponse:
-        # TODO(R2): pasar terrain_height_m del DEM cuando exista TerrainService.GetTerrainPoint.
-        res = await run_spice(spice.series, request.site, request.range)
+        site = request.site
+        # Lectura de DEM (I/O de rasterio): fuera del event loop, sin ocupar el hilo de SPICE.
+        h0 = await asyncio.to_thread(site_terrain_height_m, site.lat, site.lon)
+        res = await run_spice(spice.series, site, request.range, terrain_height_m=h0)
         return ephemeris_pb2.GetSeriesResponse(
             time=[_timestamp(t) for t in res.grid.datetimes()],
             sun=_body(res.sun),
