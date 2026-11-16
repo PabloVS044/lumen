@@ -1,7 +1,7 @@
 # Ownership por carpeta (docs/team/ROLES.md). La última regla que coincide gana.
 # Sin jerarquía: lo compartido lista a todo el equipo (contratos: 2 aprobaciones, ver WORKFLOW.md).
 # R1 Backend: @bcastillo-2022474 · R2 Geo: @carlosaltan18 · R3 Ciencia: @PabloVS044
-# R4 3D: @asanabria-2021067 · R5 Charts: @JonathanTubac · R6 Analysis: (por asignar → R5)
+# R4 3D: @asanabria-2021067 · R5 Charts: @JonathanTubac · R6 Analysis: @PabloVS044 por partes (issues rol:R6), backup R5
 # R7 Producto: @24750Montenegro
 
 *                                                     @bcastillo-2022474 @carlosaltan18 @PabloVS044 @asanabria-2021067 @JonathanTubac @24750Montenegro
@@ -73,12 +73,12 @@
 /apps/web/app/site/                                   @JonathanTubac
 /apps/web/lib/coords.ts                               @JonathanTubac
 /apps/web/lib/coords.test.ts                          @JonathanTubac
-# R6 Analysis (reasignar cuando se incorpore la persona)
-/apps/web/components/compare/                         @JonathanTubac
-/apps/web/components/power/                           @JonathanTubac
-/apps/web/components/whatif/                          @JonathanTubac
-/apps/web/app/compare/                                @JonathanTubac
-/apps/web/app/search/                                 @JonathanTubac
+# R6 Analysis: por partes (issues rol:R6). Quien tome una parte se agrega aquí.
+/apps/web/components/compare/                         @PabloVS044 @JonathanTubac
+/apps/web/components/power/                           @PabloVS044 @JonathanTubac
+/apps/web/components/whatif/                          @PabloVS044 @JonathanTubac
+/apps/web/app/compare/                                @PabloVS044 @JonathanTubac
+/apps/web/app/search/                                 @PabloVS044 @JonathanTubac
 # R7 Producto/Diseño
 /apps/web/app/(marketing)/                            @24750Montenegro
 /apps/web/app/learn/                                  @24750Montenegro
