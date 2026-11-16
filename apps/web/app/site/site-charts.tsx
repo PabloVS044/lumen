@@ -8,6 +8,7 @@ import { useQueryStates } from "nuqs";
 import { Suspense } from "react";
 
 import { HorizonPolar } from "@/components/horizon/horizon-polar";
+import { HorizonUnrolled } from "@/components/horizon/horizon-unrolled";
 import { SiteExport } from "@/components/export/site-export";
 import { PowerSimulator } from "@/components/power/power-simulator";
 import { CopyLinkButton } from "@/components/share/copy-link-button";
@@ -35,6 +36,7 @@ function Charts() {
       <CopyLinkButton />
       <SiteExport site={site} range={range} />
       <HorizonPolar site={site} range={range} />
+      <HorizonUnrolled site={site} range={range} />
       <VisibilityHeatmap site={site} range={range} />
       <LocalTerrainSection site={site} range={range} />
       <PowerSimulator site={site} range={range} />
