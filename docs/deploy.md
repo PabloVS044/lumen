@@ -109,6 +109,24 @@ flyctl machine stop <id> -a lumen-engine        # fuera de la demo: solo se cobr
 
 Actualizar el DEM: regenerar en local y repetir `seed-volume.sh`. Actualizar código: `flyctl deploy -c fly.engine.toml`.
 
+## Despliegue automático (GitHub Actions)
+
+`.github/workflows/deploy.yml` despliega cuando el CI (`engine` o `web`) termina bien **en un push a `main`**, y
+solo la app cuyo código cambió en ese merge (el motor se reinicia y recalienta al desplegar, así que no se toca
+en merges que solo cambian la web). También se puede lanzar a mano: _Actions → deploy → Run workflow_.
+
+Secretos del repositorio que debe crear un **admin** (_Settings → Secrets and variables → Actions_):
+
+| Secreto                                                             | Cómo obtenerlo                                          |
+| ------------------------------------------------------------------- | ------------------------------------------------------- |
+| `FLY_API_TOKEN_ENGINE`                                              | `flyctl tokens create deploy -a lumen-engine -x 2160h`  |
+| `FLY_API_TOKEN_WEB`                                                 | `flyctl tokens create deploy -a lumen-web -x 2160h`     |
+| `NEXT_PUBLIC_CESIUM_ION_TOKEN` / `NEXT_PUBLIC_CESIUM_MOON_ASSET_ID` | los de `apps/web/.env` (el token es público por diseño) |
+
+Los tokens de despliegue solo pueden desplegar esa app (no leen secretos ni tocan otras apps) y caducan: renovarlos
+antes (aquí 90 días). El `ENGINE_SHARED_SECRET` ya vive en Fly, no en GitHub. El volumen de datos no se redespliega:
+actualizar DEM o kernels sigue siendo manual con `seed-volume.sh`.
+
 ## Memoria y límites conocidos
 
 - El consumo de memoria del motor con el DEM global y numba **no está medido**; 2 GB es una estimación.
