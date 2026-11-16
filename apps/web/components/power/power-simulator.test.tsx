@@ -3,6 +3,7 @@ import { createRouterTransport } from "@connectrpc/connect";
 import { createMockTransport } from "@lumen/sdk/mocks";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { fireEvent, render, screen } from "@testing-library/react";
+import { NuqsTestingAdapter, type UrlUpdateEvent } from "nuqs/adapters/testing";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("./power-chart", () => ({
@@ -18,12 +19,16 @@ const range = { start: "2027-01-01", end: "2027-01-31" };
 function setup(
   site = { lat: -89.45, lon: -137.31, obsHeightM: 2 },
   transport: ReturnType<typeof createMockTransport> = createMockTransport(),
+  search = "",
+  onUrlUpdate?: (e: UrlUpdateEvent) => void,
 ) {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
     <TransportProvider transport={transport}>
       <QueryClientProvider client={client}>
-        <PowerSimulator site={site} range={range} />
+        <NuqsTestingAdapter searchParams={search} onUrlUpdate={onUrlUpdate} rateLimitFactor={0}>
+          <PowerSimulator site={site} range={range} />
+        </NuqsTestingAdapter>
       </QueryClientProvider>
     </TransportProvider>,
   );
@@ -82,5 +87,28 @@ describe("PowerSimulator", () => {
     );
     run();
     expect(await screen.findByRole("alert")).toHaveTextContent(/terrain horizon/i);
+  });
+
+  it("restores a shared configuration from ?pw= and reruns it", async () => {
+    setup(undefined, undefined, "?pw=2,0.28,h,0,500,100,80,150,60,0.95");
+    expect(screen.getByLabelText(/battery capacity/i)).toHaveValue(500);
+    expect(screen.getByLabelText(/panel orientation/i)).toHaveValue("2");
+    expect(await screen.findByRole("status")).toBeInTheDocument();
+  });
+
+  it("writes the configuration to the URL when it runs", async () => {
+    const onUrlUpdate = vi.fn<(e: UrlUpdateEvent) => void>();
+    setup(undefined, undefined, "", onUrlUpdate);
+    run();
+    await vi.waitFor(() => expect(onUrlUpdate).toHaveBeenCalled());
+    expect(onUrlUpdate.mock.lastCall![0].searchParams.get("pw")).toBe(
+      "2,0.28,vt,0,2000,100,80,150,60,0.95",
+    );
+  });
+
+  it("ignores a malformed shared configuration", () => {
+    setup(undefined, undefined, "?pw=garbage");
+    expect(screen.getByLabelText(/battery capacity/i)).toHaveValue(2000);
+    expect(screen.queryByRole("status")).toBeNull();
   });
 });

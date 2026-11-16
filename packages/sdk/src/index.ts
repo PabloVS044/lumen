@@ -23,3 +23,4 @@ export { createLumenClient, type LumenClient } from "./client";
 export { createLumenTransport, type LumenTransportOptions } from "./transport";
 export { engineErrorCode, isUnimplemented } from "./errors";
 export { validateMessage } from "./validate";
+export { searchGridOffsetKm, searchGridPoint } from "./search-grid";

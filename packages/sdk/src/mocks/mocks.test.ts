@@ -126,3 +126,76 @@ describe("power simulation mock", () => {
     expect(res.energyMarginWh).toBeLessThan(0);
   });
 });
+
+describe("what-if mock", () => {
+  const base = {
+    site: { lat: -89.45, lon: -137.31 },
+    nominalLanding: timestampFromDate(new Date("2027-01-01T00:00:00Z")),
+    maxDelayDays: 10,
+    missionDurationDays: 7,
+  };
+
+  it("evaluates one point per delay with the default metrics", async () => {
+    const res = await client.whatIf.evaluate(base);
+    expect(res.points.map((p) => p.delayHours)).toEqual(
+      Array.from({ length: 11 }, (_, k) => k * 24),
+    );
+    expect(Object.keys(res.points[0]!.metrics).sort()).toEqual([
+      "illumination_pct",
+      "longest_dark_h",
+      "operable_pct",
+    ]);
+    expect(res.points.every((p) => p.survives === undefined)).toBe(true);
+    expect(res.recommendedDelaysHours.length).toBeGreaterThan(0);
+  });
+
+  it("marks survival per delay when power is requested", async () => {
+    const res = await client.whatIf.evaluate({ ...base, power: { batteryWh: 50 } });
+    expect(res.points.every((p) => typeof p.survives === "boolean")).toBe(true);
+    for (const d of res.recommendedDelaysHours) {
+      expect(res.points.find((p) => p.delayHours === d)!.survives).toBe(true);
+    }
+  });
+
+  it("rejects unknown metrics like the engine", async () => {
+    await expect(client.whatIf.evaluate({ ...base, metrics: ["nope"] })).rejects.toSatisfy(
+      (e) => engineErrorCode(e) === "UNKNOWN_METRIC",
+    );
+  });
+});
+
+describe("best-spot search mock", () => {
+  const req = {
+    center: { lat: -89.45, lon: -137.31 },
+    radiusKm: 2,
+    spacingM: 500,
+    range: {
+      start: timestampFromDate(new Date("2027-01-01T00:00:00Z")),
+      end: timestampFromDate(new Date("2027-02-01T00:00:00Z")),
+    },
+    objective: "illumination_pct",
+    topK: 3,
+  };
+
+  it("behaves like an async job: not ready first, then the result", async () => {
+    const { job } = await client.search.findBestSpot(req);
+    await expect(client.search.getBestSpotResult({ jobId: job!.jobId })).rejects.toSatisfy(
+      (e) => engineErrorCode(e) === "JOB_NOT_READY",
+    );
+    const res = await client.search.getBestSpotResult({ jobId: job!.jobId });
+    expect(res.gridCols).toBe(9);
+    expect(res.gridRows).toBe(9);
+    expect(res.gridValues).toHaveLength(81);
+    expect(Number.isNaN(res.gridValues[0]!)).toBe(true); // esquina fuera del radio
+    expect(res.top).toHaveLength(3);
+    expect(res.top[0]!.metrics.illumination_pct).toBeGreaterThanOrEqual(
+      res.top[1]!.metrics.illumination_pct!,
+    );
+  });
+
+  it("reports unknown jobs", async () => {
+    await expect(client.search.getBestSpotResult({ jobId: "nope" })).rejects.toSatisfy(
+      (e) => engineErrorCode(e) === "JOB_NOT_FOUND",
+    );
+  });
+});

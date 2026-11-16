@@ -12,20 +12,26 @@ import { EphemerisService } from "../gen/lumen/v1/ephemeris_pb";
 import { CheckResponse_Status, HealthService } from "../gen/lumen/v1/health_pb";
 import { HorizonService } from "../gen/lumen/v1/horizon_pb";
 import { PowerService } from "../gen/lumen/v1/power_pb";
+import { SearchService } from "../gen/lumen/v1/search_pb";
+import { WhatIfService } from "../gen/lumen/v1/whatif_pb";
 import { Region, SiteService } from "../gen/lumen/v1/sites_pb";
 import { TerrainService } from "../gen/lumen/v1/terrain_pb";
 
 import {
   MOCK_VERSION,
   mockAnalysis,
+  mockBestSpot,
   mockCatalog,
   mockEvents,
   mockHorizon,
   mockSeries,
   mockSimulate,
+  mockWhatIf,
 } from "./data";
 
 export function createMockTransport(): Transport {
+  // Jobs de búsqueda: la primera consulta responde JOB_NOT_READY, como un cálculo en curso del motor.
+  const searchJobs = new Map<string, { req: Parameters<typeof mockBestSpot>[0]; polls: number }>();
   return createRouterTransport(({ service }) => {
     service(HealthService, {
       check: () => ({ status: CheckResponse_Status.OK, version: MOCK_VERSION }),
@@ -82,6 +88,43 @@ export function createMockTransport(): Transport {
 
     service(PowerService, {
       simulate: (req) => mockSimulate(req),
+    });
+
+    service(SearchService, {
+      findBestSpot: (req) => {
+        const jobId = `mock-search-${searchJobs.size + 1}`;
+        searchJobs.set(jobId, { req, polls: 0 });
+        return { job: { jobId } };
+      },
+      getBestSpotResult: (req) => {
+        const job = searchJobs.get(req.jobId);
+        if (!job) {
+          throw new ConnectError("Search job not found.", Code.NotFound, undefined, [
+            {
+              desc: ErrorDetailSchema,
+              value: create(ErrorDetailSchema, { code: "JOB_NOT_FOUND" }),
+            },
+          ]);
+        }
+        if (job.polls++ === 0) {
+          throw new ConnectError(
+            "Search job has not completed.",
+            Code.FailedPrecondition,
+            undefined,
+            [
+              {
+                desc: ErrorDetailSchema,
+                value: create(ErrorDetailSchema, { code: "JOB_NOT_READY" }),
+              },
+            ],
+          );
+        }
+        return mockBestSpot(job.req);
+      },
+    });
+
+    service(WhatIfService, {
+      evaluate: (req) => mockWhatIf(req),
     });
 
     service(AnalysisService, {
