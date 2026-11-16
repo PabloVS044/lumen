@@ -31,4 +31,4 @@ primary_region = "iad"        # Ashburn: cerca de la región por defecto de Verc
 
 [[vm]]
   size = "shared-cpu-2x"
-  memory = "2gb"              # sin medir aún: si hay OOM, `flyctl scale memory 4096`
+  memory = "4gb"              # con 2 GB el motor murió por OOM (arranque + análisis con el DEM global)

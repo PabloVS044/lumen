@@ -7,14 +7,14 @@ Owner: R1. Decisiones: ADR-13 a ADR-15 del doc técnico y sección 15.2. Un solo
 Navegador ──HTTPS──► Fly `lumen-web` (Next.js + BFF /api/engine) ──red privada (6PN) + x-lumen-secret──► Fly `lumen-engine` (volumen /data)
 ```
 
-| Pieza     | Dónde                                                             | Notas                                                           |
-| --------- | ----------------------------------------------------------------- | --------------------------------------------------------------- |
-| Web + BFF | Fly.io, app `lumen-web`, `shared-cpu-1x` 1 GB                     | imagen `infra/fly/Dockerfile.web`, config `fly.web.toml`        |
-| Motor     | Fly.io, 1 máquina `shared-cpu-2x` 2 GB (sin medir; ver "Memoria") | imagen `infra/fly/Dockerfile`, config `fly.engine.toml`         |
-| Datos     | Volumen Fly `lumen_data` montado en `/data`                       | `/data/dem` (COGs + `index.json`), `/data/kernels` (SPICE)      |
-| Caché     | En memoria del motor (`STORE=memory`)                             | Postgres solo si hace falta (`STORE=postgres` + `DATABASE_URL`) |
+| Pieza     | Dónde                                                                     | Notas                                                           |
+| --------- | ------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| Web + BFF | Fly.io, app `lumen-web`, `shared-cpu-1x` 1 GB                             | imagen `infra/fly/Dockerfile.web`, config `fly.web.toml`        |
+| Motor     | Fly.io, 1 máquina `shared-cpu-2x` 4 GB (con 2 GB hubo OOM; ver "Memoria") | imagen `infra/fly/Dockerfile`, config `fly.engine.toml`         |
+| Datos     | Volumen Fly `lumen_data` montado en `/data`                               | `/data/dem` (COGs + `index.json`), `/data/kernels` (SPICE)      |
+| Caché     | En memoria del motor (`STORE=memory`)                                     | Postgres solo si hace falta (`STORE=postgres` + `DATABASE_URL`) |
 
-Costo orientativo (confirmar en https://fly.io/docs/about/pricing/): máquina compartida de 2 GB ≈ 13 USD/mes
+Costo orientativo (confirmar en https://fly.io/docs/about/pricing/): máquina compartida de 4 GB ≈ 25 USD/mes (2 GB ≈ 13)
 mientras corre; volumen 0.15 USD/GB/mes; Fly pide tarjeta. Una máquina parada solo cobra el volumen.
 
 ## 0. Antes de nada (en local)
@@ -129,7 +129,7 @@ actualizar DEM o kernels sigue siendo manual con `seed-volume.sh`.
 
 ## Memoria y límites conocidos
 
-- El consumo de memoria del motor con el DEM global y numba **no está medido**; 2 GB es una estimación.
+- Con 2 GB el motor murió por OOM (`oom_killed=true`) al arrancar y analizar con el DEM global: por eso son 4 GB.
 - Con `STORE=memory` la caché se pierde al reiniciar (un análisis nuevo cuesta ~2.5 s con DEM polar).
 - El rate limit del BFF es por instancia (memoria): en Fly con varias máquinas es un límite blando.
 - Los scripts `seed-volume.sh`, `fly.engine.toml` y `fly.web.toml` se escribieron sin sesión de Fly: la primera ejecución real
