@@ -43,6 +43,7 @@ import {
   type EvaluateRequest,
 } from "../gen/lumen/v1/whatif_pb";
 import type { Metrics } from "../gen/lumen/v1/analysis_pb";
+import { searchGridPoint } from "../search-grid";
 import {
   GetBestSpotResultResponseSchema,
   SpotCandidateSchema,
@@ -425,7 +426,6 @@ export function mockBestSpot(req: FindBestSpotRequest) {
   const side = 2 * n + 1;
   const lat0 = req.center!.lat;
   const lon0 = req.center!.lon;
-  const mPerDegLat = (Math.PI / 180) * 1_737_400;
   const values: number[] = [];
   const candidates: { lat: number; lon: number; v: number }[] = [];
   for (let row = 0; row < side; row++) {
@@ -438,8 +438,7 @@ export function mockBestSpot(req: FindBestSpotRequest) {
       }
       const v = 60 + 25 * Math.cos(x / 1500 + lat0) * Math.sin(y / 2100 + lon0 / 10);
       values.push(v);
-      const lat = lat0 + y / mPerDegLat;
-      const lon = lon0 + x / (mPerDegLat * Math.max(Math.cos((lat0 * Math.PI) / 180), 1e-3));
+      const { lat, lon } = searchGridPoint({ lat: lat0, lon: lon0 }, x / 1000, y / 1000);
       candidates.push({ lat, lon, v });
     }
   }
