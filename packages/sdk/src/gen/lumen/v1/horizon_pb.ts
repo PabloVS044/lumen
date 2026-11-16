@@ -14,12 +14,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file lumen/v1/horizon.proto.
  */
-export const file_lumen_v1_horizon: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "ChZsdW1lbi92MS9ob3Jpem9uLnByb3RvEghsdW1lbi52MSJtCg5Ib3Jpem9uT3B0aW9ucxIsCgthel9zdGVwX2RlZxgBIAEoAUIXukgUEhIZAAAAAAAAAEApAAAAAAAAAAASLQoMbWF4X3JhbmdlX2ttGAIgASgBQhe6SBQSEhkAAAAAAAB5QCkAAAAAAAAAACJUCghPYnNlcnZlchILCgNsYXQYASABKAESCwoDbG9uGAIgASgBEhgKEHRlcnJhaW5faGVpZ2h0X20YAyABKAESFAoMb2JzX2hlaWdodF9tGAQgASgBIqcBCgtIb3Jpem9uTWFzaxITCgthel9zdGVwX2RlZxgBIAEoARIVCg1lbGV2YXRpb25fZGVnGAIgAygBEhsKE29ic3RhY2xlX2Rpc3RhbmNlX20YAyADKAESJAoIb2JzZXJ2ZXIYBCABKAsyEi5sdW1lbi52MS5PYnNlcnZlchITCgtsYXllcnNfdXNlZBgFIAMoCRIUCgxtYXhfcmFuZ2Vfa20YBiABKAEiaAoVQ29tcHV0ZUhvcml6b25SZXF1ZXN0EiQKBHNpdGUYASABKAsyDi5sdW1lbi52MS5TaXRlQga6SAPIAQESKQoHb3B0aW9ucxgCIAEoCzIYLmx1bWVuLnYxLkhvcml6b25PcHRpb25zImsKFkNvbXB1dGVIb3Jpem9uUmVzcG9uc2USJQoEbWFzaxgBIAEoCzIVLmx1bWVuLnYxLkhvcml6b25NYXNrSAASHwoDam9iGAIgASgLMhAubHVtZW4udjEuSm9iUmVmSABCCQoHb3V0Y29tZTJqCg5Ib3Jpem9uU2VydmljZRJYCg5Db21wdXRlSG9yaXpvbhIfLmx1bWVuLnYxLkNvbXB1dGVIb3Jpem9uUmVxdWVzdBogLmx1bWVuLnYxLkNvbXB1dGVIb3Jpem9uUmVzcG9uc2UiA5ACAWIGcHJvdG8z",
-    [file_buf_validate_validate, file_lumen_v1_common],
-  );
+export const file_lumen_v1_horizon: GenFile = /*@__PURE__*/
+  fileDesc("ChZsdW1lbi92MS9ob3Jpem9uLnByb3RvEghsdW1lbi52MSJtCg5Ib3Jpem9uT3B0aW9ucxIsCgthel9zdGVwX2RlZxgBIAEoAUIXukgUEhIZAAAAAAAAAEApAAAAAAAAAAASLQoMbWF4X3JhbmdlX2ttGAIgASgBQhe6SBQSEhkAAAAAAAB5QCkAAAAAAAAAACJUCghPYnNlcnZlchILCgNsYXQYASABKAESCwoDbG9uGAIgASgBEhgKEHRlcnJhaW5faGVpZ2h0X20YAyABKAESFAoMb2JzX2hlaWdodF9tGAQgASgBIqcBCgtIb3Jpem9uTWFzaxITCgthel9zdGVwX2RlZxgBIAEoARIVCg1lbGV2YXRpb25fZGVnGAIgAygBEhsKE29ic3RhY2xlX2Rpc3RhbmNlX20YAyADKAESJAoIb2JzZXJ2ZXIYBCABKAsyEi5sdW1lbi52MS5PYnNlcnZlchITCgtsYXllcnNfdXNlZBgFIAMoCRIUCgxtYXhfcmFuZ2Vfa20YBiABKAEiaAoVQ29tcHV0ZUhvcml6b25SZXF1ZXN0EiQKBHNpdGUYASABKAsyDi5sdW1lbi52MS5TaXRlQga6SAPIAQESKQoHb3B0aW9ucxgCIAEoCzIYLmx1bWVuLnYxLkhvcml6b25PcHRpb25zImsKFkNvbXB1dGVIb3Jpem9uUmVzcG9uc2USJQoEbWFzaxgBIAEoCzIVLmx1bWVuLnYxLkhvcml6b25NYXNrSAASHwoDam9iGAIgASgLMhAubHVtZW4udjEuSm9iUmVmSABCCQoHb3V0Y29tZTJqCg5Ib3Jpem9uU2VydmljZRJYCg5Db21wdXRlSG9yaXpvbhIfLmx1bWVuLnYxLkNvbXB1dGVIb3Jpem9uUmVxdWVzdBogLmx1bWVuLnYxLkNvbXB1dGVIb3Jpem9uUmVzcG9uc2UiA5ACAWIGcHJvdG8z", [file_buf_validate_validate, file_lumen_v1_common]);
 
 /**
  * @generated from message lumen.v1.HorizonOptions
@@ -44,8 +40,7 @@ export type HorizonOptions = Message<"lumen.v1.HorizonOptions"> & {
  * Describes the message lumen.v1.HorizonOptions.
  * Use `create(HorizonOptionsSchema)` to create a new message.
  */
-export const HorizonOptionsSchema: GenMessage<HorizonOptions> =
-  /*@__PURE__*/
+export const HorizonOptionsSchema: GenMessage<HorizonOptions> = /*@__PURE__*/
   messageDesc(file_lumen_v1_horizon, 0);
 
 /**
@@ -77,8 +72,7 @@ export type Observer = Message<"lumen.v1.Observer"> & {
  * Describes the message lumen.v1.Observer.
  * Use `create(ObserverSchema)` to create a new message.
  */
-export const ObserverSchema: GenMessage<Observer> =
-  /*@__PURE__*/
+export const ObserverSchema: GenMessage<Observer> = /*@__PURE__*/
   messageDesc(file_lumen_v1_horizon, 1);
 
 /**
@@ -124,8 +118,7 @@ export type HorizonMask = Message<"lumen.v1.HorizonMask"> & {
  * Describes the message lumen.v1.HorizonMask.
  * Use `create(HorizonMaskSchema)` to create a new message.
  */
-export const HorizonMaskSchema: GenMessage<HorizonMask> =
-  /*@__PURE__*/
+export const HorizonMaskSchema: GenMessage<HorizonMask> = /*@__PURE__*/
   messageDesc(file_lumen_v1_horizon, 2);
 
 /**
@@ -147,8 +140,7 @@ export type ComputeHorizonRequest = Message<"lumen.v1.ComputeHorizonRequest"> & 
  * Describes the message lumen.v1.ComputeHorizonRequest.
  * Use `create(ComputeHorizonRequestSchema)` to create a new message.
  */
-export const ComputeHorizonRequestSchema: GenMessage<ComputeHorizonRequest> =
-  /*@__PURE__*/
+export const ComputeHorizonRequestSchema: GenMessage<ComputeHorizonRequest> = /*@__PURE__*/
   messageDesc(file_lumen_v1_horizon, 3);
 
 /**
@@ -158,32 +150,28 @@ export type ComputeHorizonResponse = Message<"lumen.v1.ComputeHorizonResponse"> 
   /**
    * @generated from oneof lumen.v1.ComputeHorizonResponse.outcome
    */
-  outcome:
-    | {
-        /**
-         * @generated from field: lumen.v1.HorizonMask mask = 1;
-         */
-        value: HorizonMask;
-        case: "mask";
-      }
-    | {
-        /**
-         * Sin caché: cálculo encolado.
-         *
-         * @generated from field: lumen.v1.JobRef job = 2;
-         */
-        value: JobRef;
-        case: "job";
-      }
-    | { case: undefined; value?: undefined };
+  outcome: {
+    /**
+     * @generated from field: lumen.v1.HorizonMask mask = 1;
+     */
+    value: HorizonMask;
+    case: "mask";
+  } | {
+    /**
+     * Sin caché: cálculo encolado.
+     *
+     * @generated from field: lumen.v1.JobRef job = 2;
+     */
+    value: JobRef;
+    case: "job";
+  } | { case: undefined; value?: undefined };
 };
 
 /**
  * Describes the message lumen.v1.ComputeHorizonResponse.
  * Use `create(ComputeHorizonResponseSchema)` to create a new message.
  */
-export const ComputeHorizonResponseSchema: GenMessage<ComputeHorizonResponse> =
-  /*@__PURE__*/
+export const ComputeHorizonResponseSchema: GenMessage<ComputeHorizonResponse> = /*@__PURE__*/
   messageDesc(file_lumen_v1_horizon, 4);
 
 /**
@@ -197,5 +185,7 @@ export const HorizonService: GenService<{
     methodKind: "unary";
     input: typeof ComputeHorizonRequestSchema;
     output: typeof ComputeHorizonResponseSchema;
-  };
-}> = /*@__PURE__*/ serviceDesc(file_lumen_v1_horizon, 0);
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_lumen_v1_horizon, 0);
+

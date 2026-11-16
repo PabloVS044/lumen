@@ -18,17 +18,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file lumen/v1/whatif.proto.
  */
-export const file_lumen_v1_whatif: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "ChVsdW1lbi92MS93aGF0aWYucHJvdG8SCGx1bWVuLnYxIqkCCg9FdmFsdWF0ZVJlcXVlc3QSJAoEc2l0ZRgBIAEoCzIOLmx1bWVuLnYxLlNpdGVCBrpIA8gBARI7Cg9ub21pbmFsX2xhbmRpbmcYAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQga6SAPIAQESIAoObWF4X2RlbGF5X2RheXMYAyABKA1CCLpIBSoDGO0CEiIKEGRlbGF5X3N0ZXBfaG91cnMYBCABKA1CCLpIBSoDGKgBEjYKFW1pc3Npb25fZHVyYXRpb25fZGF5cxgFIAEoAUIXukgUEhIZAAAAAADQdkAhAAAAAAAAAAASDwoHbWV0cmljcxgGIAMoCRIkCgVwb3dlchgHIAEoCzIVLmx1bWVuLnYxLlBvd2VyQ29uZmlnItgBCgtXaGF0SWZQb2ludBITCgtkZWxheV9ob3VycxgBIAEoARIrCgdsYW5kaW5nGAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIzCgdtZXRyaWNzGAMgAygLMiIubHVtZW4udjEuV2hhdElmUG9pbnQuTWV0cmljc0VudHJ5EhUKCHN1cnZpdmVzGAQgASgISACIAQEaLgoMTWV0cmljc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoAToCOAFCCwoJX3N1cnZpdmVzIlsKEEV2YWx1YXRlUmVzcG9uc2USJQoGcG9pbnRzGAEgAygLMhUubHVtZW4udjEuV2hhdElmUG9pbnQSIAoYcmVjb21tZW5kZWRfZGVsYXlzX2hvdXJzGAIgAygBMlcKDVdoYXRJZlNlcnZpY2USRgoIRXZhbHVhdGUSGS5sdW1lbi52MS5FdmFsdWF0ZVJlcXVlc3QaGi5sdW1lbi52MS5FdmFsdWF0ZVJlc3BvbnNlIgOQAgFiBnByb3RvMw",
-    [
-      file_buf_validate_validate,
-      file_google_protobuf_timestamp,
-      file_lumen_v1_common,
-      file_lumen_v1_power,
-    ],
-  );
+export const file_lumen_v1_whatif: GenFile = /*@__PURE__*/
+  fileDesc("ChVsdW1lbi92MS93aGF0aWYucHJvdG8SCGx1bWVuLnYxIqkCCg9FdmFsdWF0ZVJlcXVlc3QSJAoEc2l0ZRgBIAEoCzIOLmx1bWVuLnYxLlNpdGVCBrpIA8gBARI7Cg9ub21pbmFsX2xhbmRpbmcYAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQga6SAPIAQESIAoObWF4X2RlbGF5X2RheXMYAyABKA1CCLpIBSoDGO0CEiIKEGRlbGF5X3N0ZXBfaG91cnMYBCABKA1CCLpIBSoDGKgBEjYKFW1pc3Npb25fZHVyYXRpb25fZGF5cxgFIAEoAUIXukgUEhIZAAAAAADQdkAhAAAAAAAAAAASDwoHbWV0cmljcxgGIAMoCRIkCgVwb3dlchgHIAEoCzIVLmx1bWVuLnYxLlBvd2VyQ29uZmlnItgBCgtXaGF0SWZQb2ludBITCgtkZWxheV9ob3VycxgBIAEoARIrCgdsYW5kaW5nGAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIzCgdtZXRyaWNzGAMgAygLMiIubHVtZW4udjEuV2hhdElmUG9pbnQuTWV0cmljc0VudHJ5EhUKCHN1cnZpdmVzGAQgASgISACIAQEaLgoMTWV0cmljc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoAToCOAFCCwoJX3N1cnZpdmVzIlsKEEV2YWx1YXRlUmVzcG9uc2USJQoGcG9pbnRzGAEgAygLMhUubHVtZW4udjEuV2hhdElmUG9pbnQSIAoYcmVjb21tZW5kZWRfZGVsYXlzX2hvdXJzGAIgAygBMlcKDVdoYXRJZlNlcnZpY2USRgoIRXZhbHVhdGUSGS5sdW1lbi52MS5FdmFsdWF0ZVJlcXVlc3QaGi5sdW1lbi52MS5FdmFsdWF0ZVJlc3BvbnNlIgOQAgFiBnByb3RvMw", [file_buf_validate_validate, file_google_protobuf_timestamp, file_lumen_v1_common, file_lumen_v1_power]);
 
 /**
  * @generated from message lumen.v1.EvaluateRequest
@@ -80,8 +71,7 @@ export type EvaluateRequest = Message<"lumen.v1.EvaluateRequest"> & {
  * Describes the message lumen.v1.EvaluateRequest.
  * Use `create(EvaluateRequestSchema)` to create a new message.
  */
-export const EvaluateRequestSchema: GenMessage<EvaluateRequest> =
-  /*@__PURE__*/
+export const EvaluateRequestSchema: GenMessage<EvaluateRequest> = /*@__PURE__*/
   messageDesc(file_lumen_v1_whatif, 0);
 
 /**
@@ -113,8 +103,7 @@ export type WhatIfPoint = Message<"lumen.v1.WhatIfPoint"> & {
  * Describes the message lumen.v1.WhatIfPoint.
  * Use `create(WhatIfPointSchema)` to create a new message.
  */
-export const WhatIfPointSchema: GenMessage<WhatIfPoint> =
-  /*@__PURE__*/
+export const WhatIfPointSchema: GenMessage<WhatIfPoint> = /*@__PURE__*/
   messageDesc(file_lumen_v1_whatif, 1);
 
 /**
@@ -136,8 +125,7 @@ export type EvaluateResponse = Message<"lumen.v1.EvaluateResponse"> & {
  * Describes the message lumen.v1.EvaluateResponse.
  * Use `create(EvaluateResponseSchema)` to create a new message.
  */
-export const EvaluateResponseSchema: GenMessage<EvaluateResponse> =
-  /*@__PURE__*/
+export const EvaluateResponseSchema: GenMessage<EvaluateResponse> = /*@__PURE__*/
   messageDesc(file_lumen_v1_whatif, 2);
 
 /**
@@ -151,5 +139,7 @@ export const WhatIfService: GenService<{
     methodKind: "unary";
     input: typeof EvaluateRequestSchema;
     output: typeof EvaluateResponseSchema;
-  };
-}> = /*@__PURE__*/ serviceDesc(file_lumen_v1_whatif, 0);
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_lumen_v1_whatif, 0);
+
