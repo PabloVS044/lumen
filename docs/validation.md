@@ -4,14 +4,14 @@ Owner: R3 Efemérides/Ciencia. Resultados de la sección 14 que alimentan `/vali
 El motor los sirve en `ValidationService.GetReport` (generado con
 `uv run python -m tests.validation.tools.build_report`; un test exige que esté al día).
 
-| Prueba                                                    | Tolerancia               | Estado                                                                               |
-| --------------------------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------ |
-| Sol/Tierra az/el vs JPL Horizons, 5 sitios × 20 instantes | ≤ 0.01°                  | ✅ máx. 5.4e-7° (ver abajo)                                                          |
-| Ventanas del eclipse 2026-03-03 vs CSPICE `occult()`      | ≤ 3 min                  | ✅ máx. 1 min (ver abajo)                                                            |
-| Horizonte DEM sintético plano                             | 1e-4°                    | ✅ test sintético en 8 azimuts; incluye curvatura y dip                                 |
-| Horizonte montaña sintética a 2 km                        | 0.2° por píxel/muestreo   | ✅ el rumbo este detecta la cresta y su distancia                                       |
-| Convergencia paso radial / alcance, Site01                 | reportar Δ máximo        | ✅ 0.0409° con paso radial/2; 0° de 200 a 250 km (ver abajo)                           |
-| % iluminación vs Mazarico 2011 / Barker 2021              | documentar diferencias   | pendiente, requiere horizonte ([#10](https://github.com/PabloVS044/lumen/issues/10)) |
+| Prueba                                                    | Tolerancia              | Estado                                                                                                                                 |
+| --------------------------------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Sol/Tierra az/el vs JPL Horizons, 5 sitios × 20 instantes | ≤ 0.01°                 | ✅ máx. 5.4e-7° (ver abajo)                                                                                                            |
+| Ventanas del eclipse 2026-03-03 vs CSPICE `occult()`      | ≤ 3 min                 | ✅ máx. 1 min (ver abajo)                                                                                                              |
+| Horizonte DEM sintético plano                             | 1e-4°                   | ✅ test sintético en 8 azimuts; incluye curvatura y dip                                                                                |
+| Horizonte montaña sintética a 2 km                        | 0.2° por píxel/muestreo | ✅ el rumbo este detecta la cresta y su distancia                                                                                      |
+| Convergencia paso radial / alcance, Site01                | reportar Δ máximo       | ✅ 0.0409° con paso radial/2; 0° de 200 a 250 km (ver abajo)                                                                           |
+| % iluminación vs Mazarico 2011 / Barker 2021              | documentar diferencias  | 🟡 orden de magnitud OK en Site01 (85 % en la cresta); falta comparación formal ([#10](https://github.com/PabloVS044/lumen/issues/10)) |
 
 ## Horizonte LOLA (secciones 9.3 y 14.2)
 
@@ -120,3 +120,22 @@ CSPICE `occult()` con una diferencia máxima de **1 minuto** (resolución de 1 m
 - Diferencias de modelo: SPICE usa el elipsoide terrestre (6378/6357 km); el motor, una esfera de 6371 km. Ninguno modela la luz refractada por la atmósfera terrestre.
 
 Test: `services/engine/tests/unit/test_eclipse.py`.
+
+## Integración con el horizonte real LOLA (Site01)
+
+Los RPC de visibilidad de R3 (`ListEvents`, `Simulate`, `WhatIf`) se probaron contra la máscara de
+horizonte real de R2: DEM PGDA Site01 de 5 m más el polar de 80 m, alcance de 200 km y paso de 0.25°.
+Test: `services/engine/tests/api/test_terrain_integration.py`. Requiere `data/scripts/prepare_dem.py`
+(≈ 312 MB), así que se salta en CI.
+
+Iluminación en 2027 (paso de 1 h, observador a 2 m, Sol visible con el centro del disco):
+
+| Punto                                     | Altura   | Pendiente | Horizonte mediano | Iluminación | Tierra visible |
+| ----------------------------------------- | -------- | --------- | ----------------- | ----------- | -------------- |
+| Coordenada del catálogo (−89.45, −137.31) | 1954.6 m | 9.3°      | +0.02°            | 52.8 %      | 37.5 %         |
+| Cresta a 300 m (−89.4403, −137.134)       | 1958.3 m | 1.8°      | −1.48°            | 85.3 %      | 51.1 %         |
+
+- **La cresta coincide en orden de magnitud con lo publicado** para la Connecting ridge (~80–90 %, Mazarico et al. 2011). La comparación formal, con el mismo periodo y la misma altura, sigue pendiente en [#10](https://github.com/PabloVS044/lumen/issues/10).
+- **La coordenada del catálogo es aproximada** (`verified: false`) y cae en una ladera de 9°. Ahí el suelo contiguo tapa el horizonte, que queda en torno a 0° con el obstáculo a pocos metros. Hay que verificarla antes de usarla como sitio de referencia (R7).
+- Es exactamente el efecto que motiva el proyecto (secciones 2.3 y 18.3): **moverse 300 m cambia la iluminación de 53 % a 85 %**. Lo cubre `test_ridge_crest_is_far_better_lit_than_nearby_slope`.
+- La "cresta" es el punto más alto del DEM de 5 m en un radio de 2 km (búsqueda simple en anillos de 100 m), no un sitio oficial.

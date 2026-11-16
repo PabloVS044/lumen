@@ -27,9 +27,22 @@ def rpc() -> ConnectJSON:
     return ConnectJSON(TestClient(app))
 
 
+def _skip_without_dem(items: list[pytest.Item]) -> None:
+    """`requires_dem`: datos de cientos de MB que CI no descarga; se saltan si no hay índice DEM."""
+    from lumen_engine.dem.index import layers
+
+    if layers():
+        return
+    reason = "no hay DEMs LOLA instalados (data/scripts/prepare_dem.py)"
+    for item in items:
+        if "requires_dem" in item.keywords:
+            item.add_marker(pytest.mark.skip(reason=reason))
+
+
 def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item]) -> None:
     """Tests marcados `requires_kernels`: se saltan en local si faltan los kernels SPICE
     (bash data/scripts/download_kernels.sh) y fallan en CI (LUMEN_REQUIRE_KERNELS=1)."""
+    _skip_without_dem(items)
     missing = missing_kernels()
     if not missing:
         return
