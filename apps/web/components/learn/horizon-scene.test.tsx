@@ -39,4 +39,17 @@ describe("HorizonScene", () => {
     render(<HorizonScene />);
     expect(screen.getByRole("button", { name: "Play animation" })).toBeInTheDocument();
   });
+
+  it("can start paused, with its own description, for a tour step", () => {
+    mockReducedMotion(false);
+    render(<HorizonScene autoPlay={false} label="Crater floor in shadow" />);
+    expect(screen.getByRole("button", { name: "Play animation" })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "Crater floor in shadow" })).toBeInTheDocument();
+  });
+
+  it("counts days within the lunar day when asked", () => {
+    mockReducedMotion(true);
+    render(<HorizonScene dayCounter startDay={31} />);
+    expect(screen.getByText("Day 1.5 of 29.5")).toBeInTheDocument();
+  });
 });
