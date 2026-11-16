@@ -7,6 +7,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useScenarioStore } from "@/stores/scenario-store";
 
+const visibility = vi.hoisted(() => ({
+  value: undefined as { sun: boolean; earth: boolean } | undefined,
+}));
+vi.mock("./site-visibility", () => ({ useSiteVisibility: () => visibility.value }));
 vi.mock("@/components/horizon/horizon-polar", () => ({
   HorizonPolar: (p: unknown) => <div data-testid="polar" data-props={JSON.stringify(p)} />,
 }));
@@ -55,6 +59,7 @@ const active = (n: number) => ({
 });
 
 beforeEach(() => {
+  visibility.value = undefined;
   useScenarioStore.setState({ sites: [], currentTime: T, playing: false });
 });
 
@@ -122,5 +127,18 @@ describe("SitePanel", () => {
     };
     expect(JSON.parse(screen.getByTestId("polar").dataset.props!)).toEqual(expected);
     expect(JSON.parse(screen.getByTestId("heatmap").dataset.props!)).toEqual(expected);
+  });
+
+  it("states in text whether the Sun and the Earth are visible above the terrain horizon now", () => {
+    visibility.value = { sun: false, earth: true };
+    setup();
+    expect(
+      screen.getByText(/Terrain horizon now: Sun not visible, Earth visible\./),
+    ).toBeInTheDocument();
+  });
+
+  it("says nothing about visibility while the engine has not answered", () => {
+    setup();
+    expect(screen.queryByText(/Terrain horizon now/)).not.toBeInTheDocument();
   });
 });

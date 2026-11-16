@@ -16,6 +16,7 @@ import { MAX_SITES, useScenarioStore } from "@/stores/scenario-store";
 
 import { compareHref, nextFreeColor, siteHref, type DateRange } from "./explore-links";
 import { sampleAt } from "./series-at";
+import { useSiteVisibility } from "./site-visibility";
 import { SkyCompass } from "./sky-compass";
 
 const OBS_HEIGHT_M = 2;
@@ -43,6 +44,7 @@ export function SitePanel({ site, range }: { site: CatalogSite; range: DateRange
   );
   const sample = series.data && currentMs !== null ? sampleAt(series.data, currentMs) : undefined;
 
+  const status = useSiteVisibility(site, range);
   const chartSite = { lat: site.lat, lon: site.lon, obsHeightM: OBS_HEIGHT_M };
   const index = active.findIndex((s) => s.id === site.id);
   const color = nextFreeColor(active);
@@ -64,6 +66,12 @@ export function SitePanel({ site, range }: { site: CatalogSite; range: DateRange
         </p>
       </header>
 
+      {status && (
+        <p>
+          Terrain horizon now: Sun {status.sun ? "visible" : "not visible"}, Earth{" "}
+          {status.earth ? "visible" : "not visible"}.
+        </p>
+      )}
       {sample ? (
         <SkyCompass sun={sample.sun} earth={sample.earth} />
       ) : (

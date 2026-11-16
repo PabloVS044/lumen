@@ -18,6 +18,7 @@ import { useScenarioStore } from "@/stores/scenario-store";
 
 import { rangeOf } from "./explore-links";
 import { SitePanel } from "./site-panel";
+import { useSiteVisibility } from "./site-visibility";
 
 export function ExploreView() {
   const [selected, setSelected] = useState<CatalogSite>();
@@ -31,13 +32,19 @@ export function ExploreView() {
   const anchor = t ?? currentTime;
   const range = start || anchor ? rangeOf(resolveWindow({ start, end, t: anchor }, 0)) : null;
 
+  const status = useSiteVisibility(selected, range);
+
   return (
     <div className="flex flex-1 flex-col lg:h-[calc(100dvh-3.8rem)] lg:flex-none lg:flex-row">
       <h1 className="sr-only">Explore</h1>
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="relative min-h-[28rem] flex-1">
           <div className="absolute inset-0">
-            <GlobeLoader selectedSiteId={selected?.id} onSelectSite={setSelected} />
+            <GlobeLoader
+              selectedSiteId={selected?.id}
+              selectedStatus={status}
+              onSelectSite={setSelected}
+            />
           </div>
         </div>
         <div className="border-t border-surface p-3">
