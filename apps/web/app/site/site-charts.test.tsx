@@ -8,6 +8,9 @@ vi.mock("@/components/horizon/horizon-polar", () => ({
     range: { start: string; end: string };
   }) => <div data-testid="polar" data-props={JSON.stringify(p)} />,
 }));
+vi.mock("@/components/horizon/horizon-unrolled", () => ({
+  HorizonUnrolled: () => <div data-testid="unrolled" />,
+}));
 vi.mock("@/components/terrain/local-terrain-section", () => ({
   LocalTerrainSection: () => <div data-testid="local" />,
 }));
@@ -39,6 +42,7 @@ describe("SiteCharts", () => {
       site: { lat: -89.45, lon: -137.31, obsHeightM: 3 },
       range: { start: "2027-01-01", end: "2027-03-01" },
     });
+    expect(screen.getByTestId("unrolled")).toBeInTheDocument();
     expect(screen.getByTestId("heatmap")).toBeInTheDocument();
     expect(screen.getByTestId("local")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /copy link/i })).toBeInTheDocument();
