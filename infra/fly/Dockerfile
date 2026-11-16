@@ -22,6 +22,6 @@ ENV CATALOG_PATH=/app/catalog/sites.yaml \
     DEM_INDEX_URL=/data/dem/index.json \
     STORE=memory
 
-# Fly alcanza `.internal` por IPv6 (6PN): escuchar en "::" (doble pila), no solo en 0.0.0.0
+# Proxy público por IPv4 y `.internal` por IPv6: lumen_engine.serve abre un socket para cada familia
 EXPOSE 8000
-CMD ["uv", "run", "--no-sync", "uvicorn", "lumen_engine.main:app", "--host", "::", "--port", "8000"]
+CMD ["uv", "run", "--no-sync", "python", "-m", "lumen_engine.serve"]
