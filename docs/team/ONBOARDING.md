@@ -17,7 +17,9 @@ git clone git@github.com:PabloVS044/lumen.git && cd lumen
 cp .env.example .env
 pnpm install                       # web + tipos (copia assets de Cesium)
 cd services/engine && uv sync --all-extras && cd ../..
-bash data/scripts/download_kernels.sh   # solo R3 / quien necesite SPICE (~50 MB)
+bash data/scripts/download_kernels.sh   # kernels SPICE (~50 MB): el motor no arranca sin ellos
+# DEM (data/local/, ignorado por git): sin él, ListEvents/Analyze fallan con NO_COVERAGE y /health sale DEGRADED
+services/engine/.venv/bin/python data/scripts/prepare_dem.py   # Site01 5 m + polar 80 m (cientos de MB; ver data/scripts/README.md)
 docker compose -f infra/docker-compose.yml up -d db redis
 ```
 
