@@ -8,13 +8,20 @@ import { timestampDate, timestampFromDate } from "@bufbuild/protobuf/wkt";
 
 import {
   AnalysisResultSchema,
+  AnalyzeRequestSchema,
   MetricsSchema,
   SeriesSchema,
   type AnalysisResult,
   type AnalyzeRequest,
 } from "../gen/lumen/v1/analysis_pb";
 import { BodySeriesSchema, IntervalSchema, type Site } from "../gen/lumen/v1/common_pb";
-import { EventSchema, EventType, type Event } from "../gen/lumen/v1/ephemeris_pb";
+import {
+  EventSchema,
+  EventType,
+  type Event,
+  type GetSeriesRequest,
+  type ListEventsRequest,
+} from "../gen/lumen/v1/ephemeris_pb";
 import { HorizonMaskSchema, ObserverSchema, type HorizonMask } from "../gen/lumen/v1/horizon_pb";
 import { CatalogSiteSchema, Region, SiteStatus, type CatalogSite } from "../gen/lumen/v1/sites_pb";
 import { CoverageSchema } from "../gen/lumen/v1/terrain_pb";
@@ -197,4 +204,28 @@ export function mockAnalysis(req: AnalyzeRequest): AnalysisResult {
       elapsedMs: 0,
     },
   });
+}
+
+/** Próximos eventos del sitio: los mismos que ve `mockAnalysis` en la ventana pedida (determinista). */
+export function mockEvents(req: ListEventsRequest): Event[] {
+  const from = timestampDate(req.from!).getTime();
+  const analysis = mockAnalysis(
+    create(AnalyzeRequestSchema, {
+      site: req.site,
+      range: {
+        start: req.from,
+        end: timestampFromDate(new Date(from + (req.horizonDays || 60) * 24 * HOUR_MS)),
+        stepMinutes: 60,
+      },
+    }),
+  );
+  return analysis.events.filter((e) => !req.types.length || req.types.includes(e.type));
+}
+
+/** Series az/el de Sol y Tierra del sitio: las mismas que `mockAnalysis` para el rango pedido. */
+export function mockSeries(req: GetSeriesRequest) {
+  const { series } = mockAnalysis(
+    create(AnalyzeRequestSchema, { site: req.site, range: req.range }),
+  );
+  return { time: series?.time ?? [], sun: series?.sun, earth: series?.earth };
 }
