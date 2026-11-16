@@ -7,12 +7,14 @@
  */
 import { useQuery } from "@connectrpc/connect-query";
 import { SiteService, type CatalogSite } from "@lumen/sdk";
+import "cesium/Build/Cesium/Widgets/widgets.css";
 import { Cartesian3, Ellipsoid, IonResource } from "cesium";
 import { useMemo } from "react";
-import { Cesium3DTileset, EllipsoidGraphics, Entity, Viewer } from "resium";
+import { Cesium3DTileset, EllipsoidGraphics, Entity, Globe as CesiumGlobe, Viewer } from "resium";
 
 import { useScenarioStore } from "@/stores/scenario-store";
 
+import { createDayNightShader } from "./moon-shader";
 import { SiteMarkers } from "./site-markers";
 import { SkyOverlay } from "./sky-overlay";
 import { tokenColor } from "./token-color";
@@ -35,6 +37,7 @@ export function Globe({ selectedSiteId, onSelectSite }: GlobeProps = {}) {
     : Number.isNaN(assetId)
       ? "Cesium Moon asset ID"
       : null;
+  const dayNight = useMemo(() => createDayNightShader(), []);
   const moonTiles = useMemo(
     () => (missing ? null : IonResource.fromAssetId(assetId, { accessToken: ionToken })),
     [missing, assetId, ionToken],
@@ -46,7 +49,7 @@ export function Globe({ selectedSiteId, onSelectSite }: GlobeProps = {}) {
         className="h-full w-full"
         ellipsoid={Ellipsoid.MOON}
         requestRenderMode
-        globe={false}
+        baseLayer={false}
         geocoder={false}
         baseLayerPicker={false}
         sceneModePicker={false}
@@ -56,8 +59,10 @@ export function Globe({ selectedSiteId, onSelectSite }: GlobeProps = {}) {
         timeline={false}
         fullscreenButton={false}
       >
+        {/* Resium 1.28 exige scene.globe: se deja uno oculto y sin capas en vez de globe={false}. */}
+        <CesiumGlobe show={false} />
         {moonTiles ? (
-          <Cesium3DTileset url={moonTiles} />
+          <Cesium3DTileset url={moonTiles} customShader={sun ? dayNight : undefined} />
         ) : (
           <Entity position={Cartesian3.ZERO}>
             <EllipsoidGraphics
@@ -66,7 +71,7 @@ export function Globe({ selectedSiteId, onSelectSite }: GlobeProps = {}) {
             />
           </Entity>
         )}
-        <SkyOverlay sun={sun} earth={earth} site={selectedSite} />
+        <SkyOverlay shader={dayNight} sun={sun} earth={earth} site={selectedSite} />
         {catalog && (
           <SiteMarkers
             sites={catalog.sites}
@@ -89,6 +94,11 @@ export function Globe({ selectedSiteId, onSelectSite }: GlobeProps = {}) {
           className="absolute bottom-14 left-3 max-w-sm rounded-md bg-panel px-3 py-2 text-sm text-bad"
         >
           Could not load the Sun and Earth positions. Lighting may be out of date.
+        </p>
+      )}
+      {moonTiles && (
+        <p className="pointer-events-none absolute right-3 bottom-2 rounded-sm bg-panel/80 px-2 py-1 text-xs text-muted">
+          Moon terrain and imagery: NASA and the USGS Astrogeology Science Center, via Cesium ion.
         </p>
       )}
       {missing && (
