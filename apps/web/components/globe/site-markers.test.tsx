@@ -12,6 +12,7 @@ vi.mock("cesium", () => ({
       public y: number,
     ) {}
   },
+  HeightReference: { CLAMP_TO_3D_TILE: 5 },
   Cartesian3: { fromDegrees: (lon: number, lat: number) => ({ lon, lat }) },
   Color: { fromCssColorString: (css: string) => ({ css }) },
   DistanceDisplayCondition: class {
@@ -24,8 +25,14 @@ vi.mock("cesium", () => ({
 
 interface MockEntityProps {
   id: string;
-  point: { color: { css: string }; disableDepthTestDistance: number };
-  label: { show: boolean; text: string; distanceDisplayCondition?: unknown };
+  point: { color: { css: string }; heightReference?: number; disableDepthTestDistance?: number };
+  label: {
+    show: boolean;
+    disableDepthTestDistance?: number;
+    text: string;
+    heightReference?: number;
+    distanceDisplayCondition?: unknown;
+  };
   onClick: () => void;
 }
 
@@ -36,7 +43,10 @@ vi.mock("resium", () => ({
       data-color={point.color.css}
       data-label={String(label.show)}
       data-text={label.text}
+      data-point-ref={String(point.heightReference)}
+      data-label-ref={String(label.heightReference)}
       data-depth={String(point.disableDepthTestDistance)}
+      data-label-depth={String(label.disableDepthTestDistance)}
       data-label-range={label.distanceDisplayCondition ? "near" : "always"}
       onClick={onClick}
     />
@@ -142,12 +152,31 @@ describe("SiteMarkers", () => {
     );
   });
 
-  it("keeps markers visible over real relief when the camera is close, but hidden behind the limb from far away", () => {
+  it("clamps points and labels to the tileset's own surface", () => {
     render(<SiteMarkers sites={mockCatalog} onSelect={() => {}} />);
-    const depth = Number(
-      screen.getByTestId(`marker-${mockCatalog[0]!.id}`).getAttribute("data-depth"),
+    for (const site of mockCatalog) {
+      const marker = screen.getByTestId(`marker-${site.id}`);
+      expect(marker).toHaveAttribute("data-point-ref", "5"); // CLAMP_TO_3D_TILE
+      expect(marker).toHaveAttribute("data-label-ref", "5");
+    }
+  });
+
+  it("only bypasses the depth test close up (points) or always (labels), so far-side points stay hidden", () => {
+    render(<SiteMarkers sites={mockCatalog} onSelect={() => {}} />);
+    const marker = screen.getByTestId(`marker-${mockCatalog[0]!.id}`);
+    const pointDepth = Number(marker.getAttribute("data-depth"));
+    expect(pointDepth).toBeGreaterThan(0);
+    expect(pointDepth).toBeLessThanOrEqual(100_000); // 3 500 km de la vista inicial: con prueba de profundidad
+    expect(marker.getAttribute("data-label-depth")).toBe("Infinity");
+  });
+
+  it("never hides the selected site's point behind relief, unlike the other points", () => {
+    render(<SiteMarkers sites={mockCatalog} selectedId={mockCatalog[0]!.id} onSelect={() => {}} />);
+    expect(screen.getByTestId(`marker-${mockCatalog[0]!.id}`).getAttribute("data-depth")).toBe(
+      "Infinity",
     );
-    expect(depth).toBeGreaterThan(100_000);
-    expect(depth).toBeLessThan(3_000_000); // la vista inicial (3 500 km) sigue con prueba de profundidad
+    expect(
+      Number(screen.getByTestId(`marker-${mockCatalog[1]!.id}`).getAttribute("data-depth")),
+    ).toBeLessThanOrEqual(100_000);
   });
 });
