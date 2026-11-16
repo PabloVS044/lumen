@@ -14,12 +14,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file lumen/v1/search.proto.
  */
-export const file_lumen_v1_search: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "ChVsdW1lbi92MS9zZWFyY2gucHJvdG8SCGx1bWVuLnYxIq0DChNGaW5kQmVzdFNwb3RSZXF1ZXN0EigKBmNlbnRlchgBIAEoCzIQLmx1bWVuLnYxLkxhdExvbkIGukgDyAEBEioKCXJhZGl1c19rbRgCIAEoAUIXukgUEhIZAAAAAAAANEApAAAAAAAA4D8SKgoJc3BhY2luZ19tGAMgASgBQhe6SBQSEhkAAAAAAECfQCkAAAAAAABJQBIzCg1tYXhfc2xvcGVfZGVnGAQgASgBQhe6SBQSEhkAAAAAAIBGQCkAAAAAAAAAAEgAiAEBEioKBXJhbmdlGAUgASgLMhMubHVtZW4udjEuVGltZVJhbmdlQga6SAPIAQESGgoJb2JqZWN0aXZlGAYgASgJQge6SARyAhABEjsKB3dlaWdodHMYByADKAsyKi5sdW1lbi52MS5GaW5kQmVzdFNwb3RSZXF1ZXN0LldlaWdodHNFbnRyeRIYCgV0b3BfaxgIIAEoDUIJukgGKgQYMigBGi4KDFdlaWdodHNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAE6AjgBQhAKDl9tYXhfc2xvcGVfZGVnIjUKFEZpbmRCZXN0U3BvdFJlc3BvbnNlEh0KA2pvYhgBIAEoCzIQLmx1bWVuLnYxLkpvYlJlZiIzChhHZXRCZXN0U3BvdFJlc3VsdFJlcXVlc3QSFwoGam9iX2lkGAEgASgJQge6SARyAhABIqYBCg1TcG90Q2FuZGlkYXRlEh8KBXBvaW50GAEgASgLMhAubHVtZW4udjEuTGF0TG9uEg0KBXNjb3JlGAIgASgBEjUKB21ldHJpY3MYAyADKAsyJC5sdW1lbi52MS5TcG90Q2FuZGlkYXRlLk1ldHJpY3NFbnRyeRouCgxNZXRyaWNzRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgBOgI4ASJ8ChlHZXRCZXN0U3BvdFJlc3VsdFJlc3BvbnNlEiQKA3RvcBgBIAMoCzIXLmx1bWVuLnYxLlNwb3RDYW5kaWRhdGUSEQoJZ3JpZF9jb2xzGAIgASgNEhEKCWdyaWRfcm93cxgDIAEoDRITCgtncmlkX3ZhbHVlcxgEIAMoATLBAQoNU2VhcmNoU2VydmljZRJNCgxGaW5kQmVzdFNwb3QSHS5sdW1lbi52MS5GaW5kQmVzdFNwb3RSZXF1ZXN0Gh4ubHVtZW4udjEuRmluZEJlc3RTcG90UmVzcG9uc2USYQoRR2V0QmVzdFNwb3RSZXN1bHQSIi5sdW1lbi52MS5HZXRCZXN0U3BvdFJlc3VsdFJlcXVlc3QaIy5sdW1lbi52MS5HZXRCZXN0U3BvdFJlc3VsdFJlc3BvbnNlIgOQAgFiBnByb3RvMw",
-    [file_buf_validate_validate, file_lumen_v1_common],
-  );
+export const file_lumen_v1_search: GenFile = /*@__PURE__*/
+  fileDesc("ChVsdW1lbi92MS9zZWFyY2gucHJvdG8SCGx1bWVuLnYxIq0DChNGaW5kQmVzdFNwb3RSZXF1ZXN0EigKBmNlbnRlchgBIAEoCzIQLmx1bWVuLnYxLkxhdExvbkIGukgDyAEBEioKCXJhZGl1c19rbRgCIAEoAUIXukgUEhIZAAAAAAAANEApAAAAAAAA4D8SKgoJc3BhY2luZ19tGAMgASgBQhe6SBQSEhkAAAAAAECfQCkAAAAAAABJQBIzCg1tYXhfc2xvcGVfZGVnGAQgASgBQhe6SBQSEhkAAAAAAIBGQCkAAAAAAAAAAEgAiAEBEioKBXJhbmdlGAUgASgLMhMubHVtZW4udjEuVGltZVJhbmdlQga6SAPIAQESGgoJb2JqZWN0aXZlGAYgASgJQge6SARyAhABEjsKB3dlaWdodHMYByADKAsyKi5sdW1lbi52MS5GaW5kQmVzdFNwb3RSZXF1ZXN0LldlaWdodHNFbnRyeRIYCgV0b3BfaxgIIAEoDUIJukgGKgQYMigBGi4KDFdlaWdodHNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAE6AjgBQhAKDl9tYXhfc2xvcGVfZGVnIjUKFEZpbmRCZXN0U3BvdFJlc3BvbnNlEh0KA2pvYhgBIAEoCzIQLmx1bWVuLnYxLkpvYlJlZiIzChhHZXRCZXN0U3BvdFJlc3VsdFJlcXVlc3QSFwoGam9iX2lkGAEgASgJQge6SARyAhABIqYBCg1TcG90Q2FuZGlkYXRlEh8KBXBvaW50GAEgASgLMhAubHVtZW4udjEuTGF0TG9uEg0KBXNjb3JlGAIgASgBEjUKB21ldHJpY3MYAyADKAsyJC5sdW1lbi52MS5TcG90Q2FuZGlkYXRlLk1ldHJpY3NFbnRyeRouCgxNZXRyaWNzRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgBOgI4ASJ8ChlHZXRCZXN0U3BvdFJlc3VsdFJlc3BvbnNlEiQKA3RvcBgBIAMoCzIXLmx1bWVuLnYxLlNwb3RDYW5kaWRhdGUSEQoJZ3JpZF9jb2xzGAIgASgNEhEKCWdyaWRfcm93cxgDIAEoDRITCgtncmlkX3ZhbHVlcxgEIAMoATLBAQoNU2VhcmNoU2VydmljZRJNCgxGaW5kQmVzdFNwb3QSHS5sdW1lbi52MS5GaW5kQmVzdFNwb3RSZXF1ZXN0Gh4ubHVtZW4udjEuRmluZEJlc3RTcG90UmVzcG9uc2USYQoRR2V0QmVzdFNwb3RSZXN1bHQSIi5sdW1lbi52MS5HZXRCZXN0U3BvdFJlc3VsdFJlcXVlc3QaIy5sdW1lbi52MS5HZXRCZXN0U3BvdFJlc3VsdFJlc3BvbnNlIgOQAgFiBnByb3RvMw", [file_buf_validate_validate, file_lumen_v1_common]);
 
 /**
  * @generated from message lumen.v1.FindBestSpotRequest
@@ -74,8 +70,7 @@ export type FindBestSpotRequest = Message<"lumen.v1.FindBestSpotRequest"> & {
  * Describes the message lumen.v1.FindBestSpotRequest.
  * Use `create(FindBestSpotRequestSchema)` to create a new message.
  */
-export const FindBestSpotRequestSchema: GenMessage<FindBestSpotRequest> =
-  /*@__PURE__*/
+export const FindBestSpotRequestSchema: GenMessage<FindBestSpotRequest> = /*@__PURE__*/
   messageDesc(file_lumen_v1_search, 0);
 
 /**
@@ -92,8 +87,7 @@ export type FindBestSpotResponse = Message<"lumen.v1.FindBestSpotResponse"> & {
  * Describes the message lumen.v1.FindBestSpotResponse.
  * Use `create(FindBestSpotResponseSchema)` to create a new message.
  */
-export const FindBestSpotResponseSchema: GenMessage<FindBestSpotResponse> =
-  /*@__PURE__*/
+export const FindBestSpotResponseSchema: GenMessage<FindBestSpotResponse> = /*@__PURE__*/
   messageDesc(file_lumen_v1_search, 1);
 
 /**
@@ -110,8 +104,7 @@ export type GetBestSpotResultRequest = Message<"lumen.v1.GetBestSpotResultReques
  * Describes the message lumen.v1.GetBestSpotResultRequest.
  * Use `create(GetBestSpotResultRequestSchema)` to create a new message.
  */
-export const GetBestSpotResultRequestSchema: GenMessage<GetBestSpotResultRequest> =
-  /*@__PURE__*/
+export const GetBestSpotResultRequestSchema: GenMessage<GetBestSpotResultRequest> = /*@__PURE__*/
   messageDesc(file_lumen_v1_search, 2);
 
 /**
@@ -138,8 +131,7 @@ export type SpotCandidate = Message<"lumen.v1.SpotCandidate"> & {
  * Describes the message lumen.v1.SpotCandidate.
  * Use `create(SpotCandidateSchema)` to create a new message.
  */
-export const SpotCandidateSchema: GenMessage<SpotCandidate> =
-  /*@__PURE__*/
+export const SpotCandidateSchema: GenMessage<SpotCandidate> = /*@__PURE__*/
   messageDesc(file_lumen_v1_search, 3);
 
 /**
@@ -173,8 +165,7 @@ export type GetBestSpotResultResponse = Message<"lumen.v1.GetBestSpotResultRespo
  * Describes the message lumen.v1.GetBestSpotResultResponse.
  * Use `create(GetBestSpotResultResponseSchema)` to create a new message.
  */
-export const GetBestSpotResultResponseSchema: GenMessage<GetBestSpotResultResponse> =
-  /*@__PURE__*/
+export const GetBestSpotResultResponseSchema: GenMessage<GetBestSpotResultResponse> = /*@__PURE__*/
   messageDesc(file_lumen_v1_search, 4);
 
 /**
@@ -190,7 +181,7 @@ export const SearchService: GenService<{
     methodKind: "unary";
     input: typeof FindBestSpotRequestSchema;
     output: typeof FindBestSpotResponseSchema;
-  };
+  },
   /**
    * @generated from rpc lumen.v1.SearchService.GetBestSpotResult
    */
@@ -198,5 +189,7 @@ export const SearchService: GenService<{
     methodKind: "unary";
     input: typeof GetBestSpotResultRequestSchema;
     output: typeof GetBestSpotResultResponseSchema;
-  };
-}> = /*@__PURE__*/ serviceDesc(file_lumen_v1_search, 0);
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_lumen_v1_search, 0);
+

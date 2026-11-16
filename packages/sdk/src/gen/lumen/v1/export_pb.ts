@@ -14,12 +14,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file lumen/v1/export.proto.
  */
-export const file_lumen_v1_export: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "ChVsdW1lbi92MS9leHBvcnQucHJvdG8SCGx1bWVuLnYxIn0KE0NyZWF0ZUV4cG9ydFJlcXVlc3QSMgoIYW5hbHlzaXMYASABKAsyGC5sdW1lbi52MS5BbmFseXplUmVxdWVzdEIGukgDyAEBEjIKBmZvcm1hdBgCIAEoDjIWLmx1bWVuLnYxLkV4cG9ydEZvcm1hdEIKukgHggEEEAEgACJSChRDcmVhdGVFeHBvcnRSZXNwb25zZRIOCgZqb2JfaWQYASABKAkSGQoMZG93bmxvYWRfdXJsGAIgASgJSACIAQFCDwoNX2Rvd25sb2FkX3VybCpzCgxFeHBvcnRGb3JtYXQSHQoZRVhQT1JUX0ZPUk1BVF9VTlNQRUNJRklFRBAAEhUKEUVYUE9SVF9GT1JNQVRfQ1NWEAESFgoSRVhQT1JUX0ZPUk1BVF9KU09OEAISFQoRRVhQT1JUX0ZPUk1BVF9QREYQAzJeCg1FeHBvcnRTZXJ2aWNlEk0KDENyZWF0ZUV4cG9ydBIdLmx1bWVuLnYxLkNyZWF0ZUV4cG9ydFJlcXVlc3QaHi5sdW1lbi52MS5DcmVhdGVFeHBvcnRSZXNwb25zZWIGcHJvdG8z",
-    [file_buf_validate_validate, file_lumen_v1_analysis],
-  );
+export const file_lumen_v1_export: GenFile = /*@__PURE__*/
+  fileDesc("ChVsdW1lbi92MS9leHBvcnQucHJvdG8SCGx1bWVuLnYxIn0KE0NyZWF0ZUV4cG9ydFJlcXVlc3QSMgoIYW5hbHlzaXMYASABKAsyGC5sdW1lbi52MS5BbmFseXplUmVxdWVzdEIGukgDyAEBEjIKBmZvcm1hdBgCIAEoDjIWLmx1bWVuLnYxLkV4cG9ydEZvcm1hdEIKukgHggEEEAEgACJSChRDcmVhdGVFeHBvcnRSZXNwb25zZRIOCgZqb2JfaWQYASABKAkSGQoMZG93bmxvYWRfdXJsGAIgASgJSACIAQFCDwoNX2Rvd25sb2FkX3VybCpzCgxFeHBvcnRGb3JtYXQSHQoZRVhQT1JUX0ZPUk1BVF9VTlNQRUNJRklFRBAAEhUKEUVYUE9SVF9GT1JNQVRfQ1NWEAESFgoSRVhQT1JUX0ZPUk1BVF9KU09OEAISFQoRRVhQT1JUX0ZPUk1BVF9QREYQAzJeCg1FeHBvcnRTZXJ2aWNlEk0KDENyZWF0ZUV4cG9ydBIdLmx1bWVuLnYxLkNyZWF0ZUV4cG9ydFJlcXVlc3QaHi5sdW1lbi52MS5DcmVhdGVFeHBvcnRSZXNwb25zZWIGcHJvdG8z", [file_buf_validate_validate, file_lumen_v1_analysis]);
 
 /**
  * @generated from message lumen.v1.CreateExportRequest
@@ -40,8 +36,7 @@ export type CreateExportRequest = Message<"lumen.v1.CreateExportRequest"> & {
  * Describes the message lumen.v1.CreateExportRequest.
  * Use `create(CreateExportRequestSchema)` to create a new message.
  */
-export const CreateExportRequestSchema: GenMessage<CreateExportRequest> =
-  /*@__PURE__*/
+export const CreateExportRequestSchema: GenMessage<CreateExportRequest> = /*@__PURE__*/
   messageDesc(file_lumen_v1_export, 0);
 
 /**
@@ -65,8 +60,7 @@ export type CreateExportResponse = Message<"lumen.v1.CreateExportResponse"> & {
  * Describes the message lumen.v1.CreateExportResponse.
  * Use `create(CreateExportResponseSchema)` to create a new message.
  */
-export const CreateExportResponseSchema: GenMessage<CreateExportResponse> =
-  /*@__PURE__*/
+export const CreateExportResponseSchema: GenMessage<CreateExportResponse> = /*@__PURE__*/
   messageDesc(file_lumen_v1_export, 1);
 
 /**
@@ -97,8 +91,7 @@ export enum ExportFormat {
 /**
  * Describes the enum lumen.v1.ExportFormat.
  */
-export const ExportFormatSchema: GenEnum<ExportFormat> =
-  /*@__PURE__*/
+export const ExportFormatSchema: GenEnum<ExportFormat> = /*@__PURE__*/
   enumDesc(file_lumen_v1_export, 0);
 
 /**
@@ -112,5 +105,7 @@ export const ExportService: GenService<{
     methodKind: "unary";
     input: typeof CreateExportRequestSchema;
     output: typeof CreateExportResponseSchema;
-  };
-}> = /*@__PURE__*/ serviceDesc(file_lumen_v1_export, 0);
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_lumen_v1_export, 0);
+

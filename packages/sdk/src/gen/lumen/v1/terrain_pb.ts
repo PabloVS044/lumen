@@ -14,12 +14,8 @@ import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file lumen/v1/terrain.proto.
  */
-export const file_lumen_v1_terrain: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    "ChZsdW1lbi92MS90ZXJyYWluLnByb3RvEghsdW1lbi52MSKSAQoIQ292ZXJhZ2USDgoGbGF5ZXJzGAEgAygJEhcKCm5lYXJfcmVzX20YAiABKAFIAIgBARIiChVpbnRlcnBvbGF0ZWRfZnJhY3Rpb24YAyABKAFIAYgBARIQCgh3YXJuaW5ncxgEIAMoCUINCgtfbmVhcl9yZXNfbUIYChZfaW50ZXJwb2xhdGVkX2ZyYWN0aW9uIj0KEkdldENvdmVyYWdlUmVxdWVzdBInCgVwb2ludBgBIAEoCzIQLmx1bWVuLnYxLkxhdExvbkIGukgDyAEBIjsKE0dldENvdmVyYWdlUmVzcG9uc2USJAoIY292ZXJhZ2UYASABKAsyEi5sdW1lbi52MS5Db3ZlcmFnZSJBChZHZXRUZXJyYWluUG9pbnRSZXF1ZXN0EicKBXBvaW50GAEgASgLMhAubHVtZW4udjEuTGF0TG9uQga6SAPIAQEiPgoXR2V0VGVycmFpblBvaW50UmVzcG9uc2USEAoIaGVpZ2h0X20YASABKAESEQoJc2xvcGVfZGVnGAIgASgBMr4BCg5UZXJyYWluU2VydmljZRJPCgtHZXRDb3ZlcmFnZRIcLmx1bWVuLnYxLkdldENvdmVyYWdlUmVxdWVzdBodLmx1bWVuLnYxLkdldENvdmVyYWdlUmVzcG9uc2UiA5ACARJbCg9HZXRUZXJyYWluUG9pbnQSIC5sdW1lbi52MS5HZXRUZXJyYWluUG9pbnRSZXF1ZXN0GiEubHVtZW4udjEuR2V0VGVycmFpblBvaW50UmVzcG9uc2UiA5ACAWIGcHJvdG8z",
-    [file_buf_validate_validate, file_lumen_v1_common],
-  );
+export const file_lumen_v1_terrain: GenFile = /*@__PURE__*/
+  fileDesc("ChZsdW1lbi92MS90ZXJyYWluLnByb3RvEghsdW1lbi52MSKSAQoIQ292ZXJhZ2USDgoGbGF5ZXJzGAEgAygJEhcKCm5lYXJfcmVzX20YAiABKAFIAIgBARIiChVpbnRlcnBvbGF0ZWRfZnJhY3Rpb24YAyABKAFIAYgBARIQCgh3YXJuaW5ncxgEIAMoCUINCgtfbmVhcl9yZXNfbUIYChZfaW50ZXJwb2xhdGVkX2ZyYWN0aW9uIj0KEkdldENvdmVyYWdlUmVxdWVzdBInCgVwb2ludBgBIAEoCzIQLmx1bWVuLnYxLkxhdExvbkIGukgDyAEBIjsKE0dldENvdmVyYWdlUmVzcG9uc2USJAoIY292ZXJhZ2UYASABKAsyEi5sdW1lbi52MS5Db3ZlcmFnZSJBChZHZXRUZXJyYWluUG9pbnRSZXF1ZXN0EicKBXBvaW50GAEgASgLMhAubHVtZW4udjEuTGF0TG9uQga6SAPIAQEiPgoXR2V0VGVycmFpblBvaW50UmVzcG9uc2USEAoIaGVpZ2h0X20YASABKAESEQoJc2xvcGVfZGVnGAIgASgBMr4BCg5UZXJyYWluU2VydmljZRJPCgtHZXRDb3ZlcmFnZRIcLmx1bWVuLnYxLkdldENvdmVyYWdlUmVxdWVzdBodLmx1bWVuLnYxLkdldENvdmVyYWdlUmVzcG9uc2UiA5ACARJbCg9HZXRUZXJyYWluUG9pbnQSIC5sdW1lbi52MS5HZXRUZXJyYWluUG9pbnRSZXF1ZXN0GiEubHVtZW4udjEuR2V0VGVycmFpblBvaW50UmVzcG9uc2UiA5ACAWIGcHJvdG8z", [file_buf_validate_validate, file_lumen_v1_common]);
 
 /**
  * @generated from message lumen.v1.Coverage
@@ -54,8 +50,7 @@ export type Coverage = Message<"lumen.v1.Coverage"> & {
  * Describes the message lumen.v1.Coverage.
  * Use `create(CoverageSchema)` to create a new message.
  */
-export const CoverageSchema: GenMessage<Coverage> =
-  /*@__PURE__*/
+export const CoverageSchema: GenMessage<Coverage> = /*@__PURE__*/
   messageDesc(file_lumen_v1_terrain, 0);
 
 /**
@@ -72,8 +67,7 @@ export type GetCoverageRequest = Message<"lumen.v1.GetCoverageRequest"> & {
  * Describes the message lumen.v1.GetCoverageRequest.
  * Use `create(GetCoverageRequestSchema)` to create a new message.
  */
-export const GetCoverageRequestSchema: GenMessage<GetCoverageRequest> =
-  /*@__PURE__*/
+export const GetCoverageRequestSchema: GenMessage<GetCoverageRequest> = /*@__PURE__*/
   messageDesc(file_lumen_v1_terrain, 1);
 
 /**
@@ -90,8 +84,7 @@ export type GetCoverageResponse = Message<"lumen.v1.GetCoverageResponse"> & {
  * Describes the message lumen.v1.GetCoverageResponse.
  * Use `create(GetCoverageResponseSchema)` to create a new message.
  */
-export const GetCoverageResponseSchema: GenMessage<GetCoverageResponse> =
-  /*@__PURE__*/
+export const GetCoverageResponseSchema: GenMessage<GetCoverageResponse> = /*@__PURE__*/
   messageDesc(file_lumen_v1_terrain, 2);
 
 /**
@@ -108,8 +101,7 @@ export type GetTerrainPointRequest = Message<"lumen.v1.GetTerrainPointRequest"> 
  * Describes the message lumen.v1.GetTerrainPointRequest.
  * Use `create(GetTerrainPointRequestSchema)` to create a new message.
  */
-export const GetTerrainPointRequestSchema: GenMessage<GetTerrainPointRequest> =
-  /*@__PURE__*/
+export const GetTerrainPointRequestSchema: GenMessage<GetTerrainPointRequest> = /*@__PURE__*/
   messageDesc(file_lumen_v1_terrain, 3);
 
 /**
@@ -133,8 +125,7 @@ export type GetTerrainPointResponse = Message<"lumen.v1.GetTerrainPointResponse"
  * Describes the message lumen.v1.GetTerrainPointResponse.
  * Use `create(GetTerrainPointResponseSchema)` to create a new message.
  */
-export const GetTerrainPointResponseSchema: GenMessage<GetTerrainPointResponse> =
-  /*@__PURE__*/
+export const GetTerrainPointResponseSchema: GenMessage<GetTerrainPointResponse> = /*@__PURE__*/
   messageDesc(file_lumen_v1_terrain, 4);
 
 /**
@@ -148,7 +139,7 @@ export const TerrainService: GenService<{
     methodKind: "unary";
     input: typeof GetCoverageRequestSchema;
     output: typeof GetCoverageResponseSchema;
-  };
+  },
   /**
    * @generated from rpc lumen.v1.TerrainService.GetTerrainPoint
    */
@@ -156,5 +147,7 @@ export const TerrainService: GenService<{
     methodKind: "unary";
     input: typeof GetTerrainPointRequestSchema;
     output: typeof GetTerrainPointResponseSchema;
-  };
-}> = /*@__PURE__*/ serviceDesc(file_lumen_v1_terrain, 0);
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_lumen_v1_terrain, 0);
+
