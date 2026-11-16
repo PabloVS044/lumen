@@ -4,7 +4,9 @@ from tests.conftest import ConnectJSON
 def test_health(rpc: ConnectJSON) -> None:
     r = rpc.call("HealthService", "Check")
     assert r.status_code == 200
-    assert r.json()["status"] == "STATUS_OK"
+    # OK vs DEGRADED depends on kernels/DEM present on the machine; test_health_rpc.py pins both.
+    assert r.json()["status"] in {"STATUS_OK", "STATUS_DEGRADED"}
+    assert r.json()["version"]
 
 
 def test_list_sites_filters_by_region(rpc: ConnectJSON) -> None:
@@ -38,16 +40,6 @@ def test_protovalidate_rejects_inverted_time_range(rpc: ConnectJSON) -> None:
     assert r.status_code == 400
 
 
-def test_unimplemented_rpc(rpc: ConnectJSON) -> None:
-    r = rpc.call("JobService", "GetJob", {"jobId": "j_1"})
-    assert r.status_code == 501
-    assert r.json()["code"] == "unimplemented"
-
-
-def test_domain_not_implemented_maps_to_unimplemented(rpc: ConnectJSON) -> None:
-    body = {
-        "site": {"lat": -89.45, "lon": 222.69},
-        "range": {"start": "2027-01-01T00:00:00Z", "end": "2027-02-01T00:00:00Z"},
-    }
-    r = rpc.call("AnalysisService", "Analyze", body)
-    assert r.status_code == 501
+def test_unknown_method_is_not_found(rpc: ConnectJSON) -> None:
+    r = rpc.call("JobService", "NoSuchMethod", {})
+    assert r.status_code == 404

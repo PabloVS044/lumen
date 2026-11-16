@@ -7,13 +7,13 @@ Contrato: `proto/lumen/v1/*.proto` en la raíz (ADR-0012). Código generado en `
 
 | Ruta | Qué | Owner |
 |---|---|---|
-| `main.py`, `rpc/`, `services/{health,sites,analysis,stubs}.py`, `analysis/`, `core/`, `jobs/`, `db/`, `catalog/` | app ASGI, interceptores, pipeline, config, errores, jobs, BD | R1 |
+| `main.py`, `rpc/`, `services/{health,sites,analysis,jobs,export}.py`, `analysis/`, `core/`, `jobs/`, `db/`, `catalog/` | app ASGI, interceptores, pipeline, config, errores, jobs, BD | R1 |
 | `dem/`, `horizon/`, `search/`, `services/{terrain,horizon,search}.py` | DEM COG, ray-casting, mejor punto | R2 |
 | `ephem/`, `visibility/`, `metrics/`, `power/`, `services/{ephemeris,power,whatif,validation}.py` | SPICE, fracción de disco, métricas, batería, what-if | R3 |
 
 ## Reglas
 
-- Un servicio por área: `services/<area>.py` hereda el stub generado (`from lumen.v1.x_connect import XService`). Métodos no implementados → el stub responde `unimplemented`. Servicios aún vacíos viven en `services/stubs.py`; al implementarlos se mueven a su archivo.
+- Un servicio por área: `services/<area>.py` hereda el stub generado (`from lumen.v1.x_connect import XService`). Métodos no implementados → el stub responde `unimplemented`.
 - Validación de entrada: automática (`rpc/interceptors.py` + reglas `buf.validate` del `.proto`). No revalidar rangos a mano.
 - Errores de dominio: `core/errors.py` (`EngineError` y subclases) → error Connect + `lumen.v1.ErrorDetail{code}`.
 - proto3: un campo numérico en 0 significa "default"; usar `core/defaults.py`.
