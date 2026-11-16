@@ -7,6 +7,9 @@
  * Contraste WCAG medido: text/muted/sun/earth/good/bad/partial ≥ 5.4:1 sobre space y panel (AA).
  * Sobre surface, `bad` da 4.1:1: úsalo ahí solo en texto grande o con icono.
  * surface es para bordes y separadores, no para texto.
+ * site-1..4: colores de los sitios activos (máx. 4), distintos de sun/earth/good/bad. Basados en la
+ * paleta Okabe-Ito (apta para daltonismo) salvo site-4. Contraste sobre space/panel: 6.3/5.8,
+ * 5.0/4.6, 5.7/5.2 y 8.9/8.2. Nunca la única señal: cada sitio también lleva su nombre.
  */
 :root {
   color-scheme: dark;
@@ -20,6 +23,10 @@
   --color-good: #2bd576;
   --color-bad: #ff4d4f;
   --color-partial: #ffb020;
+  --color-site-1: #cc79a7;
+  --color-site-2: #d55e00;
+  --color-site-3: #009e73;
+  --color-site-4: #b8a2ff;
 }
 
 @theme inline {
@@ -33,6 +40,10 @@
   --color-good: var(--color-good);
   --color-bad: var(--color-bad);
   --color-partial: var(--color-partial);
+  --color-site-1: var(--color-site-1);
+  --color-site-2: var(--color-site-2);
+  --color-site-3: var(--color-site-3);
+  --color-site-4: var(--color-site-4);
   --font-sans: var(--font-display);
   --font-mono: var(--font-data);
 
